@@ -65,18 +65,20 @@ void csrMult_v3(VectorXd& Ax, VectorXd& x, vector<double>& Adata, vector<int>& A
 
 void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
-  cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  
   for (int n = 0; n < Ow; ++n)
   {
     for (int x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
     {
       for(int l = 0; l < Kh; ++l)
       {
-        //if(Aindices[x]/Kw - l < 0 || Aindices[x]/Kw - l > Oh)
-        //  continue;
-        cout << Aindices[x]/Kw - l << ", " << n << endl;
-        exit(0);
-        //O(Aindices[x]/Kw - l, n) += Adata[x]*K[Aindices[x]%Kw + l*Kw];
+        int m      = Aindices[x]/Kw - l;
+        int Kindex = Aindices[x]%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+         
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O(m, n) += Adata[x]*K[Kindex];
       }
     }
 
@@ -248,6 +250,7 @@ int main()
       t_im2col+=elapsed/(Ih*Iw * 1.0); // normalized timing
    } 
   
+  cout << t_im2col << endl;
   // Print out the o1 from im2col:
   std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() <<  " \n" << d_o1 << std::endl;
   cout << "-----\n" << endl;
@@ -258,9 +261,26 @@ int main()
   vector<double> Adata (lowered_mat_sparse.valuePtr(), lowered_mat_sparse.valuePtr() + nz);
   vector<int> Aindices (lowered_mat_sparse.innerIndexPtr(), lowered_mat_sparse.innerIndexPtr() + nz);
   vector<int> Aindptr (lowered_mat_sparse.outerIndexPtr(), lowered_mat_sparse.outerIndexPtr() + lowered_mat_sparse.outerSize()); // +1 for the last element
- 
-  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-  cout << d_o2 ;
+  // push back the last element the number of nnz in ptr:
+  Aindptr.push_back(nz);
+
+
+   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+   {   
+      cpu_timer timer;
+      for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      cpu_times const elapsed_times(timer.elapsed());
+      nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
+      t_csr+=elapsed/(Ih*Iw * 1.0); // normalized timing
+   } 
+  
+  cout << t_csr << endl; 
+  // Print out the o1 from im2col:
+  std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
+  cout << "-----\n" << endl;
+	 
+//  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+//  cout << d_o2 ;
 
 /*
   std::cout << "\n===Sparse Feature Map: \n" << sm << std::endl;
