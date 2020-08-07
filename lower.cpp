@@ -1,11 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <boost/timer/timer.hpp>
 
 using namespace Eigen;
 using namespace std;
+using namespace boost::timer;
 
 // https://scicomp.stackexchange.com/questions/27977/how-can-i-speed-up-this-code-for-sparse-matrix-vector-multiplication
+
+void bench_Sparse(const SparseMatrix<float> &m, const MatrixXf &in, MatrixXf &o) {
+  o.noalias() = m*in.transpose();
+}
+
+void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
+ // o.noalias() = m*in.transpose();
+ o.noalias() = m*in;
+
+}
 
 void csrMult_v3(VectorXd& Ax, VectorXd& x, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr)
 {
@@ -50,8 +63,37 @@ void csrMult_v3(VectorXd& Ax, VectorXd& x, vector<double>& Adata, vector<int>& A
 } // end mult
 
 
+void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
+{
+  cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (int x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
+    {
+      for(int l = 0; l < Kh; ++l)
+      {
+        //if(Aindices[x]/Kw - l < 0 || Aindices[x]/Kw - l > Oh)
+        //  continue;
+        cout << Aindices[x]/Kw - l << ", " << n << endl;
+        exit(0);
+        //O(Aindices[x]/Kw - l, n) += Adata[x]*K[Aindices[x]%Kw + l*Kw];
+      }
+    }
+
+  }
+} // end mult
+
+
 int main()
 {
+  
+  // timer for im2col, csr
+  float t_im2col = 0;
+  float t_csr    = 0;
+
+  // bench iterations
+  int bench_iterations = 100000;
+
   // Conv parameters:
   int padding = 0;
   int stride  = 1;
@@ -74,30 +116,16 @@ int main()
 
   // Create your original input feature map:
   MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
-  
-
-  SparseMatrix<double, RowMajor> sm(Ih, Iw);
-  // SparseMatrix<double, ColMajor> sm(4,5);
 
   std::vector<int> cols = {0,1,4,0,4,0,4};
   std::vector<int> rows = {0,0,0,2,2,3,3};
-  // std::vector<double> values = {0.2,0.4,0.6,0.3,0.7,0.9,0.2};
   std::vector<double> values = {1,1,1,1,1,1,1};
 
   for(int i=0; i < cols.size(); i++)
   {
-    sm.insert(rows[i], cols[i])     = values[i];
     org_fm(rows[i], cols[i])        = values[i];
   }
-  
-  sm.makeCompressed();
 
-  // Prepare the Adata, Aindices, AindPtr for CSR multiplication
-  int nz = sm.nonZeros();
-  vector<double> Adata (sm.valuePtr(), sm.valuePtr() + nz);
-  vector<int> Aindices (sm.innerIndexPtr(), sm.innerIndexPtr() + nz);
-  vector<int> AindPtr (sm.outerIndexPtr(), sm.outerIndexPtr() + sm.outerSize()); // +1 for the last element
- 
   // Print out the original feature map:
   std::cout << "\n===Original Feature Map: \n" << org_fm << std::endl;
   cout << "-----\n" << endl;
@@ -141,7 +169,7 @@ int main()
   int start_col_int = 0;
 
   // Create the intermediate representation for im2col:
-   MatrixXf im2col_mat    = MatrixXf::Zero(Oh*Ow, Kh*Kw*Ic);
+  MatrixXf im2col_mat    = MatrixXf::Zero(Oh*Ow, Kh*Kw*Ic);
   int patch_matrix_index = 0;
   
   // For each patch:
@@ -196,16 +224,45 @@ int main()
   std::cout << "\n===CSR of Lowered Feature Map: " <<  " \n" << lowered_mat_sparse << std::endl;
   cout << "-----\n" << endl;
   
-  // Create the filter K 
-  VectorXd filter  = VectorXd::Ones(Kh*Kw);
+  // Create the filter K and its vectorized version:
+  MatrixXf filter             = MatrixXf::Ones(Kh, Kw);
+ VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
 
   // Print out the im2col interedmiate feature map:
-  std::cout << "\n===Filter: " <<  " \n" << filter  << std::endl;
+  std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
   cout << "-----\n" << endl;
-  exit(0);
+  
+  // Prepare the output for im2col, sparseMat
+  MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
+  MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
+  
+  // transpose the matrix for im2col:
+  MatrixXf im2col_mat_tr = im2col_mat.transpose();
 
+   // Perform 50 times dense matrix dense vector multiplication: d_o1 = d_m * d_b
+   {   
+      cpu_timer timer;
+      for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
+      cpu_times const elapsed_times(timer.elapsed());
+      nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
+      t_im2col+=elapsed/(Ih*Iw * 1.0); // normalized timing
+   } 
+  
+  // Print out the o1 from im2col:
+  std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() <<  " \n" << d_o1 << std::endl;
+  cout << "-----\n" << endl;
+  
+  
+  // Prepare the Adata, Aindices, AindPtr for CSR multiplication
+  int nz = lowered_mat_sparse.nonZeros();
+  vector<double> Adata (lowered_mat_sparse.valuePtr(), lowered_mat_sparse.valuePtr() + nz);
+  vector<int> Aindices (lowered_mat_sparse.innerIndexPtr(), lowered_mat_sparse.innerIndexPtr() + nz);
+  vector<int> Aindptr (lowered_mat_sparse.outerIndexPtr(), lowered_mat_sparse.outerIndexPtr() + lowered_mat_sparse.outerSize()); // +1 for the last element
+ 
+  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+  cout << d_o2 ;
 
-
+/*
   std::cout << "\n===Sparse Feature Map: \n" << sm << std::endl;
   cout << "-----\n" << endl;
   std::cout << " Size of Ptr:  " << sm.outerSize() << endl;
@@ -215,6 +272,6 @@ int main()
 
   for (auto it = sm.valuePtr(); it != sm.valuePtr() + nz; ++it)
     std::cout << *it << std::endl;
-
+*/
   return 0;
 }
