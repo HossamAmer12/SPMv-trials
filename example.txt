@@ -1,0 +1,141 @@
+
+batch	1	density	0.1	dense	4.52842	sparse	0.22805
+batch	1	density	0.2	dense	4.1049	sparse	0.488678
+batch	1	density	0.3	dense	4.3981	sparse	0.68415
+batch	1	density	0.4	dense	4.88678	sparse	0.847042
+batch	1	density	0.5	dense	5.08225	sparse	1.00994
+batch	1	density	0.6	dense	4.69131	sparse	1.17283
+batch	1	density	0.7	dense	4.98452	sparse	1.30314
+batch	1	density	0.8	dense	5.73383	sparse	1.40088
+batch	1	density	0.9	dense	4.561	sparse	1.53119
+batch	1	density	1	dense	4.30037	sparse	1.59635
+
+batch	1	density	0.1	dense	3.51848	sparse	0.22805
+batch	1	density	0.2	dense	4.23521	sparse	0.390943
+batch	1	density	0.3	dense	13.9436	sparse	0.586414
+batch	1	density	0.4	dense	3.58364	sparse	0.716728
+batch	1	density	0.5	dense	4.23521	sparse	0.879621
+batch	1	density	0.6	dense	4.62615	sparse	0.977357
+batch	1	density	0.7	dense	3.87685	sparse	1.10767
+batch	1	density	0.8	dense	4.59358	sparse	1.20541
+batch	1	density	0.9	dense	4.30037	sparse	1.33572
+batch	1	density	1	dense	3.38817	sparse	1.40088
+
+batch	1	density	0.1	dense	4.36553	sparse	0.22805	csr	0.0651571
+batch	1	density	0.2	dense	4.30037	sparse	0.423521	csr	0.195471
+
+batch	1	density	0.1	dense	3.942	sparse	0.195471	csr	0.0651571
+batch	1	density	0.2	dense	4.62615	sparse	0.390943	csr	0.195471
+batch	1	density	0.3	dense	4.43068	sparse	0.618993	csr	0.293207
+batch	1	density	0.1	dense	7.36275	sparse	0.22805	csr	0.0651571
+batch	1	density	0.1	dense	5.24515	sparse	0.22805	csr	0.4561
+batch	1	density	0.2	dense	3.16012	sparse	0.423521	csr	0.944778
+batch	1	density	0.1	dense	4.00716	sparse	0.22805	csr	0.4561
+batch	1	density	0.2	dense	3.35559	sparse	0.4561	csr	0.879621
+batch	1	density	0.3	dense	5.14741	sparse	0.618993	csr	1.30314
+batch	1	density	0.1	dense	3.12754	sparse	0.22805	csr	0.130314
+batch	1	density	0.2	dense	4.23521	sparse	0.423521	csr	0.293207
+batch	1	density	0.3	dense	4.78905	sparse	0.618993	csr	0.390943
+batch	1	density	0.4	dense	3.74653	sparse	0.781885	csr	0.618993
+batch	1	density	0.1	dense	3.48591	sparse	0.22805	csr	0.130314
+batch	1	density	0.2	dense	4.36553	sparse	0.423521	csr	0.293207
+batch	1	density	0.3	dense	4.36553	sparse	0.651571	csr	0.423521
+batch	1	density	0.1	dense	4.65873	sparse	0.22805	csr	0.130314
+batch	1	density	0.2	dense	4.26779	sparse	0.423521	csr	0.260628
+batch	1	density	0.1	dense	3.74653	sparse	0.195471	csr	0.130314
+batch	1	density	0.1	dense	4.62615	sparse	0.195471	csr	0.130314
+batch	1	density	0.2	dense	4.59358	sparse	0.423521	csr	0.293207
+batch	1	density	0.3	dense	4.59358	sparse	0.586414	csr	0.423521
+batch	1	density	0.4	dense	3.97458	sparse	0.716728	csr	0.521257
+batch	1	density	0.5	dense	8.0469	sparse	0.879621	csr	0.618993
+batch	1	density	0.5	dense	4.13748	sparse	0.879621	csr	0.618993
+batch	1	density	0.5	dense	4.30037	sparse	0.879621	csr	0.618993
+batch	1	density	0.5	dense	5.11483	sparse	0.879621	csr	0.586414
+batch	1	density	0.5	dense	4.8542	sparse	0.879621	csr	0.618993
+batch	1	density	0.6	dense	4.69131	sparse	0.977357	csr	0.716728
+batch	1	density	0.5	dense	5.21257	sparse	0.879621	csr	0.847042
+batch	1	density	0.6	dense	5.17999	sparse	1.00994	csr	0.944778
+batch	1	density	0.7	dense	5.04968	sparse	1.10767	csr	1.14025
+batch	1	density	0.8	dense	4.95194	sparse	1.27056	csr	1.20541
+batch	1	density	0.5	dense	4.91936	sparse	0.879621	csr	0.814464
+batch	1	density	0.6	dense	5.08225	sparse	0.977357	csr	0.944778
+batch	1	density	0.7	dense	4.43068	sparse	1.10767	csr	1.04251
+batch	1	density	0.5	dense	4.65873	sparse	0.879621	csr	0.814464
+batch	1	density	0.6	dense	4.26779	sparse	1.00994	csr	0.912199
+batch	1	density	0.7	dense	5.34288	sparse	1.10767	csr	1.04251
+batch	1	density	0.5	dense	4.75647	sparse	0.879621	csr	0.814464
+batch	1	density	0.6	dense	6.09219	sparse	1.00994	csr	0.944778
+batch	1	density	0.5	dense	4.03974	sparse	0.879621	csr	0.847042
+batch	1	density	0.6	dense	4.1049	sparse	1.00994	csr	0.944778
+batch	1	density	0.5	dense	3.6488	sparse	0.879621	csr	1.04251
+batch	1	density	0.6	dense	3.87685	sparse	1.00994	csr	1.17283
+batch	1	density	0.7	dense	4.52842	sparse	1.17283	csr	1.40088
+batch	1	density	0.8	dense	5.27773	sparse	1.23799	csr	1.43346
+batch	1	density	0.5	dense	4.07232	sparse	0.879621	csr	1.04251
+batch	1	density	0.6	dense	4.03974	sparse	1.00994	csr	1.20541
+batch	1	density	0.7	dense	4.17005	sparse	1.10767	csr	1.30314
+batch	1	density	0.5	dense	3.97458	sparse	0.879621	csr	0.814464
+batch	1	density	0.6	dense	4.43068	sparse	1.00994	csr	0.944778
+batch	1	density	0.5	dense	4.00716	sparse	0.879621	csr	0.781885
+batch	1	density	0.6	dense	4.95194	sparse	1.00994	csr	0.912199
+batch	1	density	0.5	dense	5.08225	sparse	0.912199	csr	0.847042
+batch	1	density	0.5	dense	4.33295	sparse	0.879621	csr	0.814464
+batch	1	density	0.5	dense	4.03974	sparse	0.879621	csr	2.18276
+batch	1	density	0.5	dense	3.77911	sparse	0.879621	csr	2.18276
+batch	1	density	0.6	dense	5.04968	sparse	1.04251	csr	2.47597
+batch	1	density	0.5	dense	4.82163	sparse	0.879621	csr	0.847042
+batch	1	density	0.6	dense	4.17005	sparse	1.04251	csr	0.912199
+
+
+batch	1	density	0.5	dense	4.62615	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	4.91936	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	4.30037	sparse	1.14025	csr	0
+batch	1	density	0.8	dense	4.59358	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	5.0171	sparse	1.30314	csr	0
+batch	1	density	1	dense	4.17005	sparse	1.3683	csr	0
+batch	1	density	0.5	dense	3.90943	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	4.07232	sparse	0.977357	csr	0
+batch	1	density	0.7	dense	3.81169	sparse	1.10767	csr	0
+batch	1	density	0.8	dense	4.91936	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	4.88678	sparse	1.3683	csr	0
+batch	1	density	1	dense	3.38817	sparse	1.43346	csr	0
+
+batch	1	density	0.5	dense	4.8542	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	3.84427	sparse	0.977357	csr	0
+batch	1	density	0.7	dense	6.25508	sparse	1.14025	csr	0
+batch	1	density	0.8	dense	4.75647	sparse	1.23799	csr	0
+batch	1	density	0.9	dense	5.27773	sparse	1.3683	csr	0
+batch	1	density	1	dense	4.17005	sparse	1.40088	csr	0
+batch	1	density	0.5	dense	3.74653	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	4.20263	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	3.942	sparse	1.14025	csr	0
+batch	1	density	0.8	dense	4.36553	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	5.50578	sparse	1.30314	csr	0
+batch	1	density	1	dense	4.3981	sparse	1.40088	csr	0
+batch	1	density	0.5	dense	4.98452	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	4.33295	sparse	1.04251	csr	0
+batch	1	density	0.7	dense	5.24515	sparse	1.17283	csr	0
+batch	1	density	0.8	dense	3.55106	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	3.97458	sparse	1.30314	csr	0
+batch	1	density	1	dense	4.17005	sparse	1.40088	csr	0
+batch	1	density	0.5	dense	3.74653	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	3.55106	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	4.43068	sparse	1.10767	csr	0
+batch	1	density	0.8	dense	3.90943	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	4.3981	sparse	1.30314	csr	0
+batch	1	density	1	dense	13.9762	sparse	1.3683	csr	0
+batch	1	density	0.5	dense	5.34288	sparse	0.847042	csr	0
+batch	1	density	0.6	dense	3.6488	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	5.14741	sparse	1.14025	csr	0
+batch	1	density	0.8	dense	4.43068	sparse	1.23799	csr	0
+batch	1	density	0.9	dense	4.65873	sparse	1.30314	csr	0
+batch	1	density	1	dense	4.07232	sparse	1.40088	csr	0
+batch	1	density	0.5	dense	3.942	sparse	0.847042	csr	0
+batch	1	density	0.6	dense	4.1049	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	3.35559	sparse	1.14025	csr	0
+batch	1	density	0.8	dense	4.17005	sparse	1.20541	csr	0
+batch	1	density	0.9	dense	3.81169	sparse	1.30314	csr	0
+batch	1	density	1	dense	4.49584	sparse	1.43346	csr	0
+batch	1	density	0.5	dense	6.25508	sparse	0.879621	csr	0
+batch	1	density	0.6	dense	3.61622	sparse	1.00994	csr	0
+batch	1	density	0.7	dense	6.28766	sparse	1.10767	csr	0

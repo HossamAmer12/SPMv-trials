@@ -1,0 +1,66 @@
+// Disable bound assertions for C (dangerous)
+#define NDEBUG
+
+#include <Eigen/Sparse>
+#include <Eigen/Dense>
+#include <stdlib.h>
+#include <boost/timer/timer.hpp>
+
+#include <iostream>
+
+#include <unsupported/Eigen/CXX11/Tensor>
+
+#include <omp.h>
+#include <vector>
+#include <fstream>
+
+
+// tutorial: https://eigen.tuxfamily.org/dox/group__TutorialSparse.html
+// https://stackoverflow.com/questions/57367167/for-eigen-sparsematrix-what-does-innerindexptr-and-outerindexptr-exactly-re
+
+using namespace std;
+using namespace Eigen;
+using namespace boost::timer;
+
+typedef SparseMatrix<float> spMatFloat;
+typedef Matrix<float, Dynamic, Dynamic, RowMajor> deMatRowFloat;
+
+
+
+int main(int argc, const char **argv) 
+{
+
+ SparseMatrix<int,RowMajor> sm(3,3),sm1;
+ sm.insert(0,0)=1;
+ sm.insert(1,1)=1;
+ sm.insert(2,2)=1;
+ sm.insert(1,2)=1;
+ sm.insert(2,1)=1;
+
+ SparseMatrix<int,RowMajor> I(3,3);
+ I.insert(0,0)=1;
+ I.insert(1,1)=1;
+ I.insert(2,2)=1;
+
+ cout<<"SM matrix \n"<<sm<<endl;
+ cout << "I matrix\n" << I << endl;
+ sm1=sm-I;
+ cout<<"SM1 Matrix \n" << sm1 <<endl;
+
+ cout << sm1.nonZeros() << endl;
+ int nz = sm1.nonZeros();
+ 
+ for (auto it = sm.valuePtr(); it != sm.valuePtr() + nz; ++it)
+ {
+   std::cout << *it << std::endl;
+ }
+ 
+ 
+ //for(int i = 0; i < sm1.valuePtr().size(); ++i)
+// {
+ // cout << "d [" << i << "] "<<< sm1.valuePtr()[i] << endl;
+// }
+ cout << "data " << sm1.valuePtr() << endl;
+ cout<<"the number of nonzeros\n"<<sm1.nonZeros()<<endl;
+
+}
