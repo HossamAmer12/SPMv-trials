@@ -89,13 +89,17 @@ void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindi
 int main()
 {
   
+  // density:
+  float density = 0.1;
+
   // timer for im2col, csr
   float t_im2col = 0;
   float t_csr    = 0;
 
   // bench iterations
   int bench_iterations = 100000;
-
+	
+  
   // Conv parameters:
   int padding = 0;
   int stride  = 1;
@@ -106,8 +110,9 @@ int main()
   int Iw = 5;
   // int Ic = 32; // this is for the node
   int Ic = 1; // put it as articial for now
+  int In = 1;
 
-  int K = 1;
+  int K = 1; // number of filters
 
   // Kernel dimensions
   int Kh = 3;
@@ -115,6 +120,8 @@ int main()
 
   int Oh = (1 + Ih - Kh + 2 * padding)/stride; // removed + 1
   int Ow = (1 + Iw - Kw + 2 * padding)/stride;
+
+  int iter = 1;  // total number of times to perform the test for each of dense, sparse multiplication
 
   // Create your original input feature map:
   MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
@@ -244,9 +251,13 @@ int main()
    // Perform 50 times dense matrix dense vector multiplication: d_o1 = d_m * d_b
    {   
       cpu_timer timer;
+      auto start = std::chrono::system_clock::now();
       for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
+      auto end = std::chrono::system_clock::now();
+      auto elapsed = end - start;
+      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);	
       cpu_times const elapsed_times(timer.elapsed());
-      nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
+      //nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
       t_im2col+=elapsed/(Ih*Iw * 1.0); // normalized timing
    } 
   
@@ -278,7 +289,8 @@ int main()
   // Print out the o1 from im2col:
   std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
   cout << "-----\n" << endl;
-	 
+
+  std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col/50/iter <<"\tcsr\t"<<t_csr/50/iter<<std::endl;
 //  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
 //  cout << d_o2 ;
 
