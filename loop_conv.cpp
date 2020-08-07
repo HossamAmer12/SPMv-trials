@@ -132,14 +132,16 @@ int main()
   std::vector<int> cols = {0,1,4,0,4,0,4};
   std::vector<int> rows = {0,0,0,2,2,3,3};
   std::vector<double> values = {1,1,1,1,1,1,1};
-
-  for(int i=0; i < cols.size(); i++)
+ 
+  for(int i = 0; i < density*Ih*Iw; ++i)
   {
-    org_fm(rows[i], cols[i])        = values[i];
+    int r        = rand()%Ih;
+    int c        = rand()%Iw;
+    org_fm(r, c) = 1;
   }
 
   // Print out the original feature map:
-  std::cout << "\n===Original Feature Map: \n" << org_fm << std::endl;
+  std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << org_fm << std::endl;
   cout << "-----\n" << endl;
   
   // Create the lowered matrix: 
@@ -282,24 +284,6 @@ int main()
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
-    
-   // Test the sparse rep of the org im2col
-   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
-   // SparseMatrix<float, RowMajor> s_m = im2col_mat_tr.sparseView();
-//   SparseMatrix<float, RowMajor> s_m = im2col_mat.sparseView();
-//   s_m.makeCompressed();
-//   MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
-//    
-//   int t_test = 0;
-//   {  
-//      clock_t t;
-//      t = clock(); 
-//      for(int k=0;k<bench_iterations;k++) bench_Sparse(s_m.transpose(), filter_vectorized, d_o3);
-//      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
-//      t_test+=elapsed/(Ih*Iw*1.0); // normalized timing
-//   } 
-//   cout << d_o3 << endl;
-//   cout << "t_test: " << t_test << endl; 
  
   // Print out the o1 from im2col:
   std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
@@ -308,20 +292,5 @@ int main()
   // elapsed time per feature element in the entire bench iterations
   std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<std::endl;
   
-  // std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col/bench_iterations/iter <<"\tcsr\t"<<t_csr/bench_iterations/iter<<std::endl;
-//  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-//  cout << d_o2 ;
-
-/*
-  std::cout << "\n===Sparse Feature Map: \n" << sm << std::endl;
-  cout << "-----\n" << endl;
-  std::cout << " Size of Ptr:  " << sm.outerSize() << endl;
-
-  nz = sm.nonZeros();
-  std::cout << "non_zeros : " << nz << " density: " << nz/(sm.size()*1.0) << std::endl;
-
-  for (auto it = sm.valuePtr(); it != sm.valuePtr() + nz; ++it)
-    std::cout << *it << std::endl;
-*/
   return 0;
 }
