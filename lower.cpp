@@ -134,7 +134,7 @@ int main()
   } // end outer outer loop
   
   // Print out the lowered feature map:
-  std::cout << "\n===Lowered Feature Map: \n" << lowered_mat << std::endl;
+  std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
   cout << "-----\n" << endl;   
   
   int start_row_int = 0;
@@ -186,11 +186,24 @@ int main()
   // Print out the im2col interedmiate feature map:
   std::cout << "\n===im2col Intermediate Feature Map with Size: " << im2col_mat.rows() << ", " << im2col_mat.cols() <<  " \n" << im2col_mat << std::endl;
   cout << "-----\n" << endl;
-  exit(0); 
+  
   // Create the sparse representation of the lowered matrix:
-
+  SparseMatrix<float, RowMajor> lowered_mat_sparse = lowered_mat.sparseView();
+  // SparseMatrix<int> lowered_mat_sparse = lowered_mat.sparseView();
+  lowered_mat_sparse.makeCompressed();
+  
+  // Print out the im2col interedmiate feature map:
+  std::cout << "\n===CSR of Lowered Feature Map: " <<  " \n" << lowered_mat_sparse << std::endl;
+  cout << "-----\n" << endl;
+  
   // Create the filter K 
-  VectorXd d_b_vectorized  = VectorXd::Random(Kh*Kw);
+  VectorXd filter  = VectorXd::Ones(Kh*Kw);
+
+  // Print out the im2col interedmiate feature map:
+  std::cout << "\n===Filter: " <<  " \n" << filter  << std::endl;
+  cout << "-----\n" << endl;
+  exit(0);
+
 
 
   std::cout << "\n===Sparse Feature Map: \n" << sm << std::endl;
