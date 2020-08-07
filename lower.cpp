@@ -3,6 +3,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <boost/timer/timer.hpp>
+#include <time.h>
+
 
 using namespace Eigen;
 using namespace std;
@@ -250,18 +252,13 @@ int main()
 
    // Perform 50 times dense matrix dense vector multiplication: d_o1 = d_m * d_b
    {   
-      cpu_timer timer;
-      auto start = std::chrono::system_clock::now();
+      clock_t t;
+      t = clock(); 
       for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
-      auto end = std::chrono::system_clock::now();
-      auto elapsed = end - start;
-      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);	
-      cpu_times const elapsed_times(timer.elapsed());
-      //nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
-      t_im2col+=elapsed/(Ih*Iw * 1.0); // normalized timing
+      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+      t_im2col+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
   
-  cout << t_im2col << endl;
   // Print out the o1 from im2col:
   std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() <<  " \n" << d_o1 << std::endl;
   cout << "-----\n" << endl;
@@ -277,20 +274,45 @@ int main()
 
 
    // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
-   {   
-      cpu_timer timer;
+   {  
+      clock_t t;
+      t = clock(); 
       for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      cpu_times const elapsed_times(timer.elapsed());
-      nanosecond_type const elapsed(elapsed_times.system+elapsed_times.user);
-      t_csr+=elapsed/(Ih*Iw * 1.0); // normalized timing
+      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+      t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
+
+
+   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+   // SparseMatrix<float, RowMajor> s_m = im2col_mat_tr.sparseView();
+   SparseMatrix<float, RowMajor> s_m = im2col_mat.sparseView();
+   s_m.makeCompressed();
+   MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
   
-  cout << t_csr << endl; 
+   cout << s_m.size() << endl;
+   cout << s_m*filter_vectorized;
+   cout << "Done" << endl;
+   exit(0);
+   int t_test = 0;
+   {  
+      clock_t t;
+      t = clock(); 
+      for(int k=0;k<bench_iterations;k++) bench_Sparse(s_m, filter_vectorized, d_o3);
+      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+      t_test+=elapsed/(Ih*Iw*1.0); // normalized timing
+   } 
+   cout << d_o3 << endl;
+   cout << "t_test: " << t_test << endl; 
+   exit(0);
+ 
   // Print out the o1 from im2col:
   std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
   cout << "-----\n" << endl;
-
-  std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col/50/iter <<"\tcsr\t"<<t_csr/50/iter<<std::endl;
+ 
+  // elapsed time per feature element in the entire bench iterations
+  std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<std::endl;
+  
+  // std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col/bench_iterations/iter <<"\tcsr\t"<<t_csr/bench_iterations/iter<<std::endl;
 //  csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
 //  cout << d_o2 ;
 
