@@ -88,6 +88,35 @@ void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindi
   }
 } // end mult
 
+void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow) 
+{
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  
+  int x                = Aindptr[0];
+  int *Aindex_help     = &Aindices[x];
+  double *Adata_help   = &Adata[x];
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (; x < Aindptr[n + 1]; ++x)
+    {   
+      double result = 0.0;
+      int NZE_index = *Aindex_help; Aindex_help++;
+      int NZE_data  = *Adata_help; Adata_help++;
+    
+      for(int l = 0; l < Kh; ++l)
+      {   
+        int m      = NZE_index/Kw - l;
+        int Kindex = NZE_index%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+             
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O(m, n) += NZE_data*K[Kindex];
+      }   
+    }   
+
+  }
+} // end mult
+
 
 int main()
 {
@@ -278,7 +307,8 @@ int main()
    {  
       clock_t t;
       t = clock(); 
-      for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 

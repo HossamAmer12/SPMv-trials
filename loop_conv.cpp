@@ -4,7 +4,11 @@
 #include <Eigen/Sparse>
 #include <boost/timer/timer.hpp>
 #include <time.h>
+#include <fstream>
 
+
+#define IS_PRINT        0
+#define IS_PRINT_SIZE   0
 
 using namespace Eigen;
 using namespace std;
@@ -19,9 +23,69 @@ void bench_Sparse(const SparseMatrix<float> &m, const MatrixXf &in, MatrixXf &o)
 
 void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
  // o.noalias() = m*in.transpose();
- o.noalias() = m*in;
+
+ // cout << m.rows() << ", " << m.cols() << endl;
+ // cout << in.rows() << ", " << in.cols() << endl;
+///  exit(0);
+   o.noalias() = m*in;
+//  o.noalias() = m.transpose()*in;
 
 }
+
+
+void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow) 
+{
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  
+  int x = Aindptr[0]; 
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (; x < Aindptr[n + 1]; ++x)
+    {   
+      double result = 0.0;
+      int NZE_index = Aindices[x];
+      int NZE_data  = Adata[x];
+      for(int l = 0; l < Kh; ++l)
+      {   
+        int m      = NZE_index/Kw - l;
+        int Kindex = NZE_index%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+         
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O(m, n) += NZE_data*K[Kindex];
+      }   
+    }   
+
+  }
+} // end mult
+
+void csrMult_v2(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow) 
+{
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  
+  int x                 = Aindptr[0];
+  int *Aindex_help     = &Aindices[x];
+  double *Adata_help   = &Adata[x];
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (; x < Aindptr[n + 1]; ++x)
+    {   
+      double result = 0.0;
+      int NZE_index = *Aindex_help; Aindex_help++;
+      int NZE_data  = *Adata_help; Adata_help++;
+      for(int l = 0; l < Kh; ++l)
+      {   
+        int m      = NZE_index/Kw - l;
+        int Kindex = NZE_index%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+                 
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O(m, n) += NZE_data*K[Kindex];
+      }   
+    }   
+
+  }
+} // end mult
 
 void csrMult_v3(VectorXd& Ax, VectorXd& x, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr)
 {
@@ -94,6 +158,9 @@ int main()
   
   // density:
   float density = 0.1;
+   
+  for(; density < 1.1; density+=0.05)
+  {  
 
   // timer for im2col, csr
   float t_im2col = 0;
@@ -109,8 +176,18 @@ int main()
   int num_filters = 1; // 64
 
   // mixed 0: conv_node 3
-  int Ih = 5;
-  int Iw = 5;
+//  int Ih = 5;
+//  int Iw = 5;
+   
+ int Ih = 149;
+ int Iw = 149;
+
+  // adjust the iterations based on Ih  
+  if(Ih > 100)
+  {
+    bench_iterations = 1000;
+  }
+  
   // int Ic = 32; // this is for the node
   int Ic = 1; // put it as articial for now
   int In = 1;
@@ -140,10 +217,18 @@ int main()
     org_fm(r, c) = 1;
   }
 
+#if IS_PRINT
   // Print out the original feature map:
   std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << org_fm << std::endl;
   cout << "-----\n" << endl;
-  
+#endif
+
+#if IS_PRINT_SIZE
+  // Print out the original feature map:
+  std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << std::endl;
+  cout << "-----\n" << endl;
+#endif  
+
   // Create the lowered matrix: 
   MatrixXf lowered_mat  = MatrixXf::Zero(Ow, Ih*Kw);
   int sub_matrix_index  = 0;  
@@ -174,11 +259,20 @@ int main()
    sub_matrix_index++;
 
   } // end outer outer loop
-  
+
+#if IS_PRINT  
   // Print out the lowered feature map:
   std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
   cout << "-----\n" << endl;   
-  
+#endif
+
+
+#if IS_PRINT_SIZE  
+  // Print out the lowered feature map:
+  std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n"  << std::endl;
+  cout << "-----\n" << endl;   
+#endif
+
   int start_row_int = 0;
   int start_col_int = 0;
 
@@ -225,27 +319,47 @@ int main()
 
   } // end outer outer loop
   
+#if IS_PRINT
   // Print out the im2col interedmiate feature map:
   std::cout << "\n===im2col Intermediate Feature Map with Size: " << im2col_mat.rows() << ", " << im2col_mat.cols() <<  " \n" << im2col_mat << std::endl;
-  cout << "-----\n" << endl;
-  
+  cout << "-----\n" << endl;  
+#endif
+
+
+#if IS_PRINT_SIZE
+  // Print out the im2col interedmiate feature map:
+  std::cout << "\n===im2col Intermediate Feature Map with Size: " << im2col_mat.rows() << ", " << im2col_mat.cols() <<  " \n" << std::endl;
+  cout << "-----\n" << endl;  
+#endif
+
   // Create the sparse representation of the lowered matrix:
   SparseMatrix<float, RowMajor> lowered_mat_sparse = lowered_mat.sparseView();
   // SparseMatrix<int> lowered_mat_sparse = lowered_mat.sparseView();
   lowered_mat_sparse.makeCompressed();
-  
+ 
+#if IS_PRINT 
   // Print out the im2col interedmiate feature map:
   std::cout << "\n===CSR of Lowered Feature Map: " <<  " \n" << lowered_mat_sparse << std::endl;
   cout << "-----\n" << endl;
-  
+#endif  
+
   // Create the filter K and its vectorized version:
   MatrixXf filter             = MatrixXf::Ones(Kh, Kw);
- VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
+  VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
 
+
+#if IS_PRINT
   // Print out the im2col interedmiate feature map:
   std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
   cout << "-----\n" << endl;
-  
+#endif
+
+#if IS_PRINT_SIZE
+  // Print out the im2col interedmiate feature map:
+  std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
+  cout << "-----\n" << endl;
+#endif
+
   // Prepare the output for im2col, sparseMat
   MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
   MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
@@ -257,15 +371,23 @@ int main()
    {   
       clock_t t;
       t = clock(); 
-      for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
+      for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat, filter_vectorized, d_o1);
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_im2col+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
-  
+
+#if IS_PRINT
   // Print out the o1 from im2col:
   std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() <<  " \n" << d_o1 << std::endl;
   cout << "-----\n" << endl;
-  
+#endif
+
+
+#if IS_PRINT_SIZE 
+  // Print out the o1 from im2col:
+  std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() << std::endl;
+  cout << "-----\n" << endl;
+#endif
   
   // Prepare the Adata, Aindices, AindPtr for CSR multiplication
   int nz = lowered_mat_sparse.nonZeros();
@@ -280,17 +402,38 @@ int main()
    {  
       clock_t t;
       t = clock(); 
-      for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<bench_iterations;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // bench_iterations = 1; // if you want to see the correct result of csr_mult, comment this line
+      for(int k=0;k<bench_iterations;k++) csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
-   } 
+   }
  
+#if IS_PRINT
   // Print out the o1 from im2col:
   std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
   cout << "-----\n" << endl;
- 
+#endif 
+
+
+#if IS_PRINT_SIZE
+  // Print out the o1 from im2col:
+  std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() << std::endl;
+  cout << "-----\n" << endl;
+#endif 
+
   // elapsed time per feature element in the entire bench iterations
-  std::cout<<"\nbatch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<std::endl;
+  std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<std::endl;
   
+  ofstream myfile;
+  myfile.open ("csr_log.txt", ios::out | ios::app);
+  int batch = 1;
+  myfile << Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
+	<<t_csr <<"\tpercent\t"<< 100.0*(t_csr-t_im2col)/t_im2col << "\n";
+  myfile.close();
+  
+  } // density loop
+ 
   return 0;
 }
