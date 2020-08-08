@@ -157,9 +157,9 @@ int main()
 {
   
   // density:
-  float density = 0.1;
+  float density = 0.05;
    
-  for(; density < 1.1; density+=0.05)
+ for(; density < 1.1; density+=0.05)
   {  
 
   // timer for im2col, csr
@@ -179,8 +179,16 @@ int main()
 //  int Ih = 5;
 //  int Iw = 5;
    
- int Ih = 149;
- int Iw = 149;
+// int Ih = 149;
+// int Iw = 149;
+
+  int Ih = 50;
+  int Iw = 50;
+ 
+  // Kernel dimensions
+  int Kh = 3;
+  int Kw = 3;
+
 
   // adjust the iterations based on Ih  
   if(Ih > 100)
@@ -193,10 +201,6 @@ int main()
   int In = 1;
 
   int K = 1; // number of filters
-
-  // Kernel dimensions
-  int Kh = 3;
-  int Kw = 3;
 
   int Oh = (1 + Ih - Kh + 2 * padding)/stride; // removed + 1
   int Ow = (1 + Iw - Kw + 2 * padding)/stride;
@@ -429,8 +433,8 @@ int main()
   ofstream myfile;
   myfile.open ("csr_log.txt", ios::out | ios::app);
   int batch = 1;
-  myfile << Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
-	<<t_csr <<"\tpercent\t"<< 100.0*(t_csr-t_im2col)/t_im2col << "\n";
+  myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
+	<<t_csr <<"\tpercent\t"<< 100.0*(t_im2col-t_csr)/t_im2col << "\n";
   myfile.close();
   
   } // density loop

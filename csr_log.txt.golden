@@ -48,24 +48,3 @@
 3x3 | 149x149) batch	1	density	1.05	im2col	0.00498496	csr	0.0402494	percent	-707.418
 
 
-3x3 | 50x50) batch	1	density	0.05	im2col	0.457956	csr	0.292368	percent	36.1581
-3x3 | 50x50) batch	1	density	0.1	im2col	0.458883	csr	0.563027	percent	-22.6951
-3x3 | 50x50) batch	1	density	0.15	im2col	0.457593	csr	0.803254	percent	-75.5391
-3x3 | 50x50) batch	1	density	0.2	im2col	0.456923	csr	1.01091	percent	-121.242
-3x3 | 50x50) batch	1	density	0.25	im2col	0.458844	csr	1.2512	percent	-172.685
-3x3 | 50x50) batch	1	density	0.3	im2col	0.45795	csr	1.40089	percent	-205.904
-3x3 | 50x50) batch	1	density	0.35	im2col	0.458587	csr	1.64711	percent	-259.17
-3x3 | 50x50) batch	1	density	0.4	im2col	0.458956	csr	1.83761	percent	-300.388
-3x3 | 50x50) batch	1	density	0.45	im2col	0.458625	csr	1.98939	percent	-333.773
-3x3 | 50x50) batch	1	density	0.5	im2col	0.458403	csr	2.13728	percent	-366.244
-3x3 | 50x50) batch	1	density	0.55	im2col	0.457708	csr	2.33328	percent	-409.774
-3x3 | 50x50) batch	1	density	0.6	im2col	0.458729	csr	2.38512	percent	-419.941
-3x3 | 50x50) batch	1	density	0.65	im2col	0.457118	csr	2.57667	percent	-463.678
-3x3 | 50x50) batch	1	density	0.7	im2col	0.458076	csr	2.77491	percent	-505.776
-3x3 | 50x50) batch	1	density	0.75	im2col	0.45901	csr	2.84577	percent	-519.98
-3x3 | 50x50) batch	1	density	0.8	im2col	0.458382	csr	2.93246	percent	-539.741
-3x3 | 50x50) batch	1	density	0.85	im2col	0.459895	csr	3.12007	percent	-578.43
-3x3 | 50x50) batch	1	density	0.9	im2col	0.458812	csr	3.22811	percent	-603.58
-3x3 | 50x50) batch	1	density	0.95	im2col	0.458658	csr	3.24104	percent	-606.636
-3x3 | 50x50) batch	1	density	1	im2col	0.458919	csr	3.4408	percent	-649.761
-3x3 | 50x50) batch	1	density	1.05	im2col	0.458649	csr	3.42363	percent	-646.46
