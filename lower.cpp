@@ -5,6 +5,7 @@
 #include <boost/timer/timer.hpp>
 #include <time.h>
 
+#include <math.h>
 
 using namespace Eigen;
 using namespace std;
@@ -86,10 +87,7 @@ int end_row)
 
   int n, x, l, m, Kindex;
 
-#pragma omp parallel num_threads(2)
-{
-#pragma omp parallel for default(none) private(n, x, l, m, Kindex) shared(O, Adata, Aindices, Aindptr, K, Kh, Kw, Oh, Ow)   
-  for (n = 0; n < Ow/2; ++n)
+  for (n = start_row; n < end_row; ++n)
   {
     for (x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
     {
@@ -103,9 +101,7 @@ int end_row)
         O(m, n) += Adata[x]*K[Kindex];
       }
     }
-
   }
-}
 } // end mult
 
 int main()
@@ -299,7 +295,18 @@ int main()
       t = clock(); 
       // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
       // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<1;k++) 
+      
+      int num_threads = 2; 
+      int piece_size  = ceil(1.0*Ow / num_threads);
+// #pragma omp parallel for default(none) private(row_ind,index) shared(result,A,rowA,colA,x,n)  
+    for(int p = 0; p < Ow; p = p + piece_size) 
+    {
+      int start_row = p;
+      int end_row   = p + piece_size - 1;
+      cout << "s, e : " << start_row << ", " << end_row  << "== pice " << piece_size << ", Ow: " << Ow << endl;
+      csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow, p, p + piece_size - 1);
+    }
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
