@@ -79,23 +79,24 @@ void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Ai
 
 // https://web.stanford.edu/class/cs315b/projects/conjugate_gradient/conjugate_gradient.cpp
 // Parallel version
-void csrMult_vp(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
+void csrMult_vp(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow, int start_row, 
+int end_row)
 {
   // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
 
-  int n, x;
+  int n, x, l, m, Kindex;
 
-#pragma omp parallel num_threads(8)
+#pragma omp parallel num_threads(2)
 {
-#pragma omp parallel for default(none) private(n, x) shared(O, Adata, Aindices, Aindptr, K, Kh, Kw, Oh, Ow)   
-  for (int n = 0; n < Ow; ++n)
+#pragma omp parallel for default(none) private(n, x, l, m, Kindex) shared(O, Adata, Aindices, Aindptr, K, Kh, Kw, Oh, Ow)   
+  for (n = 0; n < Ow/2; ++n)
   {
-    for (int x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
+    for (x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
     {
-      for(int l = 0; l < Kh; ++l)
+      for(l = 0; l < Kh; ++l)
       {
-        int m      = Aindices[x]/Kw - l;
-        int Kindex = Aindices[x]%Kw + l*Kw; 
+        m      = Aindices[x]/Kw - l;
+        Kindex = Aindices[x]%Kw + l*Kw; 
         if(m < 0 || m >= Oh) continue;
          
         // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
