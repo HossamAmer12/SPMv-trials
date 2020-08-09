@@ -23,48 +23,6 @@ void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
 
 }
 
-void csrMult_v3(VectorXd& Ax, VectorXd& x, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr)
-{
-   // This code assumes that the size of Ax is numRowsA.
-   int dataIdx = Aindptr[0];
-   int *Aindex = &Aindices[dataIdx];
-
- for(int j = 0; j < Aindptr.size(); ++j)
- {
-  cout << j << ") " << Aindptr[j] << endl;
- }
-
-   cout << "\nCaught the exception 22222 " << endl;
-   cout << "value of i: " << 0 << ", Ax Size: " << Ax.size() << endl;
-   cout << "Loop AindPtr "  << Aindptr[1] << ", AindPtr.size: " << Aindptr.size() << endl;
-   cout << "dataIdx: " << dataIdx << endl;
-   cout << "Adatat size "  << Adata.size() << endl;
-  for (int i = 0; i < Ax.size(); i++)
-  {
-    double Ax_i = 0.0;
-    for (; dataIdx < Aindptr[i + 1]; dataIdx++)
-    {
-      if(i > Aindptr.size())
-      {
-        cout << "Go beyond Aindptr.size "  << Aindptr.size() << ", " << Ax.size()  << endl;
-        exit(0);
-      }
-      if(dataIdx > Adata.size())
-      {
-        cout << "\nCaught the exception " << endl;
-        cout << "value of i: " << i << ", Ax Size: " << Ax.size() << endl;
-        cout << "Loop AindPtr "  << Aindptr[i] << ", AindPtr.size: " << Aindptr.size() << endl;
-        cout << "dataIdx: " << dataIdx << endl;
-        cout << "Adatat size "  << Adata.size() << endl;
-        exit(0);
-      }
-      Ax_i += Adata[dataIdx] * x[*Aindex];
-    }
-
-     Ax[i] = Ax_i;
-  }
-} // end mult
-
 
 void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
@@ -117,6 +75,37 @@ void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Ai
   }
 } // end mult
 
+
+
+// https://web.stanford.edu/class/cs315b/projects/conjugate_gradient/conjugate_gradient.cpp
+// Parallel version
+void csrMult_vp(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
+{
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+  int n, x;
+
+#pragma omp parallel num_threads(8)
+{
+#pragma omp parallel for default(none) private(n, x) shared(O, Adata, Aindices, Aindptr, K, Kh, Kw, Oh, Ow)   
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (int x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
+    {
+      for(int l = 0; l < Kh; ++l)
+      {
+        int m      = Aindices[x]/Kw - l;
+        int Kindex = Aindices[x]%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+         
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O(m, n) += Adata[x]*K[Kindex];
+      }
+    }
+
+  }
+}
+} // end mult
 
 int main()
 {
@@ -308,7 +297,8 @@ int main()
       clock_t t;
       t = clock(); 
       // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
