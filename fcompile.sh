@@ -27,7 +27,7 @@
 #/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp dummy.cpp
 
 # Compile lower.cpp
-/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp lower.cpp
+# /usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp lower.cpp
 
 # Compile loop_conv.cpp
 #/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp loop_conv.cpp
@@ -40,3 +40,22 @@
 # Compile quick trials
 #/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp back.cpp
 #/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp test_mult.cpp
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# module load eigen/3.2.10
+# module load gcc/6.4.0
+# module load boost/1.72.0
+
+# server 
+# Compile lower.cpp
+# gcc -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp lower.cpp
+
+# gcc -O3 -march=native -ffast-math  -msse4 -w -lstdc++ -o sparse -fopenmp lower.cpp
+
+gcc -O3 -march=native -ffast-math  -msse4 -w -lstdc++ -o loop_conv -fopenmp loop_conv.cpp
+
+
+# g++ -O3 -fopenmp gs_test.cpp -o gs_test
+
+time ./loop_conv

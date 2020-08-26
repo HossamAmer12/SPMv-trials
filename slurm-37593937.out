@@ -1,0 +1,15 @@
+loop_conv.cpp: In function ‘int main()’:
+loop_conv.cpp:845:119: error: ‘csrMult_vp’ was not declared in this scope
+       for(int k=0;k<bench_iterations;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+                                                                                                                       ^
+loop_conv.cpp:863:120: error: ‘csrMult_vp1’ was not declared in this scope
+       for(int k=0;k<bench_iterations;k++) csrMult_vp1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+                                                                                                                        ^
+loop_conv.cpp:906:3: error: expected ‘;’ before ‘myfile’
+   myfile.close();
+   ^~~~~~
+/var/spool/slurmd/job37593937/slurm_script: line 11: 29260 Segmentation fault      (core dumped) ./loop_conv > loop_conv.txt
+
+real	0m0.820s
+user	0m4.572s
+sys	0m0.063s

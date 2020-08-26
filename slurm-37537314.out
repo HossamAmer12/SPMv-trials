@@ -1,0 +1,38 @@
+
+===Lowered Feature Map of Size: 8, 30
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+0 0 1 0 0 0 0 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0
+0 1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Adata Vectors : 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+Aindices Vectors : 
+20 28 19 27 18 11 23 2 8 10 11 22 1 7 8 9 10 21 0 6 7 9 2 6 
+Aindptr Vectors : 
+0 2 4 5 7 12 18 22 24 
+start --> 0 end --> 2
+start --> 2 end --> 4
+start --> 4 end --> 5
+start --> 5 end --> 7
+start --> 7 end --> 12
+start --> 12 end --> 18
+start --> 18 end --> 22
+start --> 22 end --> 24
+0 0 1 1 2 3 3 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 7 7 
+*CSR without omp : 0.006 milliseconds
+2 2 1 2 5 6 4 2 
+*CSR with element by element: 0.009 milliseconds
+2 2 1 2 5 6 4 2 
+*CSR with omp : 0.79 milliseconds
+2 2 1 2 5 6 4 2 
+#threads : 1
+number of threads : 0
+/var/spool/slurmd/job37537314/slurm_script: line 11: 12362 Segmentation fault      (core dumped) ./loop_conv
+
+real	0m0.182s
+user	0m0.136s
+sys	0m0.056s

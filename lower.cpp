@@ -2,14 +2,14 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <boost/timer/timer.hpp>
+// #include <boost/timer/timer.hpp>
 #include <time.h>
 
 #include <math.h>
 
 using namespace Eigen;
 using namespace std;
-using namespace boost::timer;
+// using namespace boost::timer;
 
 // https://scicomp.stackexchange.com/questions/27977/how-can-i-speed-up-this-code-for-sparse-matrix-vector-multiplication
 
