@@ -1,0 +1,5 @@
+
+real	0m0.360s
+user	0m1.339s
+sys	0m0.050s
+/var/spool/slurmd/job37644650/slurm_script: line 15: timr: command not found

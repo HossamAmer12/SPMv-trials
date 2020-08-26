@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
@@ -8,8 +10,10 @@
 // #include <sys/time.h>
 #include <omp.h>
 #include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <string>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #define IS_PRINT        0
 #define IS_PRINT_SIZE   0
@@ -413,9 +417,9 @@ vec_t_i* new_vector_i(int length)
 }
 
 void free_vector(vec_t* vec) {
-    cout << "vec_t" << endl;
     free(vec->value);
     free(vec);
+    // cout << "vec_t" << endl;
 }
 
 void free_vector(vec_t_i* vec) {
@@ -636,15 +640,83 @@ void print_vec(vec_t *Op, index_t nnz)
 //   }
 // }
 
-int main()
+int main(int argc, char* argv[])
 {
+    // Check the number of parameters
+    if (argc < 7) {
+        // Tell the user how to run the program
+        std::cerr << "Usage: " << argv[0] << " density" << " Ih" << " Iw" << " Kh" << " Kw" << " bench_iterations" << std::endl;
+        /* "Usage messages" are a conventional way of telling the user
+         * how to run a program if they enter the command incorrectly.
+         */
+        return 1;
+    }
+    // Print the user's name:
+    std::cout << argv[0] << " density : " << argv[1] << " Ih : " << argv[2] << " Iw : " << argv[3] 
+              << " Kh : " << argv[4] << " Kw : " << argv[5] << " bench_iterations : " << argv[6] << std::endl;
+
+    //Example output(no arguments passed) :
+    //Usage: a.exe <NAME>
+    //Example output(one argument passed) :
+    //a.exe says hello, Chris!
 
     // float density:
-    float density = 0.05;
-    // float density = 0.5;
-//#pragma parallel for priavte (density)
-    for (; density < 1.05; density += 0.05)
+    float density        = atof(argv[1]);
+    int Ih               = atoi(argv[2]);
+    int Iw               = atoi(argv[3]);
+    int Kh               = atoi(argv[4]);
+    int Kw               = atoi(argv[5]);
+    int bench_iterations = atoi(argv[6]);
+    // bench iterations
+    //int bench_iterations = 100;
+
+
+    // Conv parameters:
+    int padding = 0;
+    int stride = 1;
+    int num_filters = 1; // 64
+
+    // mixed 0: conv_node 3
+  //  int Ih = 5;
+  //  int Iw = 5;
+
+    //int Ih = 149;
+    //int Iw = 149;
+
+    //int Ih = 20;
+    //int Iw = 20;
+    int Ib = 1; // batch size
+    int batch = 1;
+
+    // Kernel dimensions
+    //int Kh = 3;
+    //int Kw = 3;
+
+
+    // adjust the iterations based on Ih  
+    // if (Ih > 100)
+    // {
+    //     bench_iterations = 1000;
+    // }
+
+    // int Ic = 32; // this is for the node
+    int Ic = 1; // put it as articial for now
+    int In = 1;
+
+    int K = 1; // number of filters
+
+    int Oh = (1 + Ih - Kh + 2 * padding) / stride; // removed + 1
+    int Ow = (1 + Iw - Kw + 2 * padding) / stride;
+
+    int iter = 1;  // total number of times to perform the test for each of dense, sparse multiplication
+
+
+    // float density = 0.05;
+
+    // for (; density < 1.05; density += 0.05)
     {
+        // Create your original input feature map:
+        MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
         cout << " ******* DENSITY =  " << density << " ******* " << endl;
 
         // timer for im2col, csr
@@ -657,54 +729,8 @@ int main()
         float t_csr_spmv_seq = 0;
         float t_csr_spmv_vp = 0;
         float t_csr_spmv_vp1 = 0;
-        float t_csr_spmv_vp2 = 0;
+        float t_csr_spmv_vp2_1 = 0, t_csr_spmv_vp2_2 = 0;
 
-
-        // bench iterations
-        int bench_iterations = 100;
-
-
-        // Conv parameters:
-        int padding = 0;
-        int stride = 1;
-        int num_filters = 1; // 64
-
-        // mixed 0: conv_node 3
-      //  int Ih = 5;
-      //  int Iw = 5;
-
-        int Ih = 149;
-        int Iw = 149;
-
-        //int Ih = 20;
-        //int Iw = 20;
-        int Ib = 1; // batch size
-        int batch = 1;
-
-        // Kernel dimensions
-        int Kh = 3;
-        int Kw = 3;
-
-
-        // adjust the iterations based on Ih  
-        if (Ih > 100)
-        {
-            bench_iterations = 1000;
-        }
-
-        // int Ic = 32; // this is for the node
-        int Ic = 1; // put it as articial for now
-        int In = 1;
-
-        int K = 1; // number of filters
-
-        int Oh = (1 + Ih - Kh + 2 * padding) / stride; // removed + 1
-        int Ow = (1 + Iw - Kw + 2 * padding) / stride;
-
-        int iter = 1;  // total number of times to perform the test for each of dense, sparse multiplication
-
-        // Create your original input feature map:
-        MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
 
         std::vector<int> cols = { 0,1,4,0,4,0,4 };
         std::vector<int> rows = { 0,0,0,2,2,3,3 };
@@ -957,6 +983,8 @@ int main()
         cout << "Aindptr Vectors : " << endl;
         print_vec(Aindptr);
 #endif
+
+
 #if SpMV_seq_para
          vector<index_t> rindex;
          {
@@ -974,23 +1002,23 @@ int main()
         double bench_iterations_ = bench_iterations;
         
         // CSR without omp
-        t = clock();
-        for (int k = 0; k < bench_iterations; k++) sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
-        // sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
-        cout << "CSR without omp : " << elapsed_ << " milliseconds" << endl;
-        //print_vec(Op);
+        // t = clock();
+        // for (int k = 0; k < bench_iterations; k++) sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
+        // // sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
+        // elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
+        // cout << "CSR without omp : " << elapsed_ << " milliseconds" << endl;
+        // //print_vec(Op);
         t_csr_spmv_product += elapsed_;
         
         
         // CSR with element by element without omp
-        std::fill(Op.begin(), Op.end(), 0);
-        t = clock();
-        for (int k = 0; k < bench_iterations; k++) sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
-        // sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
-        cout << "CSR with element by element without omp: " << elapsed_ << " milliseconds" << endl;
-        //print_vec(Op);
+        // std::fill(Op.begin(), Op.end(), 0);
+        // t = clock();
+        // for (int k = 0; k < bench_iterations; k++) sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
+        // // sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
+        // elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
+        // cout << "CSR with element by element without omp: " << elapsed_ << " milliseconds" << endl;
+        // //print_vec(Op);
         t_csr_spmv_seq += elapsed_;
         
         
@@ -1022,31 +1050,31 @@ int main()
         for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
         // sp_mv_product_vp(Op_, Adata, Aindptr, Aindices, rindex, K1);
         elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        cout << "CSR with omp : " << elapsed_ << " milliseconds" << endl;
+        cout << "CSR with omp v1: " << elapsed_ << " milliseconds" << endl;
         //print_vec(Op);
 
         t_csr_spmv_vp += elapsed_;
         
         // Version 2
-        //std::fill(Op.begin(), Op.end(), 0);
-        //t = clock();
-        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
-        //// for(int k=0;k<bench_iterations;k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
-        //elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        //cout << "CSR with omp v2 : " << elapsed_ << " milliseconds" << endl;
-        //// print_vec(Op);
-        //t_csr_spmv_vp1 += elapsed_;
+        std::fill(Op.begin(), Op.end(), 0);
+        t = clock();
+        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
+        // for(int k=0;k<bench_iterations;k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
+        cout << "CSR with omp v2 : " << elapsed_ << " milliseconds" << endl;
+        // // print_vec(Op);
+        t_csr_spmv_vp1 += elapsed_;
 
         // version 3.1
-        //t = clock();
-        //std::fill(Op.begin(), Op.end(), 0);
-        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2(Op, Adata, Aindptr, Aindices, rindex, K1);
-        ////for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
-        //elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        //cout << "CSR with omp v3.1 : " << elapsed_ << " milliseconds" << endl;
-        //print_vec(Op);
+        t = clock();
+        std::fill(Op.begin(), Op.end(), 0);
+        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2(Op, Adata, Aindptr, Aindices, rindex, K1);
+        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
+        cout << "CSR with omp v3.1 : " << elapsed_ << " milliseconds" << endl;
+        // // print_vec(Op);
         
-        t_csr_spmv_vp2 += elapsed_;
+        t_csr_spmv_vp2_1 += elapsed_;
 
         // version 3.2
         t = clock();
@@ -1054,8 +1082,8 @@ int main()
         for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
         elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
         cout << "CSR with omp v3.2 : " << elapsed_ << " milliseconds" << endl;
-        //print_vec(Op_, Op.size());
-        t_csr_spmv_vp2 += elapsed_;
+        // print_vec(Op_, Op.size());
+        t_csr_spmv_vp2_2 += elapsed_;
 
         // free Memory 
 
@@ -1073,21 +1101,47 @@ int main()
         free_vector(Adata_);
 
         //return 0;
-        ofstream myfile_spmv;      
 #ifdef _WIN32
-        // cout << "_WIN32" << endl;
+        std::ofstream myfile_spmv;      
+        cout << "_WIN32" << endl;
         myfile_spmv.open("D:\\9.CPO&CPS\\OUTPUTs\\loop_conv\\COO\\spmv_log.txt", ios::out | ios::app);
 #endif
 #ifdef linux
-        // cout << "linux" << endl;
-        myfile_spmv.open("/home/ahamsala/scratch/DC/openmp_projects/Output_All/OURS/spmv_log.txt", ios::out | ios::app);
+        const std::string dir="//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//";
+        struct stat st;
+        if (stat(dir.c_str(), &st) == 0)
+        {
+          cout << "Invalid  Directory \n" ;
+          return 0;
+        }
+        std::string file_name = "spmv_log.txt";
+        std::string dir_spmv = dir + file_name;
+        // myfile_spmv.open("//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//spmv_log.txt", ios::out | ios::app);
+        // myfile_spmv.open(dir_spmv.c_str(), ios::out | ios::app);
+        cout << "linux :: " << dir_spmv.c_str() << endl;
+        std::ofstream myfile_spmv;
+        myfile_spmv.open(dir_spmv.c_str(), std::ofstream::out | std::ofstream::app);
 #endif
         // myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
         // <<t_csr <<"\tpercent\t"<< 100.0*(t_im2col-t_csr)/t_im2col << "\n";
-        myfile_spmv << Kh << "x" << Kw << " | " << Ih << "x" << Iw << ") batch\t" << batch << "\tdensity\t" << density << '\n'
-            << "CSR without omp:\t" << t_csr_spmv_product << "\tCSR with element by element without omp:\t" << t_csr_spmv_seq << '\n'
-            << "CSR with omp\t" << t_csr_spmv_vp << "\tCSR with omp v1\t" << t_csr_spmv_vp1 << "\tCSR with omp v2\t" << t_csr_spmv_vp2 << "\n\n";
-        myfile_spmv.close();
+        if (myfile_spmv.is_open())
+        {          
+          myfile_spmv << Kh << "x" << Kw << " | " << "(" << Ih << "x" << Iw << ") batch\t" << batch << '\n' 
+                      << "\ndensity\t" << density << '\n'
+                      << "\nCSR without omp:\t" << t_csr_spmv_product 
+                      << "\nCSR with element by element without omp:\t" << t_csr_spmv_seq << '\n'
+                      << "\nCSR with omp v1  :\t" << t_csr_spmv_vp 
+                      << "\nCSR with omp v2  :\t" << t_csr_spmv_vp1
+                      << "\nCSR with omp v3.1:\t" << t_csr_spmv_vp2_1 
+                      << "\nCSR with omp v3.2:\t" << t_csr_spmv_vp2_2 
+                      << "\n\n";
+          myfile_spmv.close();
+        }
+        else
+        {
+          cout << "Unable to open file";
+          return 0;
+        }
 
 
 #endif 

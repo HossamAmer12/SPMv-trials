@@ -8,4 +8,8 @@
 
 gcc -O3 -march=native -ffast-math  -msse4 -w -lstdc++ -o loop_conv -fopenmp loop_conv.cpp
 
+gcc -O3 -march=native -ffast-math  -msse4 -w -lstdc++ -o loop_conv_last -fopenmp loop_conv_last.cpp
+
 time ./loop_conv >loop_conv.txt
+
+timr ./loop_conv_last >loop_conv_last.txt
