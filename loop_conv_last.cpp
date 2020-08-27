@@ -4,20 +4,16 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-// #include <boost/timer/timer.hpp>
 #include <time.h>
 #include <fstream>
-// #include <sys/time.h>
 #include <omp.h>
 #include <math.h>
 #include <string>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+
 
 #define IS_PRINT        0
 #define IS_PRINT_SIZE   0
-#define PARALLEL        0
+#define gen_mtx         1
 #define NUM_THREAD_SPMV 4
 #define NUM_THREAD_CONV 4
 #define MAXTHREAD       16
@@ -54,7 +50,7 @@ void print_vec(vector<data_t>& Op);
 
 void print_vec(vector<index_t>& Op);
 
-void print_vec(vec_t* Op, index_t nnz);
+void print_vec(vec_t* vec);
 
 void free_vector(vec_t* vec);
 
@@ -207,7 +203,7 @@ void csrMult_vp(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Ai
     double* Adata_help = &Adata[x];
     int n, l;
     omp_set_num_threads(NUM_THREAD_CONV);
-// #pragma omp parallel for private (Aindex_help, Adata_help) shared(O , n)
+    // #pragma omp parallel for private (Aindex_help, Adata_help) shared(O , n)
     for (n = 0; n < Ow; ++n)
     {
         for (; x < Aindptr[n + 1]; ++x)
@@ -239,7 +235,7 @@ void csrMult_vp1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& A
     double* Adata_help = &Adata[x];
     int n, l;
     omp_set_num_threads(NUM_THREAD_CONV);
-//#pragma omp parallel for private (n, x, l)
+    //#pragma omp parallel for private (n, x, l)
     for (n = 0; n < Ow; ++n)
     {
         for (; x < Aindptr[n + 1]; ++x)
@@ -334,7 +330,7 @@ void sp_mv_product(vector<data_t>& O, vector<data_t>& Adata, vector<index_t>& Ai
 
     for (row_ind = 0; row_ind < n; row_ind++) {
         O[row_ind] = 0.0;
-        for (index = Aindptr[row_ind]; index < Aindptr[row_ind + 1]; index++) 
+        for (index = Aindptr[row_ind]; index < Aindptr[row_ind + 1]; index++)
         {
             O[row_ind] += Adata[index] * K[Aindices[index]];
         }
@@ -443,7 +439,7 @@ void copy_vec(vec_t_i* to, vector<index_t>& from)
     }
 }
 
-void sp_mv_product_vp(vec_t *O, vector<data_t>& Adata, vector<index_t>& Aindptr, vector<index_t>& Aindices, vector<index_t>& rindex, vector<data_t>& K,index_t nrow)
+void sp_mv_product_vp(vec_t* O, vector<data_t>& Adata, vector<index_t>& Aindptr, vector<index_t>& Aindices, vector<index_t>& rindex, vector<data_t>& K, index_t nrow)
 {
     index_t nnz = Adata.size();
     // index_t nrow = O.size();
@@ -525,8 +521,58 @@ void sp_mv_product_vp1(vector<data_t>& O, vector<data_t>& Adata, vector<index_t>
             O[r] = val;
         }
     }
-    double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds 
-    //cout << "INNER**CSR with omp v2 : " << elapsed_ << " milliseconds" << endl;
+    double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in msec 
+    //cout << "INNER**CSR with omp v2 : " << elapsed_ << " msec" << endl;
+}
+
+
+void sp_mv_product_vp1_(vec_t* O, vec_t* Adata, vec_t_i* Aindptr, vec_t_i* Aindices, vec_t_i* rindex, vec_t* K, index_t nrow, index_t nnz)
+{
+    clock_t t;
+    index_t n_threads = omp_get_num_procs();
+    vec_t* scratch_vector[MAXTHREAD];
+    // init_scratch_vectors(nrow, scratch_vector);
+    for (index_t t = 0; t < MAXTHREAD; t++)
+    {
+        scratch_vector[t] = new_vector(nrow);
+    }
+
+    omp_set_num_threads(MAXTHREAD);
+    // omp_set_num_threads(1);
+    // cout <<"rindex : " << rindex.size()<<"cindex : " << Aindices.size() <<endl;
+    t = clock();
+#pragma omp parallel
+    {
+        index_t tid = omp_get_thread_num();
+        index_t tcount = omp_get_num_threads();
+        vec_t* svec = scratch_vector[tid];
+
+        memset(svec->value, 0, svec->length * sizeof(index_t));
+        // zero_vector(svec);
+
+#pragma omp for
+        for (int idx = 0; idx < nnz; idx++)
+        {
+            data_t mval = Adata->value[idx];
+            index_t     r = rindex->value[idx];
+            index_t     c = Aindices->value[idx];
+            data_t xval = K->value[c];
+            data_t prod = mval * xval;
+            svec->value[r] += prod;
+        }
+#pragma omp for
+        for (index_t r = 0; r < nrow; r++)
+        {
+            data_t val = 0.0;
+            for (index_t t = 0; t < tcount; t++)
+            {
+                val += scratch_vector[t]->value[r];
+            }
+            O->value[r] = val;
+        }
+    }
+    double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in msec 
+    //cout << "INNER**CSR with omp v2 : " << elapsed_ << " msec" << endl;
 }
 
 
@@ -560,8 +606,8 @@ void sp_mv_product_vp2(vector<data_t>& O, vector<data_t>& Adata, vector<index_t>
 #pragma omp atomic
         O[last_r] += val;
     }
-    double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds 
-    //cout << "INNER**CSR with omp v3 : " << elapsed_ << " milliseconds" << endl;
+    double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in msec 
+    //cout << "INNER**CSR with omp v3 : " << elapsed_ << " msec" << endl;
 }
 
 void sp_mv_product_vp2_(vec_t* O, vec_t* Adata, vec_t_i* Aindptr, vec_t_i* Aindices, vec_t_i* rindex, vec_t* K, index_t nrow, index_t nnz)
@@ -569,12 +615,12 @@ void sp_mv_product_vp2_(vec_t* O, vec_t* Adata, vec_t_i* Aindptr, vec_t_i* Aindi
     //clock_t t;
     zero_vector(O);
     //t = clock();
-    #pragma omp parallel
+#pragma omp parallel
     {
         data_t val = 0.0;
         index_t last_r = 0;
         #pragma omp for nowait
-        for (index_t idx = 0; idx < nnz; idx++) 
+        for (index_t idx = 0; idx < nnz; idx++)
         {
             data_t mval = Adata->value[idx];
             index_t r = rindex->value[idx];
@@ -584,19 +630,19 @@ void sp_mv_product_vp2_(vec_t* O, vec_t* Adata, vec_t_i* Aindptr, vec_t_i* Aindi
             if (r == last_r) {
                 val += prod;
             }
-            else 
+            else
             {
-        #pragma omp atomic
+                #pragma omp atomic
                 O->value[last_r] += val;
                 last_r = r;
                 val = prod;
             }
         }
-    #pragma omp atomic
+        #pragma omp atomic
         O->value[last_r] += val;
     }
-    // double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds 
-    //cout << "INNER**CSR with omp v3 : " << elapsed_ << " milliseconds" << endl;
+    // double elapsed_ = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in msec 
+    //cout << "INNER**CSR with omp v3 : " << elapsed_ << " msec" << endl;
 }
 
 
@@ -619,13 +665,13 @@ void print_vec(vector<index_t>& Op)
     std::cout << std::endl;
 }
 
-void print_vec(vec_t *Op, index_t nnz)
-{
-    for (int i = 0; i < nnz; i++)
-    {
-        std::cout << Op->value[i] << ' ';
+void print_vec(vec_t* vec) {
+    index_t i;
+    printf("[");
+    for (i = 0; i < vec->length; i++) {
+        printf("\t%.2f", vec->value[i]);
     }
-    std::cout << std::endl;
+    printf("]\n");
 }
 
 
@@ -652,8 +698,8 @@ int main(int argc, char* argv[])
         return 1;
     }
     // Print the user's name:
-    std::cout << argv[0] << " density : " << argv[1] << " Ih : " << argv[2] << " Iw : " << argv[3] 
-              << " Kh : " << argv[4] << " Kw : " << argv[5] << " bench_iterations : " << argv[6] << std::endl;
+    std::cout << argv[0] << " density : " << argv[1] << " Ih : " << argv[2] << " Iw : " << argv[3]
+        << " Kh : " << argv[4] << " Kw : " << argv[5] << " bench_iterations : " << argv[6] << std::endl;
 
     //Example output(no arguments passed) :
     //Usage: a.exe <NAME>
@@ -661,11 +707,11 @@ int main(int argc, char* argv[])
     //a.exe says hello, Chris!
 
     // float density:
-    float density        = atof(argv[1]);
-    int Ih               = atoi(argv[2]);
-    int Iw               = atoi(argv[3]);
-    int Kh               = atoi(argv[4]);
-    int Kw               = atoi(argv[5]);
+    float density = atof(argv[1]);
+    int Ih = atoi(argv[2]);
+    int Iw = atoi(argv[3]);
+    int Kh = atoi(argv[4]);
+    int Kw = atoi(argv[5]);
     int bench_iterations = atoi(argv[6]);
     // bench iterations
     //int bench_iterations = 100;
@@ -728,7 +774,7 @@ int main(int argc, char* argv[])
         float t_csr_spmv_product = 0;
         float t_csr_spmv_seq = 0;
         float t_csr_spmv_vp = 0;
-        float t_csr_spmv_vp1 = 0;
+        float t_csr_spmv_vp1_1 = 0, t_csr_spmv_vp1_2 = 0;
         float t_csr_spmv_vp2_1 = 0, t_csr_spmv_vp2_2 = 0;
 
 
@@ -759,7 +805,8 @@ int main(int argc, char* argv[])
 #endif  
 
         // Create the lowered matrix: 
-        MatrixXf lowered_mat = MatrixXf::Zero(Ow, Ih * Kw);
+        // MatrixXf lowered_mat = MatrixXf::Zero(Ow, Ih * Kw);
+        MatrixXf lowered_mat = MatrixXf::Zero(1, Ih*Kw);
         int sub_matrix_index = 0;
 
         //std::cout << "\n====================================================================================\n" << endl;
@@ -783,9 +830,8 @@ int main(int argc, char* argv[])
                     lowered_mat(sub_matrix_index, lowered_mat_col_index) = org_fm(row_int, col_int);
                     lowered_mat_col_index++;
                 } // end inner loop
-
             } // end outer loop
-
+            break;
             sub_matrix_index++;
 
         } // end outer outer loop
@@ -903,7 +949,7 @@ int main(int argc, char* argv[])
             clock_t t;
             t = clock();
             for (int k = 0; k < bench_iterations; k++)  bench_Dense(im2col_mat, filter_vectorized, d_o1);
-            double elapsed = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds 
+            double elapsed = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in msec 
             // double elapsed =  omp_get_wtime() - t;
             t_im2col += elapsed / (Ih * Iw * 1.0); // normalized timing
         }
@@ -946,17 +992,17 @@ int main(int argc, char* argv[])
         vector<index_t> r_index = rindex_;
         vector<index_t> c_index = Aindices;
         vector<data_t> cooValue = Adata;
-
+#if gen_mtx
         ofstream myfile_coo;
         char buffer[200];
         int n;
 #ifdef _WIN32
-        // cout << "_WIN32" << endl;
-        n = sprintf_s(buffer, "D:\\9.CPO&CPS\\OUTPUTs\\loop_conv\\COO\\coo_%d_%0.2f.mtx", Iw, density);
+         cout << "_WIN32" << endl;
+        n = sprintf_s(buffer, "D:\\### PhD Codes ###\\OUTPUTs\\COO\\coo_%d_%d_%d_%0.2f.mtx", Ih, Kh, Kw, density);
 #endif
 #ifdef linux
         // cout << "linux" << endl;
-        n = sprintf(buffer, "/home/ahamsala/scratch/DC/openmp_projects/merge-spmv/tgz/coo_105/coo_%d_%0.2f.mtx", Iw, density);
+        n = sprintf(buffer, "/scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_%d_%d_%d_%0.2f.mtx", Ih, Kh, Kw, density);
 #endif
         myfile_coo.open(buffer, ios::out);
         myfile_coo << lowered_mat.rows() << " " << lowered_mat.cols() << " " << nz << endl;
@@ -965,7 +1011,7 @@ int main(int argc, char* argv[])
             myfile_coo << r_index[i] << " " << c_index[i] << endl;
         }
         myfile_coo.close();
-
+#endif
 
         double t;
         clock_t t_;
@@ -986,45 +1032,45 @@ int main(int argc, char* argv[])
 
 
 #if SpMV_seq_para
-         vector<index_t> rindex;
-         {
-             index_t row_start = 0;
-             for (int i; i < Aindptr.size() - 1; i++)
-             {
-                 // cout << "start --> " << Aindptr[i] << " end --> " <<Aindptr[i+1]<<endl;
-                 for (int row_i = Aindptr[i]; row_i < Aindptr[i + 1]; row_i++)
-                     rindex.push_back(row_start);
-                 row_start++;
-             }
-         }
+        vector<index_t> rindex;
+        {
+            index_t row_start = 0;
+            for (int i; i < Aindptr.size() - 1; i++)
+            {
+                // cout << "start --> " << Aindptr[i] << " end --> " <<Aindptr[i+1]<<endl;
+                for (int row_i = Aindptr[i]; row_i < Aindptr[i + 1]; row_i++)
+                    rindex.push_back(row_start);
+                row_start++;
+            }
+        }
         vector<data_t> Op(lowered_mat.rows(), 0.0);
         vector<data_t> K1(lowered_mat.cols(), 1.0);
         double bench_iterations_ = bench_iterations;
-        
+
         // CSR without omp
-        // t = clock();
-        // for (int k = 0; k < bench_iterations; k++) sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
-        // // sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
-        // elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
-        // cout << "CSR without omp : " << elapsed_ << " milliseconds" << endl;
-        // //print_vec(Op);
+        t = clock();
+        for (int k = 0; k < bench_iterations; k++) sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
+        // sp_mv_product(Op, Adata, Aindptr, Aindices, K1);
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec  
+        cout << "CSR without omp : " << elapsed_ << " msec" << endl;
+        //print_vec(Op);
         t_csr_spmv_product += elapsed_;
-        
-        
+
+
         // CSR with element by element without omp
-        // std::fill(Op.begin(), Op.end(), 0);
-        // t = clock();
-        // for (int k = 0; k < bench_iterations; k++) sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
-        // // sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
-        // elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds  
-        // cout << "CSR with element by element without omp: " << elapsed_ << " milliseconds" << endl;
+        std::fill(Op.begin(), Op.end(), 0);
+        t = clock();
+        for (int k = 0; k < bench_iterations; k++) sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
+        // sp_mv_product_seq(Op, Adata, Aindptr, Aindices, K1);
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec  
+        cout << "CSR with element by element without omp: " << elapsed_ << " msec" << endl;
         // //print_vec(Op);
         t_csr_spmv_seq += elapsed_;
-        
-        
+
+
         // version 1
         std::fill(Op.begin(), Op.end(), 0);
-        
+
         index_t nrow = Op.size();
         vec_t* Op_ = new_vector(nrow);
 
@@ -1036,7 +1082,7 @@ int main(int argc, char* argv[])
 
         vec_t_i* Aindices_ = new_vector_i(Aindices.size());
         copy_vec(Aindices_, Aindices);
-        
+
         vec_t_i* r_index_ = new_vector_i(r_index.size());
         copy_vec(r_index_, r_index);
 
@@ -1047,77 +1093,80 @@ int main(int argc, char* argv[])
 
         t = clock();
         //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp(Op_, Adata, Aindptr, Aindices, rindex, K1, nrow);
-        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
-        // sp_mv_product_vp(Op_, Adata, Aindptr, Aindices, rindex, K1);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        cout << "CSR with omp v1: " << elapsed_ << " milliseconds" << endl;
+         for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec 
+        cout << "CSR with omp v1: " << elapsed_ << " msec" << endl;
         //print_vec(Op);
 
         t_csr_spmv_vp += elapsed_;
-        
-        // Version 2
+
+        // Version 2.1
+        //std::fill(Op.begin(), Op.end(), 0);
+        //t = clock();
+        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
+        //// for(int k=0;k<bench_iterations;k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
+        //elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec 
+        //cout << "CSR with omp v2.1 : " << elapsed_ << " msec" << endl;
+        // // print_vec(Op);
+        //t_csr_spmv_vp1_1 += elapsed_;
+
+        // Version 2.2
         std::fill(Op.begin(), Op.end(), 0);
         t = clock();
-        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
+        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp1_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
         // for(int k=0;k<bench_iterations;k++) sp_mv_product_vp1(Op, Adata, Aindptr, Aindices, rindex, K1);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        cout << "CSR with omp v2 : " << elapsed_ << " milliseconds" << endl;
-        // // print_vec(Op);
-        t_csr_spmv_vp1 += elapsed_;
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec 
+        cout << "CSR with omp v2.2 : " << elapsed_ << " msec" << endl;
+        //print_vec(Op_);
+        t_csr_spmv_vp1_2 += elapsed_;
 
         // version 3.1
-        t = clock();
-        std::fill(Op.begin(), Op.end(), 0);
-        for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2(Op, Adata, Aindptr, Aindices, rindex, K1);
-        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        cout << "CSR with omp v3.1 : " << elapsed_ << " milliseconds" << endl;
+        //t = clock();
+        //std::fill(Op.begin(), Op.end(), 0);
+        //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2(Op, Adata, Aindptr, Aindices, rindex, K1);
+        ////for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
+        //elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec 
+        //cout << "CSR with omp v3.1 : " << elapsed_ << " msec" << endl;
         // // print_vec(Op);
-        
-        t_csr_spmv_vp2_1 += elapsed_;
+
+        //t_csr_spmv_vp2_1 += elapsed_;
 
         // version 3.2
         t = clock();
         //for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2(Op, Adata, Aindptr, Aindices, rindex, K1);
         for (int k = 0; k < bench_iterations; k++) sp_mv_product_vp2_(Op_, Adata_, Aindptr_, Aindices_, r_index_, K1_, nrow, nz);
-        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in milliseconds 
-        cout << "CSR with omp v3.2 : " << elapsed_ << " milliseconds" << endl;
-        // print_vec(Op_, Op.size());
+        elapsed_ = 1000 * ((double)(clock() - t)) / (CLOCKS_PER_SEC * bench_iterations_); // time in msec 
+        cout << "CSR with omp v3.2 : " << elapsed_ << " msec" << endl;
+        //print_vec(Op_);
         t_csr_spmv_vp2_2 += elapsed_;
 
         // free Memory 
 
-        cout << "Aindptr_ freeing" << endl;
-        free_vector(Aindptr_);
-        cout << "Aindices_ freeing" << endl;
-        free_vector(Aindices_);
-        cout << "r_index_ freeing" << endl;
-        free_vector(r_index_);
-        cout << "K1_ freeing" << endl;
-        free_vector(K1_);
-        cout << "Op_ freeing" << endl;
-        free_vector(Op_);
-        cout << "Adata_ freeing" << endl;
-        free_vector(Adata_);
+         //cout << "Aindptr_ freeing" << endl;
+         free_vector(Aindptr_);
+         //cout << "Aindices_ freeing" << endl;
+         free_vector(Aindices_);
+         //cout << "r_index_ freeing" << endl;
+         free_vector(r_index_);
+         //cout << "K1_ freeing" << endl;
+         free_vector(K1_);
+         //cout << "Op_ freeing" << endl;
+         free_vector(Op_);
+         //cout << "Adata_ freeing" << endl;
+         free_vector(Adata_);
 
         //return 0;
 #ifdef _WIN32
-        std::ofstream myfile_spmv;      
-        cout << "_WIN32" << endl;
-        myfile_spmv.open("D:\\9.CPO&CPS\\OUTPUTs\\loop_conv\\COO\\spmv_log.txt", ios::out | ios::app);
+        std::ofstream myfile_spmv;
+        const std::string dir = "D:\\### PhD Codes ###\\OUTPUTs\\"; //MSI
+        std::string  file_name = "spmv_log.txt";
+        myfile_spmv.open(dir + file_name, ios::out | ios::app);
 #endif
 #ifdef linux
-        const std::string dir="//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//";
-        struct stat st;
-        if (stat(dir.c_str(), &st) == 0)
-        {
-          cout << "Invalid  Directory \n" ;
-          return 0;
-        }
+        // const std::string dir="//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//";
+        const std::string dir = "/scratch/ahamsala/DC_CODES/OUTPUTs/COO/";
         std::string file_name = "spmv_log.txt";
         std::string dir_spmv = dir + file_name;
-        // myfile_spmv.open("//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//spmv_log.txt", ios::out | ios::app);
-        // myfile_spmv.open(dir_spmv.c_str(), ios::out | ios::app);
         cout << "linux :: " << dir_spmv.c_str() << endl;
         std::ofstream myfile_spmv;
         myfile_spmv.open(dir_spmv.c_str(), std::ofstream::out | std::ofstream::app);
@@ -1125,22 +1174,33 @@ int main(int argc, char* argv[])
         // myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
         // <<t_csr <<"\tpercent\t"<< 100.0*(t_im2col-t_csr)/t_im2col << "\n";
         if (myfile_spmv.is_open())
-        {          
-          myfile_spmv << Kh << "x" << Kw << " | " << "(" << Ih << "x" << Iw << ") batch\t" << batch << '\n' 
-                      << "\ndensity\t" << density << '\n'
-                      << "\nCSR without omp:\t" << t_csr_spmv_product 
-                      << "\nCSR with element by element without omp:\t" << t_csr_spmv_seq << '\n'
-                      << "\nCSR with omp v1  :\t" << t_csr_spmv_vp 
-                      << "\nCSR with omp v2  :\t" << t_csr_spmv_vp1
-                      << "\nCSR with omp v3.1:\t" << t_csr_spmv_vp2_1 
-                      << "\nCSR with omp v3.2:\t" << t_csr_spmv_vp2_2 
-                      << "\n\n";
-          myfile_spmv.close();
+        {
+            myfile_spmv << Kh << "x" << Kw << " | " << "(" << Ih << "x" << Iw << ")\t"
+                << "density\t" << density << '\n'
+                << "\t" << t_csr_spmv_product
+                << "\t" << t_csr_spmv_seq 
+                << "\t" << t_csr_spmv_vp
+                //<< "\t" << t_csr_spmv_vp1_1
+                << "\t" << t_csr_spmv_vp1_2
+                //<< "\t" << t_csr_spmv_vp2_1
+                << "\t" << t_csr_spmv_vp2_2
+                << "\n";
+            cout << '\n' << Kh << "x" << Kw << " | " << "(" << Ih << "x" << Iw << ") batch\t" << batch
+                << "\ndensity\t" << density 
+                << "\nCSR without omp:\t" << t_csr_spmv_product
+                << "\nCSR with element by element without omp:\t" << t_csr_spmv_seq
+                << "\nCSR with omp v1  :\t" << t_csr_spmv_vp
+                //<< "\nCSR with omp v2  :\t" << t_csr_spmv_vp1_1
+                << "\nCSR with omp v2.2  :\t" << t_csr_spmv_vp1_2
+                //<< "\nCSR with omp v3.1:\t" << t_csr_spmv_vp2_1
+                << "\nCSR with omp v3.2:\t" << t_csr_spmv_vp2_2
+                << "\n";
+            myfile_spmv.close();
         }
         else
         {
-          cout << "Unable to open file";
-          return 0;
+            cout << "Unable to open file";
+            return 0;
         }
 
 
@@ -1161,9 +1221,9 @@ int main(int argc, char* argv[])
             t = omp_get_wtime();
             // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
             for (int k = 0; k < bench_iterations; k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in milliseconds 
+            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in msec 
             // gettimeofday(&tv2, &tz);
-            cout << "normal csr  --> elapsed time = " << elapsed_ << " milliseconds" << endl;
+            cout << "normal csr  --> elapsed time = " << elapsed_ << " msec" << endl;
             d_o2 = d_o2 / bench_iterations;
             t_csr += elapsed_ / (Ih * Iw * 1.0); // normalized timing`
 #if IS_PRINT
@@ -1172,7 +1232,7 @@ int main(int argc, char* argv[])
             cout << "-----\n" << endl;
 #endif     
             // elapsed_ = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
-            // double elapsed = 1000*((double)(omp_get_wtime()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+            // double elapsed = 1000*((double)(omp_get_wtime()-t))/CLOCKS_PER_SEC; // time in msec 
         }
         // -------------------------------- Need to be fixed  for OpenMP --------------------------
 
@@ -1183,8 +1243,8 @@ int main(int argc, char* argv[])
 
             //srMult_vp(MatrixXf& O, vector<double>& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int
             for (int k = 0; k < bench_iterations; k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in milliseconds
-            cout << "Parallel csr v0 --> elapsed time = " << elapsed_ << " milliseconds" << endl;;
+            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in msec
+            cout << "Parallel csr v0 --> elapsed time = " << elapsed_ << " msec" << endl;;
             d_o2 = d_o2 / bench_iterations;
             t_csr_vp += elapsed_ / (Ih * Iw * 1.0);
 #if IS_PRINT
@@ -1200,8 +1260,8 @@ int main(int argc, char* argv[])
             t = omp_get_wtime();
             for (int k = 0; k < bench_iterations; k++) csrMult_vp1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
             elapsed = omp_get_wtime() - t;
-            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in milliseconds
-            cout << "Parallel csr v1 --> elapsed time = " << elapsed_ << " milliseconds" << endl;
+            elapsed_ = 1000 * ((double)(clock() - t_)) / CLOCKS_PER_SEC; // time in msec
+            cout << "Parallel csr v1 --> elapsed time = " << elapsed_ << " msec" << endl;
             d_o2 = d_o2 / bench_iterations;
             t_csr_vp1 += elapsed_ / (Ih * Iw * 1.0);
 #if IS_PRINT
@@ -1232,7 +1292,7 @@ int main(int argc, char* argv[])
 
 #ifdef _WIN32
         // cout << "_WIN32" << endl;
-        myfile_csr_conv.open("D:\\9.CPO&CPS\\OUTPUTs\\loop_conv\\COO\\csr_conv.txt", ios::out | ios::app);
+        myfile_csr_conv.open("D:\\### PhD Codes ###\\OUTPUTs\\csr_conv.txt", ios::out | ios::app);
 #endif
 #ifdef linux
         // cout << "linux" << endl;

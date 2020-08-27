@@ -1,0 +1,17 @@
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+sh: ./loop_conv_last: Permission denied
+
+real	0m1.097s
+user	0m0.119s
+sys	0m0.112s

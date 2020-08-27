@@ -1,0 +1,544 @@
+./loop_conv_last density : 0.59 Ih : 149 Iw : 4768 Kh : 3 Kw : 3 bench_iterations : 100
+ ******* DENSITY =  0.59 ******* 
+CSR without omp : 2.43496 msec
+CSR with element by element without omp: 1.01813 msec
+CSR with omp v1: 19.8431 msec
+CSR with omp v2.2 : 6.27034 msec
+CSR with omp v3.2 : 2.38703 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+3x3 | (149x4768) batch	1
+density	0.59
+CSR without omp:	2.43496
+CSR with element by element without omp:	1.01813
+CSR with omp v1  :	19.8431
+CSR with omp v2.2  :	6.27034
+CSR with omp v3.2:	2.38703
+./loop_conv_last density : 0.46 Ih : 147 Iw : 4704 Kh : 3 Kw : 3 bench_iterations : 100
+ ******* DENSITY =  0.46 ******* 
+CSR without omp : 1.76497 msec
+CSR with element by element without omp: 0.87741 msec
+CSR with omp v1: 44.3107 msec
+CSR with omp v2.2 : 5.41047 msec
+CSR with omp v3.2 : 1.99271 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+3x3 | (147x4704) batch	1
+density	0.46
+CSR without omp:	1.76497
+CSR with element by element without omp:	0.87741
+CSR with omp v1  :	44.3107
+CSR with omp v2.2  :	5.41047
+CSR with omp v3.2:	1.99271
+./loop_conv_last density : 0.77 Ih : 73 Iw : 4672 Kh : 1 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.77 ******* 
+CSR without omp : 0.3294 msec
+CSR with element by element without omp: 0.25119 msec
+CSR with omp v1: 33.3828 msec
+CSR with omp v2.2 : 2.06167 msec
+CSR with omp v3.2 : 0.70584 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x1 | (73x4672) batch	1
+density	0.77
+CSR without omp:	0.3294
+CSR with element by element without omp:	0.25119
+CSR with omp v1  :	33.3828
+CSR with omp v2.2  :	2.06167
+CSR with omp v3.2:	0.70584
+./loop_conv_last density : 0.48 Ih : 71 Iw : 5680 Kh : 3 Kw : 3 bench_iterations : 100
+ ******* DENSITY =  0.48 ******* 
+CSR without omp : 0.95186 msec
+CSR with element by element without omp: 0.53964 msec
+CSR with omp v1: 34.5451 msec
+CSR with omp v2.2 : 3.90364 msec
+CSR with omp v3.2 : 1.31925 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+3x3 | (71x5680) batch	1
+density	0.48
+CSR without omp:	0.95186
+CSR with element by element without omp:	0.53964
+CSR with omp v1  :	34.5451
+CSR with omp v2.2  :	3.90364
+CSR with omp v3.2:	1.31925
+./loop_conv_last density : 0.74 Ih : 35 Iw : 6720 Kh : 1 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.74 ******* 
+CSR without omp : 0.20614 msec
+CSR with element by element without omp: 0.22114 msec
+CSR with omp v1: 29.3993 msec
+CSR with omp v2.2 : 2.1143 msec
+CSR with omp v3.2 : 0.61847 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x1 | (35x6720) batch	1
+density	0.74
+CSR without omp:	0.20614
+CSR with element by element without omp:	0.22114
+CSR with omp v1  :	29.3993
+CSR with omp v2.2  :	2.1143
+CSR with omp v3.2:	0.61847
+./loop_conv_last density : 0.48 Ih : 35 Iw : 1680 Kh : 5 Kw : 5 bench_iterations : 100
+ ******* DENSITY =  0.48 ******* 
+CSR without omp : 0.32426 msec
+CSR with element by element without omp: 0.18198 msec
+CSR with omp v1: 32.482 msec
+CSR with omp v2.2 : 1.44579 msec
+CSR with omp v3.2 : 0.51804 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+5x5 | (35x1680) batch	1
+density	0.48
+CSR without omp:	0.32426
+CSR with element by element without omp:	0.18198
+CSR with omp v1  :	32.482
+CSR with omp v2.2  :	1.44579
+CSR with omp v3.2:	0.51804
+./loop_conv_last density : 0.14 Ih : 17 Iw : 2720 Kh : 1 Kw : 7 bench_iterations : 100
+ ******* DENSITY =  0.14 ******* 
+CSR without omp : 0.07326 msec
+CSR with element by element without omp: 0.06751 msec
+CSR with omp v1: 1.30485 msec
+CSR with omp v2.2 : 1.41747 msec
+CSR with omp v3.2 : 0.37228 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x7 | (17x2720) batch	1
+density	0.14
+CSR without omp:	0.07326
+CSR with element by element without omp:	0.06751
+CSR with omp v1  :	1.30485
+CSR with omp v2.2  :	1.41747
+CSR with omp v3.2:	0.37228
+./loop_conv_last density : 0.17 Ih : 17 Iw : 2720 Kh : 7 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.17 ******* 
+CSR without omp : 0.02526 msec
+CSR with element by element without omp: 0.03796 msec
+CSR with omp v1: 29.1915 msec
+CSR with omp v2.2 : 1.06712 msec
+CSR with omp v3.2 : 0.24101 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+7x1 | (17x2720) batch	1
+density	0.17
+CSR without omp:	0.02526
+CSR with element by element without omp:	0.03796
+CSR with omp v1  :	29.1915
+CSR with omp v2.2  :	1.06712
+CSR with omp v3.2:	0.24101
+./loop_conv_last density : 0.24 Ih : 17 Iw : 13056 Kh : 1 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.24 ******* 
+CSR without omp : 0.17075 msec
+CSR with element by element without omp: 0.23472 msec
+CSR with omp v1: 1.45452 msec
+CSR with omp v2.2 : 2.84091 msec
+CSR with omp v3.2 : 0.48766 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x1 | (17x13056) batch	1
+density	0.24
+CSR without omp:	0.17075
+CSR with element by element without omp:	0.23472
+CSR with omp v1  :	1.45452
+CSR with omp v2.2  :	2.84091
+CSR with omp v3.2:	0.48766
+./loop_conv_last density : 0.08 Ih : 8 Iw : 16384 Kh : 1 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.08 ******* 
+CSR without omp : 0.12163 msec
+CSR with element by element without omp: 0.15878 msec
+CSR with omp v1: 0.37719 msec
+CSR with omp v2.2 : 3.70798 msec
+CSR with omp v3.2 : 0.30622 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x1 | (8x16384) batch	1
+density	0.08
+CSR without omp:	0.12163
+CSR with element by element without omp:	0.15878
+CSR with omp v1  :	0.37719
+CSR with omp v2.2  :	3.70798
+CSR with omp v3.2:	0.30622
+./loop_conv_last density : 0.14 Ih : 8 Iw : 3072 Kh : 1 Kw : 3 bench_iterations : 100
+ ******* DENSITY =  0.14 ******* 
+CSR without omp : 0.02901 msec
+CSR with element by element without omp: 0.04458 msec
+CSR with omp v1: 30.6685 msec
+CSR with omp v2.2 : 1.10482 msec
+CSR with omp v3.2 : 0.22317 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x3 | (8x3072) batch	1
+density	0.14
+CSR without omp:	0.02901
+CSR with element by element without omp:	0.04458
+CSR with omp v1  :	30.6686
+CSR with omp v2.2  :	1.10482
+CSR with omp v3.2:	0.22317
+./loop_conv_last density : 0.14 Ih : 8 Iw : 3072 Kh : 3 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.14 ******* 
+CSR without omp : 0.01408 msec
+CSR with element by element without omp: 0.03072 msec
+CSR with omp v1: 0.14009 msec
+CSR with omp v2.2 : 1.1357 msec
+CSR with omp v3.2 : 0.24328 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+3x1 | (8x3072) batch	1
+density	0.14
+CSR without omp:	0.01408
+CSR with element by element without omp:	0.03072
+CSR with omp v1  :	0.14009
+CSR with omp v2.2  :	1.1357
+CSR with omp v3.2:	0.24328
+./loop_conv_last density : 0.24 Ih : 8 Iw : 16384 Kh : 1 Kw : 1 bench_iterations : 100
+ ******* DENSITY =  0.24 ******* 
+CSR without omp : 0.20153 msec
+CSR with element by element without omp: 0.24917 msec
+CSR with omp v1: 0.87104 msec
+CSR with omp v2.2 : 3.8227 msec
+CSR with omp v3.2 : 0.44831 msec
+linux :: /scratch/ahamsala/DC_CODES/OUTPUTs/COO/spmv_log.txt
+
+1x1 | (8x16384) batch	1
+density	0.24
+CSR without omp:	0.20153
+CSR with element by element without omp:	0.24917
+CSR with omp v1  :	0.87104
+CSR with omp v2.2  :	3.8227
+CSR with omp v3.2:	0.44831
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_2720_1_7_0.14.mtx, 
+	 num_rows: 2714
+	 num_cols: 119
+	 num_nonzeros: 42303
+	 row_length_mean: 15.58696
+	 row_length_std_dev: 3.61270
+	 row_length_variation: 0.23178
+	 row_length_skewness: 0.15114
+
+CSR matrix (2714 rows, 119 columns, 42303 non-zeros, max-length 27):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	103 (86.55%)
+	Degree 1e1: 	2611 (2194.12%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0715 avg ms, 1.18309 gflops, 12.286 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0504 avg ms, 1.67816 gflops, 17.428 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_4768_3_3_0.59.mtx, 
+	 num_rows: 4766
+	 num_cols: 447
+	 num_nonzeros: 950040
+	 row_length_mean: 199.33697
+	 row_length_std_dev: 10.59722
+	 row_length_variation: 0.05316
+	 row_length_skewness: -0.00086
+
+CSR matrix (4766 rows, 447 columns, 950040 non-zeros, max-length 237):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	0 (0.00%)
+	Degree 1e1: 	0 (0.00%)
+	Degree 1e2: 	4766 (1066.22%)
+
+
+	18083 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.2772 avg ms, 6.85512 gflops, 68.758 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.2374 avg ms, 8.00330 gflops, 80.274 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_4704_3_3_0.46.mtx, 
+	 num_rows: 4702
+	 num_cols: 441
+	 num_nonzeros: 763475
+	 row_length_mean: 162.37239
+	 row_length_std_dev: 10.21836
+	 row_length_variation: 0.06293
+	 row_length_skewness: 0.03166
+
+CSR matrix (4702 rows, 441 columns, 763475 non-zeros, max-length 201):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	0 (0.00%)
+	Degree 1e1: 	0 (0.00%)
+	Degree 1e2: 	4702 (1066.21%)
+
+
+	22502 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0872 avg ms, 17.51779 gflops, 175.825 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0772 avg ms, 19.78776 gflops, 198.609 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_6720_1_1_0.74.mtx, 
+	 num_rows: 6720
+	 num_cols: 35
+	 num_nonzeros: 123029
+	 row_length_mean: 18.30789
+	 row_length_std_dev: 2.93820
+	 row_length_variation: 0.16049
+	 row_length_skewness: -0.00907
+
+CSR matrix (6720 rows, 35 columns, 123029 non-zeros, max-length 30):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	7 (20.00%)
+	Degree 1e1: 	6713 (19180.00%)
+
+
+	139640 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0455 avg ms, 5.40783 gflops, 55.851 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0204 avg ms, 12.05442 gflops, 124.495 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_3072_3_1_0.14.mtx, 
+	 num_rows: 3072
+	 num_cols: 8
+	 num_nonzeros: 3197
+	 row_length_mean: 1.04069
+	 row_length_std_dev: 0.95537
+	 row_length_variation: 0.91802
+	 row_length_skewness: 0.73859
+
+CSR matrix (3072 rows, 8 columns, 3197 non-zeros, max-length 5):
+	Degree 1e-1: 	1024 (12800.00%)
+	Degree 1e0: 	2048 (25600.00%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0622 avg ms, 0.10287 gflops, 1.622 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0389 avg ms, 0.16453 gflops, 2.594 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_5680_3_3_0.48.mtx, 
+	 num_rows: 5678
+	 num_cols: 213
+	 num_nonzeros: 461003
+	 row_length_mean: 81.19109
+	 row_length_std_dev: 7.12832
+	 row_length_variation: 0.08780
+	 row_length_skewness: -0.01822
+
+CSR matrix (5678 rows, 213 columns, 461003 non-zeros, max-length 107):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	0 (0.00%)
+	Degree 1e1: 	5646 (2650.70%)
+	Degree 1e2: 	32 (15.02%)
+
+
+	37266 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.1305 avg ms, 7.06668 gflops, 71.189 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0516 avg ms, 17.88556 gflops, 180.177 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_16384_1_1_0.24.mtx, 
+	 num_rows: 16384
+	 num_cols: 8
+	 num_nonzeros: 27963
+	 row_length_mean: 1.70673
+	 row_length_std_dev: 1.16492
+	 row_length_variation: 0.68255
+	 row_length_skewness: 0.48910
+
+CSR matrix (16384 rows, 8 columns, 27963 non-zeros, max-length 7):
+	Degree 1e-1: 	2444 (30550.00%)
+	Degree 1e0: 	13940 (174250.00%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0480 avg ms, 1.16400 gflops, 15.732 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0239 avg ms, 2.33732 gflops, 31.590 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_16384_1_1_0.08.mtx, 
+	 num_rows: 16384
+	 num_cols: 8
+	 num_nonzeros: 10073
+	 row_length_mean: 0.61481
+	 row_length_std_dev: 0.75301
+	 row_length_variation: 1.22479
+	 row_length_skewness: 1.11540
+
+CSR matrix (16384 rows, 8 columns, 10073 non-zeros, max-length 5):
+	Degree 1e-1: 	8645 (108062.50%)
+	Degree 1e0: 	7739 (96737.50%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0158 avg ms, 1.27313 gflops, 25.156 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0161 avg ms, 1.25086 gflops, 24.716 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_2720_7_1_0.17.mtx, 
+	 num_rows: 2720
+	 num_cols: 17
+	 num_nonzeros: 7242
+	 row_length_mean: 2.66250
+	 row_length_std_dev: 1.50687
+	 row_length_variation: 0.56596
+	 row_length_skewness: 0.49297
+
+CSR matrix (2720 rows, 17 columns, 7242 non-zeros, max-length 9):
+	Degree 1e-1: 	153 (900.00%)
+	Degree 1e0: 	2567 (15100.00%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0757 avg ms, 0.19131 gflops, 2.344 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0404 avg ms, 0.35856 gflops, 4.394 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_4672_1_1_0.77.mtx, 
+	 num_rows: 4672
+	 num_cols: 73
+	 num_nonzeros: 183067
+	 row_length_mean: 39.18386
+	 row_length_std_dev: 4.24559
+	 row_length_variation: 0.10835
+	 row_length_skewness: -0.00356
+
+CSR matrix (4672 rows, 73 columns, 183067 non-zeros, max-length 54):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	0 (0.00%)
+	Degree 1e1: 	4672 (6400.00%)
+
+
+	93844 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0280 avg ms, 13.09123 gflops, 132.917 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0270 avg ms, 13.55330 gflops, 137.608 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_13056_1_1_0.24.mtx, 
+	 num_rows: 13056
+	 num_cols: 17
+	 num_nonzeros: 47254
+	 row_length_mean: 3.61933
+	 row_length_std_dev: 1.70356
+	 row_length_variation: 0.47068
+	 row_length_skewness: 0.36117
+
+CSR matrix (13056 rows, 17 columns, 47254 non-zeros, max-length 13):
+	Degree 1e-1: 	231 (1358.82%)
+	Degree 1e0: 	12811 (75358.82%)
+	Degree 1e1: 	14 (82.35%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.1149 avg ms, 0.82271 gflops, 9.591 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0920 avg ms, 1.02750 gflops, 11.978 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_1680_5_5_0.48.mtx, 
+	 num_rows: 1676
+	 num_cols: 175
+	 num_nonzeros: 111742
+	 row_length_mean: 66.67184
+	 row_length_std_dev: 6.36272
+	 row_length_variation: 0.09543
+	 row_length_skewness: 0.05022
+
+CSR matrix (1676 rows, 175 columns, 111742 non-zeros, max-length 90):
+	Degree 1e-1: 	0 (0.00%)
+	Degree 1e0: 	0 (0.00%)
+	Degree 1e1: 	1676 (957.71%)
+
+
+	153745 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0395 avg ms, 5.65925 gflops, 57.102 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0152 avg ms, 14.70691 gflops, 148.393 effective GB/s
+
+Reading... Parsing... done. /scratch/ahamsala/DC_CODES/OUTPUTs/COO/coo_3072_1_3_0.14.mtx, 
+	 num_rows: 3070
+	 num_cols: 24
+	 num_nonzeros: 9584
+	 row_length_mean: 3.12182
+	 row_length_std_dev: 1.64549
+	 row_length_variation: 0.52709
+	 row_length_skewness: 0.39615
+
+CSR matrix (3070 rows, 24 columns, 9584 non-zeros, max-length 9):
+	Degree 1e-1: 	115 (479.17%)
+	Degree 1e0: 	2955 (12312.50%)
+
+
+	200000 timing iterations
+
+
+MKL CsrMV, 	PASS
+fp64: 0.0000 setup ms, 0.0458 avg ms, 0.41849 gflops, 4.989 effective GB/s
+
+
+Merge CsrMV, 	Using 8 threads on 8 procs
+	PASS
+fp64: 0.0000 setup ms, 0.0266 avg ms, 0.71990 gflops, 8.583 effective GB/s
+
