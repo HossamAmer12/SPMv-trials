@@ -806,7 +806,7 @@ int main(int argc, char* argv[])
 
         // Create the lowered matrix: 
         // MatrixXf lowered_mat = MatrixXf::Zero(Ow, Ih * Kw);
-        MatrixXf lowered_mat = MatrixXf::Zero(1, Ih*Kw);
+        MatrixXf lowered_mat = MatrixXf::Zero(1, Ih * Kw);
         int sub_matrix_index = 0;
 
         //std::cout << "\n====================================================================================\n" << endl;
@@ -831,7 +831,7 @@ int main(int argc, char* argv[])
                     lowered_mat_col_index++;
                 } // end inner loop
             } // end outer loop
-            break;
+            // break; // this 
             sub_matrix_index++;
 
         } // end outer outer loop
@@ -1164,7 +1164,7 @@ int main(int argc, char* argv[])
 #endif
 #ifdef linux
         // const std::string dir="//home//ahamsala//scratch//DC//openmp_projects//Output_All//OURS//";
-        const std::string dir = "/scratch/ahamsala/DC_CODES/OUTPUTs/COO/";
+        const std::string dir = "/scratch/ahamsala/DC_CODES/OUTPUTs/";
         std::string file_name = "spmv_log.txt";
         std::string dir_spmv = dir + file_name;
         cout << "linux :: " << dir_spmv.c_str() << endl;

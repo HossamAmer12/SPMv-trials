@@ -1,5 +1,0 @@
-/var/spool/slurmd/job37617581/slurm_script: line 11:  4350 Segmentation fault      (core dumped) ./loop_conv > loop_conv.txt
-
-real	0m0.847s
-user	0m4.704s
-sys	0m0.079s
