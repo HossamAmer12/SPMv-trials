@@ -805,8 +805,8 @@ int main(int argc, char* argv[])
 #endif  
 
         // Create the lowered matrix: 
-        // MatrixXf lowered_mat = MatrixXf::Zero(Ow, Ih * Kw);
-        MatrixXf lowered_mat = MatrixXf::Zero(1, Ih * Kw);
+        MatrixXf lowered_mat = MatrixXf::Zero(Ow, Ih * Kw);
+        // MatrixXf lowered_mat = MatrixXf::Zero(1, Ih * Kw);
         int sub_matrix_index = 0;
 
         //std::cout << "\n====================================================================================\n" << endl;
@@ -830,8 +830,9 @@ int main(int argc, char* argv[])
                     lowered_mat(sub_matrix_index, lowered_mat_col_index) = org_fm(row_int, col_int);
                     lowered_mat_col_index++;
                 } // end inner loop
+
             } // end outer loop
-            // break; // this 
+
             sub_matrix_index++;
 
         } // end outer outer loop
