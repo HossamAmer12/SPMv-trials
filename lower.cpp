@@ -4,6 +4,7 @@
 #include <Eigen/Sparse>
 #include <boost/timer/timer.hpp>
 #include <time.h>
+#include <math.h>
 
 
 using namespace Eigen;
@@ -23,6 +24,277 @@ void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
 
 }
 
+void print2DVector(std::vector<vector<int>>& x)
+{
+ for(int i = 0; i < x.size(); ++i)
+ {
+   cout << "\n===== " << i << " =====\n";
+   for(int j = 0; j < x[i].size(); ++j)
+   {
+     cout << x[i][j] << ", "; 
+   }
+ }
+}
+
+void printVector(std::vector<int>& x)
+{
+ for(int i = 0; i < x.size(); ++i)
+ {
+     cout << x[i] << ", "; 
+ }
+ cout << "\n";
+}
+
+void _CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
+{
+  std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
+  int i = 0;
+  int l = 0;
+  int n;
+
+  if (Kw % Sw == 0)
+  {
+   n = Kw / Sw;
+  } 
+  else
+  { 
+   n = ceil(Kw / Sw);
+  } 
+  
+  int count = 0;
+  int interm_count = 0;
+  std::vector<int> seq_ptr;
+  std::vector<int> ptrs;
+  std::vector<int> Interm;
+
+  for(int c = 0; c < floor(Kw/Sw); ++c)
+  {
+   //seq_ptr[count] = Sw;
+   //ptr[count]   = count;
+   //Interm[count] = interm_count;
+
+   seq_ptr.push_back(Sw);
+   ptrs.push_back(count);
+   Interm.push_back(interm_count);
+   count++;  
+  }
+  if((Kw%Sw) != 0)
+  {
+   seq_ptr.push_back(Kw%Sw);
+   ptrs.push_back(count);
+   Interm.push_back(interm_count);
+   count++; 
+  }
+
+
+  interm_count++;
+  for (int c = 0; c < floor((Iw-(2*Kw))/Sw); ++c)
+  {
+   seq_ptr.push_back(Sw-(Kw%Sw)); 
+   seq_ptr.push_back(Kw%Sw);
+   
+   ptrs.push_back(floor(Kw/Sw)-1);
+   ptrs.push_back(floor(Kw/Sw));
+  
+   Interm.push_back(interm_count);
+   Interm.push_back(interm_count);
+   count += 2;
+   interm_count++; 
+  }
+  
+ 
+  if(floor((Iw-(2*Kw))/Sw) != 0)
+  {
+   seq_ptr.push_back(Sw-(Kw%Sw));
+   ptrs.push_back(floor(Kw/Sw) - 1);
+   Interm.push_back(interm_count);
+   count++; 
+  }
+ 
+  if((Kw%Sw) != 0)
+  {
+   seq_ptr.push_back(Kw%Sw);
+   ptrs.push_back(floor(Kw/Sw));
+   Interm.push_back(interm_count);
+   count++; 
+  }
+ 
+  interm_count++;
+ 
+  cout <<  "Seq ptr: " << seq_ptr.size() << endl;
+
+  for(int c = 0; c < int(floor(Kw/Sw)); ++c)
+  {
+   // cout << c << ", " << seq_ptr.size() << endl;
+   //seq_ptr[count] = Sw;
+   //ptr[count]   = count;
+   //Interm[count] = interm_count;
+
+   seq_ptr.push_back(Sw);
+   ptrs.push_back(floor(Kw/Sw)-(c+1));
+   Interm.push_back(interm_count);
+   count++; 
+   interm_count++; 
+  }
+
+ cout << "Seq ptr: " << seq_ptr.size() << endl;
+ printVector(seq_ptr);
+ exit(0);
+
+  int j = 0; int num_nnz = 0;
+  vector<vector<int> > Ptr(n); // n is the rows
+  vector<vector<int> > DN(n); // n is the rows
+  vector<vector<int> > IN(n); // n is the rows 
+
+  // Ptr declaration
+  for(int p = 0; p < n; ++p)
+  {
+   Ptr[p] = vector<int>(Ow + 1, 0);
+  }
+  
+  for(int i_  = 0; i_ < seq_ptr.size() - 1; ++i_)
+  {
+   cout << "\ni_: " << i_ << endl;
+   for(int j_ = 0; j_ < seq_ptr[i]; ++j_)
+   {
+    cout << "j: " << j_ << endl;
+    for(int i = 0; i < Ih; ++i)
+    {
+     cout << "i: " << i << endl;
+     if(lowered_mat(i, j) != 0)
+     {
+      IN[ptrs[i_]].push_back( (j + (i*Kw))-(Interm[i_]*Sw) );
+      DN[ptrs[i_]].push_back( lowered_mat(i, j) );
+      num_nnz++;
+     } 
+    } // end loop 1
+    j++;
+   }// end loop 2
+   
+  for(int ptr_c = 0; ptr_c < n; ++ptr_c)
+  {
+    Ptr[ptr_c][Interm[i_]+1] = Ptr[ptr_c][Ptr.size()-1]; // --? 
+  }
+
+  Ptr[ptrs[i_]][Interm[i_]+1]  = num_nnz + Ptr[ptrs[i_]][Interm[i_]+1];
+  num_nnz = 0;
+  
+ }// end loop 3
+  
+  print2DVector(Ptr);
+ 
+  exit(0); 
+}
+
+void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
+{
+  std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
+  
+  int flag = 0;
+  int i = 0;
+  int l = 0;
+  int n;
+
+  if (Kw % Sw == 0)
+  {
+   n = Kw / Sw;
+  } 
+  else
+  { 
+   n = ceil(Kw / Sw);
+  } 
+  
+
+  std::vector<int> x(n, 0);
+  std::vector<int> m(n, 0);
+  vector<vector<int> > IN(n); // n is the rows 
+  vector<vector<int> > DA(n); // n is the rows 
+  vector<vector<int> > ptr(n); // n is the rows 
+  
+  // Ptr declaration
+  for(int p = 0; p < n; ++p)
+  {
+   ptr[p] = vector<int>(Ow + 1);
+  }
+  
+  for (int j = 0; j < Kw; ++j)
+  {
+    if (lowered_mat(i, j) != 0)
+    {
+	// cout << i << ", " << j << endl;
+	IN[l].push_back(j + (i*Kw));
+	DA[l].push_back(lowered_mat(i, j));
+        
+	if (flag == 0)
+	{
+	  ptr[l][m[l]] = x[l];
+	  flag = 1;
+	  m[l]++; 
+	}
+	
+       x[l]++;
+    }
+    
+   if (i == Ih -1)
+   {
+     i = 0;
+     if ( (j+1) % Sw == 0)
+     {
+      ptr[l][m[l]] = x[l];
+      l++;
+      flag = 0;
+     }
+     else if(j == Kw - 1)
+     {
+      ptr[l][m[l]] = x[l];
+     }
+     else
+     {
+       i++;
+     }
+   }
+	 
+  } // end for loop  
+
+  l--;
+
+  for(int p = 0; p < m.size(); ++p)
+  {
+   m[p]++;
+  }
+  flag = 0;
+
+  for(int j = Kw; j < Iw - Kw; ++j)
+  {
+   if (lowered_mat(i, j) != 0)
+   {
+    IN[l][x[l]] = j - ((m[l] - 1) * Sw) + (i * Kw);
+    DA[l][x[l]] = lowered_mat(i, j);
+    x[l]++;     
+   }
+   
+   if(i == Ih - 1)
+   {
+    i = 0;
+    if(flag == 0)
+    {
+	if (Kw % Sw == 0)
+        {
+          if((j - Kw + 1) % Sw == 0)
+          {
+           ptr[l][m[l]] = x[l]; // --?
+          } 
+        }
+    }
+   }
+
+  } // end for loop
+
+
+  print2DVector(ptr);
+ 
+  exit(0); 
+}
 
 void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
@@ -125,6 +397,8 @@ int main()
   // Conv parameters:
   int padding = 0;
   int stride  = 1;
+  int Sh, Sw;
+  Sh = Sw = stride;
   int num_filters = 1; // 64
 
   // mixed 0: conv_node 3
@@ -195,7 +469,7 @@ int main()
   // Print out the lowered feature map:
   std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
   cout << "-----\n" << endl;   
-  
+   
   int start_row_int = 0;
   int start_col_int = 0;
 
@@ -263,9 +537,10 @@ int main()
   std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
   cout << "-----\n" << endl;
   
-  // Prepare the output for im2col, sparseMat
+  // Prepare the output for im2col, sparseMat, CPO
   MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
   MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
+  MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
   
   // transpose the matrix for im2col:
   MatrixXf im2col_mat_tr = im2col_mat.transpose();
@@ -293,16 +568,26 @@ int main()
   Aindptr.push_back(nz);
 
 
-   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+   // Perform 50 times raw sparse matrix dense vector multiplication of CPO: d_o3 = d_m * d_b
    {  
       clock_t t;
       t = clock(); 
-      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+      // for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, lowered_mat, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
+
+   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+//   {  
+//      clock_t t;
+//      t = clock(); 
+//      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+//      // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+//      for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+//      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+//      t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+//   } 
     
    // Test the sparse rep of the org im2col
    // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
