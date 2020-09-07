@@ -333,7 +333,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
     // Third piece
     flag = 1;
     i = 0;
-    for (int j = Iw < Kw; Iw; ++j)
+    for (int j = Iw - Kw; j < Iw; ++j)
     {
         for(int i = 0; i < Ih; i++)
         {
@@ -379,8 +379,15 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
         }
     } // end for (j = Iw - Kw; Iw; ++j)
     
-    cout << "Done processing " << endl;
+    cout << "\nPtr: "; 
     print2DVector(ptr);
+
+    cout << "\n\nIN: ";
+    print2DVector(IN);
+
+    cout << "\n\nData:";
+    print2DVector(DA);
+    cout << "\n" << endl;
     
     exit(0);
 }
