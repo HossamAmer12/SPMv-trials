@@ -216,45 +216,42 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
   {
    ptr[p] = vector<int>(Ow + 1);
   }
-  
-  for (int j = 0; j < Kw; ++j)
-  {
-    if (lowered_mat(i, j) != 0)
-    {
-	// cout << i << ", " << j << endl;
-	IN[l].push_back(j + (i*Kw));
-	DA[l].push_back(lowered_mat(i, j));
-        
-	if (flag == 0)
-	{
-	  ptr[l][m[l]] = x[l];
-	  flag = 1;
-	  m[l]++; 
-	}
-	
-       x[l]++;
-    }
     
-   if (i == Ih -1)
+   // FIrst piece
+   for (int j = 0; j < Kw; ++j)
    {
-     i = 0;
+       for(i = 0; i < Ih; ++i)
+       {
+           if (lowered_mat(i, j) != 0)
+           {
+               // cout << i << ", " << j << endl;
+               IN[l].push_back(j + (i*Kw));
+               DA[l].push_back(lowered_mat(i, j));
+               
+               if (flag == 0)
+               {
+                   ptr[l][m[l]] = x[l];
+                   flag = 1;
+                   m[l]++;
+               } // end if (flag == 0)
+               
+               x[l]++;
+           } // end if  if (lowered_mat(i, j) != 0)
+           
+       } // end for(i=0; i < Ih; ++i)
+      
      if ( (j+1) % Sw == 0)
      {
       ptr[l][m[l]] = x[l];
       l++;
       flag = 0;
-     }
+     } // end if ( (j+1) % Sw == 0)
      else if(j == Kw - 1)
      {
       ptr[l][m[l]] = x[l];
-     }
-     else
-     {
-       i++;
-     }
-   }
-	 
-  } // end for loop  
+     } // end if(j == Kw - 1)
+      
+  } // end for (int j = 0; j < Kw; ++j)
 
   l--;
 
@@ -264,32 +261,113 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
   }
   flag = 0;
 
+  
+  // Second piece
   for(int j = Kw; j < Iw - Kw; ++j)
   {
-   if (lowered_mat(i, j) != 0)
-   {
-    IN[l][x[l]] = j - ((m[l] - 1) * Sw) + (i * Kw);
-    DA[l][x[l]] = lowered_mat(i, j);
-    x[l]++;     
-   }
-   
-   if(i == Ih - 1)
-   {
-    i = 0;
-    if(flag == 0)
-    {
-	if (Kw % Sw == 0)
-        {
-          if((j - Kw + 1) % Sw == 0)
+      for(i = 0; i < Ih; ++i)
+      {
+          if (lowered_mat(i, j) != 0)
           {
-           ptr[l][m[l]] = x[l]; // --?
-          } 
-        }
-    }
-   }
+              IN[l].push_back(j - ((m[l] - 1) * Sw) + (i * Kw));
+              DA[l].push_back(lowered_mat(i, j));
+              // IN[l][x[l]] = j - ((m[l] - 1) * Sw) + (i * Kw);
+              // DA[l][x[l]] = lowered_mat(i, j);
+              x[l]++;     
+          } // end if (lowered_mat(i, j) != 0)
+      }// end for(i = 0; i < Ih; ++i)
+      
+      if(flag == 0)
+      {
+          if (Kw % Sw == 0)
+          {
+              if((j - Kw + 1) % Sw == 0)
+              {
+                  ptr[l][m[l]] = x[l];
+                  m[l]++;
+                  
+                  if(n > 1)
+                  {
+                      for(int c = 0; c < n-1; ++c)
+                      {
+                          ptr[c][m[c]] = x[c];
+                          m[c]++;
+                      }
+                  } // end if(n > 1)
+              } // end if ((j - Kw + 1) % Sw == 0)
+          } // end if (Kw % Sw == 0)
+          else if ( (j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+          {
+              ptr[l][m[l]] = x[l];
+              m[l]++;
+              l++;
+              flag = 1;
+          } // end else if ( (j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+      } // end if(flag == 0)
+       
+	else
+	{
+	  if ( (j - Kw + 1) % Sw == 0)
+	  {
+	       ptr[l][m[l]] = x[l];
+	       m[l]++;
+	       l--;
+	       flag = 0;
 
-  } // end for loop
+	  } // end if ( (j - Kw + 1) % Sw == 0)
+	   if(n > 2)
+	   { 
+	     for(int c = 0; c < n-2; ++c)
+	     {
+             ptr[c][m[c]] = x[c];
+             m[c]++;
+	     } // end for(int c = 0; c < n-2; ++c)
+	   } // end if n > 2
+    } // end if flag == 1
+  
+  } // end for(int j = Kw; j < Iw - Kw; ++j)
+    
 
+  // Third piece
+  flag = 1;
+  for (int j = Iw - Kw; Iw; ++j)
+  {
+      for(i = 0; i = Ih; ++i)
+      {
+          if(lowered_mat(i, j) != 0)
+          {
+              IN[l].push_back(j + (i*Kw) - (Sw*(m[l] - 1)));
+              DA[l].push_back(lowered_mat(i, j));
+              x[l]++;
+          }// end if(lowered_mat(i, j) != 0)
+      } // end for(i = 0; i = Ih; ++i)
+      
+      if((Iw - j - 1) % Sw == 0)
+      {
+          for(int c = 0; c < l+1; ++c)
+          {
+              ptr[c][m[c]] = x[c];
+              m[c]++;
+          } // end for(int c = 0; c < l+1; ++c)
+          l--;
+          
+          if(l > 1)
+          {
+              for(int c = 0; c < l-1; ++c)
+              {
+                  ptr[c][m[c]] = x[c];
+                  m[c]++
+              } // end for(int c = 0; c < l-1; ++c)
+          }// end if l > 1
+          
+          else if(l == 1)
+          {
+              ptr[0][m[0]] = x[0];
+              m[0]++;
+          } // end else if(l == 1)
+      } // end if ((Iw - j - 1) % Sw == 0)
+
+  } // end for (j = Iw - Kw; Iw; ++j)
 
   print2DVector(ptr);
  
