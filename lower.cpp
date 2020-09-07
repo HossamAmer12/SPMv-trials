@@ -252,7 +252,8 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
      } // end if(j == Kw - 1)
       
   } // end for (int j = 0; j < Kw; ++j)
-
+  
+    
   l--;
 
   for(int p = 0; p < m.size(); ++p)
@@ -327,13 +328,17 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
   
   } // end for(int j = Kw; j < Iw - Kw; ++j)
     
-
+    
+    
   // Third piece
   flag = 1;
-  for (int j = Iw - Kw; Iw; ++j)
+  i = 0;
+  for (int j = Iw < Kw; Iw; ++j)
   {
-      for(i = 0; i = Ih; ++i)
+      for(int i = 0; i < Ih; i++)
       {
+          cout << "2222  Row: " << i << ", Col: " << j << endl;
+          
           if(lowered_mat(i, j) != 0)
           {
               IN[l].push_back(j + (i*Kw) - (Sw*(m[l] - 1)));
@@ -349,14 +354,13 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
               ptr[c][m[c]] = x[c];
               m[c]++;
           } // end for(int c = 0; c < l+1; ++c)
-          l--;
           
           if(l > 1)
           {
               for(int c = 0; c < l-1; ++c)
               {
                   ptr[c][m[c]] = x[c];
-                  m[c]++
+                  m[c]++;
               } // end for(int c = 0; c < l-1; ++c)
           }// end if l > 1
           
@@ -365,11 +369,15 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
               ptr[0][m[0]] = x[0];
               m[0]++;
           } // end else if(l == 1)
+          
+          l--;
       } // end if ((Iw - j - 1) % Sw == 0)
 
   } // end for (j = Iw - Kw; Iw; ++j)
 
-  print2DVector(ptr);
+    
+    cout << ptr[0][1] << endl;
+//  print2DVector(ptr);
  
   exit(0); 
 }
@@ -650,9 +658,9 @@ int main()
    {  
       clock_t t;
       t = clock(); 
-      // for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, lowered_mat, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+       for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+//      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
 
