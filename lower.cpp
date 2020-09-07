@@ -217,7 +217,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
    ptr[p] = vector<int>(Ow + 1);
   }
     
-   // FIrst piece
+   // First piece
    for (int j = 0; j < Kw; ++j)
    {
        for(i = 0; i < Ih; ++i)
@@ -292,7 +292,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
                       {
                           ptr[c][m[c]] = x[c];
                           m[c]++;
-                      }
+                      } // end for(int c = 0; c < n-1; ++c)
                   } // end if(n > 1)
               } // end if ((j - Kw + 1) % Sw == 0)
           } // end if (Kw % Sw == 0)
