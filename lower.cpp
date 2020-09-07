@@ -363,20 +363,23 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
                     m[c]++;
                 } // end for(int c = 0; c < l-1; ++c)
             }// end if l > 1
-            
+         
+/*   
             else if(l == 1)
             {
                 ptr[0][m[0]] = x[0];
                 m[0]++;
             } // end else if(l == 1)
+*/
             
             l--;
         } // end if ((Iw - j - 1) % Sw == 0)
-        
+       /* 
         if( l < 0)
         {
             break;
         }
+       */
     } // end for (j = Iw - Kw; Iw; ++j)
     
     cout << "\nPtr: "; 
