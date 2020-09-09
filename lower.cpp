@@ -224,19 +224,18 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
         for(i = 0; i < Ih; ++i)
         {
             cout << "I: " << i << " J: " << j << endl;
+	    if (flag == 0)
+ 	    {
+		ptr[l][m[l]] = x[l];
+		flag = 1;
+		m[l]++;
+            } // end if (flag == 0)
+
             if (lowered_mat(i, j) != 0)
             {
                 // cout << i << ", " << j << endl;
                 IN[l].push_back(j + (i*Kw));
                 DA[l].push_back(lowered_mat(i, j));
-                
-                if (flag == 0)
-                {
-                    ptr[l][m[l]] = x[l];
-                    flag = 1;
-                    m[l]++;
-                } // end if (flag == 0)
-                
                 x[l]++;
             } // end if  if (lowered_mat(i, j) != 0)
             
@@ -341,7 +340,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
     // Third piece
     flag = 1;
     i = 0;
-    for (int j = Iw - Kw; j < Iw; ++j)
+    for (int j = Iw - Kw + 1; j < Iw; ++j)
     {
         for(int i = 0; i < Ih; i++)
         {
@@ -363,8 +362,8 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
         {
             for(int c = 0; c < l+1; ++c)
             {
-                ptr[c][m[c]] = x[c];
-                m[c]++;
+                ptr[l][m[l]] = x[l];
+                m[l]++;
             } // end for(int c = 0; c < l+1; ++c)
             
             if(l > 1)
