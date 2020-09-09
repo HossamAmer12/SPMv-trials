@@ -205,7 +205,6 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
         n = ceil(Kw / Sw);
     }
     
-    
     std::vector<int> x(n, 0);
     std::vector<int> m(n, 0);
     vector<vector<int> > IN(n); // n is the rows
@@ -368,14 +367,14 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
             
             if(l > 1)
             {
-                for(int c = 0; c < l-1; ++c)
+                for(int c = 0; c < l; ++c)
                 {
                     ptr[c][m[c]] = x[c];
                     m[c]++;
                 } // end for(int c = 0; c < l-1; ++c)
             }// end if l > 1
             
-            else if(l == 1)
+            else if(l == 0)
             {
                 ptr[0][m[0]] = x[0];
                 m[0]++;
