@@ -22,44 +22,98 @@ void conv(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int
     int n      = ceil(Kw/Sw);
     int number = floor((Iw - Kw)/Sw) + 1;
      
-    cout << "# of submats: " << number << ", # of ptrs: " << n << endl;
+    cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
 
     // For each ptr type
-    for (int m = 0; m < n; ++m)
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
     {
 	// For each submat
-	for (int r = 0; r < number; ++r)
+	for (int submat = 0; submat < number; ++submat)
 	{
-	   // From ptr r t r+1
-	   for(int x = ptr[m][r]; x < ptr[m][r+1]; ++x)
+	   cout << "\nCurrent Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
+	  
+	   for(int i = 0; i <= type_ptr; ++i)
 	   {
-	     cout << "ptr_type: " << m << " submat: " << r << ", from: " << x << ", to: " << ptr[m][r+1] << endl;
-	    
+	
+	   // From ptr r t r+1
+	   int shereet = (type_ptr > 0)? 1:0;
+	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+	   {
+	     if(x == ptr[type_ptr][submat-i*shereet])
+	     cout << "*********ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+	    else
+	     cout << "ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+/**/	    
              // Loop on Kh for the output
 	     for(int l = 0; l < Kh; ++l)
 	     {
-		cout << "l: " << l << endl; 
-		// for(int i = 0; i <= m; ++i)
-		for(int i = 0; i < m; ++i)
-		{
- 		    int y = IN[m][x]/Kw - l;
-		    int x = r - i;
-		    cout << "Oy: " << y << ", Ox: " << x << endl;
-	 	    if(y < 0 || y >= Oh) continue;
+	//	cout << "l: " << l << endl; 
+		    
+                    int input_index = IN[type_ptr][x];
+		    if(i > 0)
+		    {	
+		    if(submat == 1)
+		    {
+		      if(type_ptr == 1)
+			input_index = input_index - 1;	
+		      else if (type_ptr == 2)
+			input_index  = input_index - 1;
+		    }
+
+		    if(submat >= 2)
+		    {
+		      //if(type_ptr == 1)
+			//input_index = input_index - 1;	
+		      //else if (type_ptr == 2)
+			//input_index  = input_index - 1;
+			input_index = input_index - i;
+		    }
+		   }
+		  
+ 		    int y_out = (input_index)/Kw - l;
+		    int x_out = submat;
+		    // int x_out = submat;
+		    
+		    // if(type_ptr == 2)
+		 //	x_out  = submat - i; 
+	 	    if(y_out < 0 || y_out >= Oh){
+			cout << "continue YYY============\n" << endl;
+			 continue;
+		     }
 			
 		     // extra:	
-		     if(x < 0 || x >= Ow) continue;	
+		     if(x_out < 0 || x_out >= Ow){
+			 cout << "continue XXX============\n" << endl;
+			 continue;	
+		     }
+		     // cout << "Oy: " << y_out << ", Ox: " << x_out << endl;
+		     // cout << "Index: " << input_index << ", Data: " << DA[type_ptr][x] << endl;
+		     cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+		
 
-		    if(y == 0 && x == 0)
+		    if(y_out == 0 && x_out == 0)
 		    {
-		      cout << "Fetch " << "DA[" <<  m << "]" << "[" << x << "]" << endl;
+		      cout << "Fetch " << "DA[" <<  type_ptr << "]" << "[" << x << "]" << endl;
 		    }
+		
+		// int m      = Aindices[x]/Kw - l;
+                // int Kindex = Aindices[x]%Kw + l*Kw;
+               //  O(m, n) += Adata[x]*K[Kindex];
+	
+		   // O(y_out, x_out) += DA[type_ptr][x] * K[IN[type_ptr][x]%Kw + l*Kw - i];
+		   // O(y_out, x_out) += DA[type_ptr][x] * K[input_index%Kw + l*Kw - i];
+		    O(y_out, x_out) += DA[type_ptr][x] * 1.0;
 			
-		    O(y, x) += DA[m][x] * K[IN[m][x]%Kw + l*Kw - i];
-		}
-	     }
-	   }
-	}	
+	     } // for each l in Kh
+
+
+	    } // for each raga3 el shereet
+	   } // for each x from range ptr and ptr + 1
+	} // for each submat
+	
+	cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
+        //if (type_ptr == 1)
+	//exit(0);	
     }
 
     cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
