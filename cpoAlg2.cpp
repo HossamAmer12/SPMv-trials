@@ -22,7 +22,7 @@ void conv(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int
     int n      = ceil(Kw/Sw);
     int number = floor((Iw - Kw)/Sw) + 1;
      
-    cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
 
     // For each ptr type
     for (int type_ptr = 0; type_ptr < n; ++type_ptr)
@@ -47,65 +47,21 @@ void conv(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int
              // Loop on Kh for the output
 	     for(int l = 0; l < Kh; ++l)
 	     {
-	//	cout << "l: " << l << endl; 
-		    
-                    int input_index = IN[type_ptr][x];
-		    if(i > 0)
-		    {	
-		    if(submat == 1)
-		    {
-		      if(type_ptr == 1)
-			input_index = input_index - 1;	
-		      else if (type_ptr == 2)
-			input_index  = input_index - 1;
-		    }
-
-		    if(submat >= 2)
-		    {
-		      //if(type_ptr == 1)
-			//input_index = input_index - 1;	
-		      //else if (type_ptr == 2)
-			//input_index  = input_index - 1;
-			input_index = input_index - i;
-		    }
-		   }
-		  
+                    int input_index = IN[type_ptr][x] - i;
  		    int y_out = (input_index)/Kw - l;
 		    int x_out = submat;
-		    // int x_out = submat;
 		    
-		    // if(type_ptr == 2)
-		 //	x_out  = submat - i; 
 	 	    if(y_out < 0 || y_out >= Oh){
 			cout << "continue YYY============\n" << endl;
-			 continue;
+			continue;
 		     }
 			
-		     // extra:	
-		     if(x_out < 0 || x_out >= Ow){
-			 cout << "continue XXX============\n" << endl;
-			 continue;	
-		     }
-		     // cout << "Oy: " << y_out << ", Ox: " << x_out << endl;
-		     // cout << "Index: " << input_index << ", Data: " << DA[type_ptr][x] << endl;
 		     cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
 		
-
-		    if(y_out == 0 && x_out == 0)
-		    {
-		      cout << "Fetch " << "DA[" <<  type_ptr << "]" << "[" << x << "]" << endl;
-		    }
-		
-		// int m      = Aindices[x]/Kw - l;
-                // int Kindex = Aindices[x]%Kw + l*Kw;
-               //  O(m, n) += Adata[x]*K[Kindex];
-	
-		   // O(y_out, x_out) += DA[type_ptr][x] * K[IN[type_ptr][x]%Kw + l*Kw - i];
-		   // O(y_out, x_out) += DA[type_ptr][x] * K[input_index%Kw + l*Kw - i];
-		    O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+		    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+		    O(y_out, x_out) += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
 			
 	     } // for each l in Kh
-
 
 	    } // for each raga3 el shereet
 	   } // for each x from range ptr and ptr + 1
@@ -441,6 +397,7 @@ int main()
     // Create the filter K and its vectorized version:
     MatrixXf filter             = MatrixXf::Ones(Kh, Kw);
     VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
+    // filter_vectorized(0) = 12;
     
     // Print out the im2col interedmiate feature map:
     std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
@@ -471,11 +428,14 @@ int main()
         t = clock();
         for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw,
 				IN, DA, ptr);
+
+	t = clock();
 	conv(d_o1, filter_vectorized, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
         //      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
         double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
         t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
     }
-    
+   
+    cout << "CPO conv time: " << t_csr << endl; 
     return 0;
 }
