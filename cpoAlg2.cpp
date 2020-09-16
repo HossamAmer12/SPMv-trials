@@ -13,15 +13,128 @@ using namespace boost::timer;
 
 // https://scicomp.stackexchange.com/questions/27977/how-can-i-speed-up-this-code-for-sparse-matrix-vector-multiplication
 
+void print2DVectorF(std::vector<vector<float>>& x);
 
 
-void conv(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int> > &DA, vector<vector<int> > &ptr, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
+
+void conv(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
 {
     // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
     
     int n      = ceil(Kw/Sw);
     int number = floor((Iw - Kw)/Sw) + 1;
-     
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+	// For each submat
+ 	int submat = 0;
+	for (int submat = 0; submat < number; ++submat)
+	{
+	  for(int i = 0; i <= type_ptr; ++i)
+	  {
+	
+	   // From ptr r t r+1
+	   int shereet = (type_ptr > 0)? 1:0;
+	   // int shereet = 1;
+	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+	   {
+             // Loop on Kh for the output
+	     for(int l = 0; l < Kh; ++l)
+	     {
+                    int input_index = IN[type_ptr][x] - i;
+ 		    int y_out = (input_index)/Kw - l;
+		    int x_out = submat;
+		    
+	 	    if(y_out < 0 || y_out >= Oh){
+			continue;
+		     }
+			
+		     // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+		
+		    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+		    O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
+			
+	     } // for each l in Kh
+
+	    } // for each raga3 el shereet
+	   } // for each x from range ptr and ptr + 1
+	} // for each submat
+	
+    }
+
+    // cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
+    print2DVectorF(O);
+    cout << "-----\n" << endl;
+
+}
+
+
+
+void conv_v2(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw);
+    int number = floor((Iw - Kw)/Sw) + 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    // For each ptr type
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+	// For each submat
+	for (int submat = 0; submat < number; ++submat)
+	{
+	  
+	  for(int i = 0; i <= type_ptr; ++i)
+	  {
+	
+	   // From ptr r t r+1
+	   int shereet = (type_ptr > 0)? 1:0;
+	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+	   {
+             // Loop on Kh for the output
+	     for(int l = 0; l < Kh; ++l)
+	     {
+                    int input_index = IN[type_ptr][x] - i;
+ 		    int y_out = (input_index)/Kw - l;
+		    int x_out = submat;
+		    
+	 	    if(y_out < 0 || y_out >= Oh){
+			continue;
+		     }
+			
+		     // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+		
+		    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+		    O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
+			
+	     } // for each l in Kh
+
+	    } // for each raga3 el shereet
+	   } // for each x from range ptr and ptr + 1
+	} // for each submat
+	
+    }
+
+    // cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
+    print2DVectorF(O);
+    cout << "-----\n" << endl;
+
+}
+
+void conv_v1(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int> > &DA, vector<vector<int> > &ptr, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw);
+    int number = floor((Iw - Kw)/Sw) + 1;
+    
     // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
 
     // For each ptr type
@@ -32,11 +145,12 @@ void conv(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int
 	{
 	   cout << "\nCurrent Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
 	  
-	   for(int i = 0; i <= type_ptr; ++i)
-	   {
+	  for(int i = 0; i <= type_ptr; ++i)
+	  {
 	
 	   // From ptr r t r+1
 	   int shereet = (type_ptr > 0)? 1:0;
+	   	   
 	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
 	   {
 	     if(x == ptr[type_ptr][submat-i*shereet])
@@ -87,6 +201,19 @@ void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
     o.noalias() = m*in;
     
 }
+
+void print2DVectorF(std::vector<vector<float>>& x)
+{
+    for(int i = 0; i < x.size(); ++i)
+    {
+        for(int j = 0; j < x[i].size(); ++j)
+        {
+            cout << x[i][j] << " ";
+        }
+	cout << "\n";
+    }
+}
+
 
 void print2DVector(std::vector<vector<int>>& x)
 {
@@ -324,7 +451,8 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
 
 int main()
 {
-    
+    int FREQ = 1; 
+
     // density:
     float density = 0.1;
     
@@ -407,7 +535,7 @@ int main()
     MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
     MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
     MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
-    
+   	 
     int n;
     if (Kw % Sw == 0)
     {
@@ -421,16 +549,26 @@ int main()
     vector<vector<int> > IN(n); // n is the rows
     vector<vector<int> > DA(n); // n is the rows
     vector<vector<int> > ptr(n); // n is the rows
- 
+	
+    // Create the Output 
+    vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+   
+    // Create the Kernel
+    vector<int> Kernel(Kh*Kw, 1);		
+
+
     // Perform 50 times raw sparse matrix dense vector multiplication of CPO: d_o3 = d_m * d_b
     {
-        clock_t t;
-        t = clock();
+        // clock_t t;
+        // t = clock();
         for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw,
 				IN, DA, ptr);
-
+	
+	clock_t t;
 	t = clock();
-	conv(d_o1, filter_vectorized, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+	for(int k=0;k<FREQ;k++)
+		// conv_v1(d_o1, filter_vectorized, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+		conv(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
         //      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
         double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
         t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing

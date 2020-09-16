@@ -403,10 +403,10 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
     exit(0);
 }
 
+// single
 void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
     // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
-    
     for (int n = 0; n < Ow; ++n)
     {
         for (int x = Aindptr[n]; x < Aindptr[n + 1]; ++x)
@@ -418,10 +418,10 @@ void csrMult(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindi
                 if(m < 0 || m >= Oh) continue;
                 
                 // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+                // cout << "R) " << m << ", C) " << n << ", Data: " << Adata[x] << ", Index: " << Aindices[x] << endl;
                 O(m, n) += Adata[x]*K[Kindex];
             }
         }
-        
     }
 } // end mult
 
@@ -511,6 +511,9 @@ int main()
     // mixed 0: conv_node 3
     int Ih = 5;
     int Iw = 5;
+     
+
+    Ih = Iw = 8;
     // int Ic = 32; // this is for the node
     int Ic = 1; // put it as articial for now
     int In = 1;
@@ -533,10 +536,21 @@ int main()
     std::vector<int> rows = {0,0,0,2,2,3,3};
     std::vector<double> values = {1,1,1,1,1,1,1};
     
+    org_fm(2, 0) = 1;
+    org_fm(4, 1) = 3;
+    org_fm(1, 2) = 2;
+    org_fm(2, 2) = 1;
+    org_fm(0, 3) = 2;
+    org_fm(4, 3) = 2;
+    org_fm(1, 4) = 3;
+    org_fm(3, 4) = 1;  
+   /*
     for(int i=0; i < cols.size(); i++)
     {
-        org_fm(rows[i], cols[i])        = values[i];
+        // org_fm(rows[i], cols[i])        = values[i];
+        org_fm(rows[i], cols[i])        = 1;
     }
+  */
     
     // Print out the original feature map:
     std::cout << "\n===Original Feature Map: \n" << org_fm << std::endl;
@@ -639,7 +653,7 @@ int main()
     // Create the filter K and its vectorized version:
     MatrixXf filter             = MatrixXf::Ones(Kh, Kw);
     VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
-    
+    // filter_vectorized(0) = 12; 
     // Print out the im2col interedmiate feature map:
     std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
     cout << "-----\n" << endl;
@@ -656,7 +670,8 @@ int main()
     {
         clock_t t;
         t = clock();
-        for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
+        // for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat_tr, filter_vectorized, d_o1);
+        for(int k=0;k<bench_iterations;k++)  bench_Dense(im2col_mat, filter_vectorized, d_o1);
         double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
         t_im2col+=elapsed/(Ih*Iw*1.0); // normalized timing
     }
@@ -674,7 +689,7 @@ int main()
     // push back the last element the number of nnz in ptr:
     Aindptr.push_back(nz);
     
-    
+  /*  
     // Perform 50 times raw sparse matrix dense vector multiplication of CPO: d_o3 = d_m * d_b
     {
         clock_t t;
@@ -684,17 +699,19 @@ int main()
         double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
         t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
     }
-    
+   */
+ 
     // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
-    //   {
-    //      clock_t t;
-    //      t = clock();
-    //      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-    //      // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-    //      for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-    //      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
-    //      t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
-    //   } 
+       {
+          clock_t t;
+          t = clock();
+          // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+          for(int k=0;k<1;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+          // for(int k=0;k<1;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+          // for(int k=0;k<1;k++) csrMult_vp(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+          double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+          t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+       } 
     
     // Test the sparse rep of the org im2col
     // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
