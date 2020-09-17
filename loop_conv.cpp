@@ -32,6 +32,304 @@ void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
 
 }
 
+void print2DVectorF(std::vector<vector<float>>& x)
+{
+    for(int i = 0; i < x.size(); ++i)
+    {   
+        for(int j = 0; j < x[i].size(); ++j)
+        {   
+            cout << x[i][j] << " ";
+        }   
+        cout << "\n";
+    }   
+}
+
+/*SSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+
+void conv_CPO(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw);
+    int number = floor((Iw - Kw)/Sw) + 1;
+    // number = 0; n = 1;
+    
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+    
+      int shereet2 = (submat == 0)? 0:type_ptr;
+      shereet2     = (submat == 1)? 1:shereet2;  
+      for(int i = 0; i <= shereet2; ++i)
+      {
+  
+       // From ptr r t r+1
+        int shereet = (type_ptr > 0)? 1:0;
+  //     int shereet = (type_ptr > 0 and submat > 0)? 1:0;
+       // int shereet = 1;
+
+       for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+       {
+         
+         if(submat-i*shereet < 0)
+         {
+            if(x == ptr[type_ptr][submat-i*shereet])
+              cout << "*********ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+            else
+            cout << "ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+             cout << "Bug " <<  (submat-i*shereet) << endl;
+             int h = 1 + 1;
+             exit(0);
+         }
+         
+        // Loop on Kh for the output
+       for(int l = 0; l < Kh; ++l)
+       {
+                    int input_index = IN[type_ptr][x] - i;
+        int y_out = (input_index)/Kw - l;
+        int x_out = submat;
+        
+        if(y_out < 0 || y_out >= Oh){
+            continue;
+         }
+      
+         // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+      
+            // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+
+      } // for each raga3 el shereet
+     } // for each x from range ptr and ptr + 1
+  } // for each submat
+  
+    }
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+
+
+void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN, 
+ vector<vector<int> > &DA, vector<vector<int> > &ptr)
+{
+
+    // std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() << "\n" << lowered_mat << std::endl;
+
+    int flag = 0;
+    int i = 0;
+    int l = 0;
+    int n;
+
+    if (Kw % Sw == 0)
+    {
+        n = Kw / Sw;
+    }
+    else
+    {
+        n = ceil(Kw / Sw);
+    }
+
+    std::vector<int> x(n, 0);
+    std::vector<int> m(n, 0);
+
+    /*
+    // Ptr declaration
+    for (int p = 0; p < n; ++p)
+    {
+        ptr[p] = vector<int>(Ow + 1);
+    }
+    */
+
+    // First piece
+    for (int j = 0; j < Kw; ++j)
+    {
+        if (flag == 0)
+        {
+            ptr[l][m[l]] = x[l];
+            flag = 1;
+            m[l]++;
+        } // end if (flag == 0)
+        for (i = 0; i < Ih; ++i)
+        {
+            // cout << "I: " << i << " J: " << j << endl;
+
+            if (lowered_mat(i, j) != 0)
+            {
+                // cout << i << ", " << j << endl;
+                IN[l].push_back(j + (i * Kw));
+                DA[l].push_back(lowered_mat(i, j));
+                x[l]++;
+            } // end if  if (lowered_mat(i, j) != 0)
+
+        } // end for(i=0; i < Ih; ++i)
+
+        if ((j + 1) % Sw == 0)
+        {
+            ptr[l][m[l]] = x[l];
+            l++;
+            flag = 0;
+        } // end if ( (j+1) % Sw == 0)
+        else if (j == Kw - 1)
+        {
+            ptr[l][m[l]] = x[l];
+        } // end if(j == Kw - 1)
+
+        // cout << "First piece: " << endl;
+        // print2DVector(ptr);
+        // printVector(m);
+
+    } // end for (int j = 0; j < Kw; ++j)
+
+    l--;
+
+    for (int p = 0; p < m.size(); ++p)
+    {
+        m[p] = m[p] + 1;
+        // printVector(m);
+    }
+    // printVector(m);
+    flag = 0;
+
+
+    // Second piece
+    for (int j = Kw; j < Iw - Kw; ++j)
+    {
+        for (i = 0; i < Ih; ++i)
+        {
+            if (lowered_mat(i, j) != 0)
+            {
+                IN[l].push_back(j - ((m[l] - 1) * Sw) + (i * Kw));
+                DA[l].push_back(lowered_mat(i, j));
+                // IN[l][x[l]] = j - ((m[l] - 1) * Sw) + (i * Kw);
+                // DA[l][x[l]] = lowered_mat(i, j);
+                x[l]++;
+            } // end if (lowered_mat(i, j) != 0)
+        }// end for(i = 0; i < Ih; ++i)
+
+        if (flag == 0)
+        {
+            if (Kw % Sw == 0)
+            {
+                if ((j - Kw + 1) % Sw == 0)
+                {
+                    ptr[l][m[l]] = x[l];
+                    m[l]++;
+
+                    if (n > 1)
+                    {
+                        for (int c = 0; c < n - 1; ++c)
+                        {
+                            ptr[c][m[c]] = x[c];
+                            m[c]++;
+                        } // end for(int c = 0; c < n-1; ++c)
+                    } // end if(n > 1)
+                } // end if ((j - Kw + 1) % Sw == 0)
+            } // end if (Kw % Sw == 0)
+            else if ((j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+            {
+                ptr[l][m[l]] = x[l];
+                m[l]++;
+                l++;
+                flag = 1;
+            } // end else if ( (j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+        } // end if(flag == 0)
+
+        else
+        {
+            if ((j - Kw + 1) % Sw == 0)
+            {
+                ptr[l][m[l]] = x[l];
+                m[l]++;
+                l--;
+                flag = 0;
+
+            } // end if ( (j - Kw + 1) % Sw == 0)
+            if (n > 2)
+            {
+                for (int c = 0; c < n - 2; ++c)
+                {
+                    ptr[c][m[c]] = x[c];
+                    m[c]++;
+                } // end for(int c = 0; c < n-2; ++c)
+            } // end if n > 2
+        } // end if flag == 1
+
+    } // end for(int j = Kw; j < Iw - Kw; ++j)
+
+    // printVector(m);
+
+    // Third piece
+    flag = 1;
+    i = 0;
+    for (int j = Iw - Kw; j < Iw; ++j)
+    {
+        for (int i = 0; i < Ih; i++)
+        {
+            // cout << "2222  Row: " << i << ", Col: " << j << endl;
+
+            if (lowered_mat(i, j) != 0)
+            {
+                int ind_val = j + (i * Kw) - Sw * (m[l] - 1);
+                // cout << "l " << l << " m[l]: " << m[l] << " Debug Index: " << ", j: " << j << ", (i*kw): " << (i * Kw) << " thir_part: " << (Sw * (m[l] - 1)) << " = " << ind_val << endl;
+                //                << " 1 " << j + (i*Kw) - (Sw*(m[l] - 1)))<< endl;
+
+                IN[l].push_back(ind_val);
+                DA[l].push_back(lowered_mat(i, j));
+                x[l]++;
+            }// end if(lowered_mat(i, j) != 0)
+        } // end for(i = 0; i = Ih; ++i)
+
+        if ((Iw - j - 1) % Sw == 0)
+        {
+            for (int c = 0; c < l + 1; ++c)
+            {
+                ptr[l][m[l]] = x[l];
+                m[l]++;
+            } // end for(int c = 0; c < l+1; ++c)
+
+            if (l > 1)
+            {
+                for (int c = 0; c < l; ++c)
+                {
+                    ptr[c][m[c]] = x[c];
+                    m[c]++;
+                } // end for(int c = 0; c < l-1; ++c)
+            }// end if l > 1
+
+            else if (l == 1)
+            {
+                ptr[0][m[0]] = x[0];
+                m[0]++;
+            } // end else if(l == 1)
+
+            l--;
+        } // end if ((Iw - j - 1) % Sw == 0)
+    } // end for (j = Iw - Kw; Iw; ++j)
+
+     // cout << "\nPtr: ";
+     // print2DVector(ptr);
+
+     // cout << "\n\nIN: ";
+     // print2DVector(IN);
+
+     // cout << "\n\nData:";
+     // print2DVector(DA);
+     // cout << "\n" << endl;
+
+}
+
+
+/*SSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+
 
 void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow) 
 {
@@ -159,20 +457,24 @@ int main()
   // density:
   float density = 0.05;
    
- for(; density < 1.1; density+=0.05)
-  {  
+ for(; density < 1.05; density+=0.05)
+ {  
 
   // timer for im2col, csr
   float t_im2col = 0;
   float t_csr    = 0;
+  float t_cpo    = 0;
 
   // bench iterations
   int bench_iterations = 100000;
+  // int bench_iterations = 1;
 	
   
   // Conv parameters:
   int padding = 0;
   int stride  = 1;
+  int Sh, Sw; 
+  Sh = Sw = stride;
   int num_filters = 1; // 64
 
   // mixed 0: conv_node 3
@@ -182,8 +484,10 @@ int main()
 // int Ih = 149;
 // int Iw = 149;
 
-  int Ih = 50;
-  int Iw = 50;
+  // int Ih = 50;
+  // int Iw = 50;
+  int Ih = 8;
+  int Iw = 8;
  
   // Kernel dimensions
   int Kh = 3;
@@ -214,13 +518,50 @@ int main()
   std::vector<int> rows = {0,0,0,2,2,3,3};
   std::vector<double> values = {1,1,1,1,1,1,1};
  
-  for(int i = 0; i < density*Ih*Iw; ++i)
+   
+  for (int i = 0; i < ceil(density * Ih * Iw); ++i)
   {
-    int r        = rand()%Ih;
-    int c        = rand()%Iw;
-    org_fm(r, c) = 1;
-  }
+    int r = rand() % Ih; 
+    int c = rand() % Iw; 
+    if(org_fm(r, c) == 0)
+    {
+       org_fm(r, c) = 1;
+    }
+    else
+    {
+      bool found = false;
+      for(int u = 0; u < Ih; ++u)
+      {
+        for(int v = 0; v < Iw; ++v)
+        {
+          if(org_fm(u, v) == 0)
+          {
+            org_fm(u, v) = 1;
+            found = true;
+            break;
+         }
+       }
+       if(found)
+        break;
+     }
+   }
+ }
 
+  // Calculate the actual dennsity
+ double density_cal = 0;
+  for (unsigned i = 0; i < Ih; ++i)
+  {
+      for (unsigned j = 0; j < Iw; ++j)
+      {   
+          if (org_fm(i, j) != 0){
+            density_cal += 1;
+          } 
+      }
+  }
+  
+  density_cal = density_cal/(Ih*Iw);
+  // cout << "Calculated density: " << density_cal << endl;
+  
 #if IS_PRINT
   // Print out the original feature map:
   std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << org_fm << std::endl;
@@ -368,6 +709,12 @@ int main()
   MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
   MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
   
+  // Prepare the output for CPO
+  vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+
+  // Create the Kernel
+  vector<int> Kernel(Kh*Kw, 1);
+
   // transpose the matrix for im2col:
   MatrixXf im2col_mat_tr = im2col_mat.transpose();
 
@@ -380,6 +727,7 @@ int main()
       t_im2col+=elapsed/(Ih*Iw*1.0); // normalized timing
    } 
 
+ 
 #if IS_PRINT
   // Print out the o1 from im2col:
   std::cout << "\n===im2col Output with Size: " << d_o1.rows() << ", " << d_o1.cols() <<  " \n" << d_o1 << std::endl;
@@ -413,6 +761,8 @@ int main()
       double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
       t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
    }
+
+
  
 #if IS_PRINT
   // Print out the o1 from im2col:
@@ -427,14 +777,47 @@ int main()
   cout << "-----\n" << endl;
 #endif 
 
+  // Prepare the Adata, Aindices, AindPtr for CPO multiplication
+   int n = ceil(Kw / Sw);
+   if (Kw % Sw == 0)
+   {   
+        n = Kw / Sw; 
+   } 
+  
+  vector<vector<int> > IN(n); // n is the rows
+  vector<vector<int> > DA(n); // n is the rows
+  vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
+  CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+
+  // Perform 50 times raw sparse matrix dense vector multiplication: d_CPO = d_m * d_b
+  {  
+      clock_t t;
+       for(int k=0;k<bench_iterations;k++){
+           // Prepare the output for CPO
+           vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+           t = clock();
+           conv_CPO(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+           double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+           t_cpo+=elapsed/(Ih*Iw*1.0); // normalized timing
+
+           // if(k == bench_iterations-1)
+           // {
+           //  print2DVectorF(O);
+           //  cout << "-----\n" << endl;
+           // }
+       }
+   }
+
   // elapsed time per feature element in the entire bench iterations
-  std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<std::endl;
+  std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
   
   ofstream myfile;
   myfile.open ("csr_log.txt", ios::out | ios::app);
   int batch = 1;
-  myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch<<"\tdensity\t"<<density<<"\tim2col\t"<<t_im2col<<"\tcsr\t"
-	<<t_csr <<"\tpercent\t"<< 100.0*(t_im2col-t_csr)/t_im2col << "\n";
+  myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch
+         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal 
+         <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
+	       <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
   myfile.close();
   
   } // density loop
