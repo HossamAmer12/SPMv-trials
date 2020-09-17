@@ -37,10 +37,15 @@
 # /usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp cpoAlg2.cpp
 
 # Compile rand cpo
-/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp rand_cpo.cpp
+# /usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp rand_cpo.cpp
+
+
+# Compile rand cscc
+# /usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp rand_cscc.cpp
+
 
 # Compile loop_conv.cpp
-# /usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp loop_conv.cpp
+/usr/local/bin/gcc-6 -lc++ -O3 -march=native -ffast-math  -msse4 -w -lboost_timer -lstdc++ -o sparse -I/Users/hossam.amer/7aS7aS_Works/work/my_Tools/eigen -fopenmp loop_conv.cpp
 
 # Enable -O2 
 # Enable NDEBUG

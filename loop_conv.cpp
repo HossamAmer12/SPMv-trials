@@ -330,6 +330,36 @@ void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, 
 
 /*SSSSSSSSSSSSSSSSSSSSSSSSSSS*/
 
+// CSR without eigen
+void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double> &Adata, vector<int> &Aindices, vector<int> &Aindptr, int Kh, int Kw, int Oh, int Ow)
+{
+  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+  
+  int x                 = Aindptr[0];
+  int *Aindex_help     = &Aindices[x];
+  double *Adata_help   = &Adata[x];
+  for (int n = 0; n < Ow; ++n)
+  {
+    for (; x < Aindptr[n + 1]; ++x)
+    {   
+      double result = 0.0;
+      int NZE_index = *Aindex_help; Aindex_help++;
+      int NZE_data  = *Adata_help; Adata_help++;
+      for(int l = 0; l < Kh; ++l)
+      {   
+        int m      = NZE_index/Kw - l;
+        int Kindex = NZE_index%Kw + l*Kw; 
+        if(m < 0 || m >= Oh) continue;
+                 
+        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        O[m][n] += NZE_data*K[Kindex];
+      }   
+    }   
+
+  }
+} // end mult
+
+
 
 void csrMult_v1(MatrixXf& O, VectorXf& K, vector<double>& Adata, vector<int>& Aindices, vector<int>& Aindptr, int Kh, int Kw, int Oh, int Ow) 
 {
@@ -455,9 +485,10 @@ int main()
 {
   
   // density:
-  float density = 0.05;
+  // float density = 0.05;
+  float density = 0.3;
    
- for(; density < 1.05; density+=0.05)
+ // for(; density < 1.05; density+=0.05)
  {  
 
   // timer for im2col, csr
@@ -750,18 +781,39 @@ int main()
   Aindptr.push_back(nz);
 
 
+
    // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
-   {  
+  {  
       clock_t t;
-      t = clock(); 
-      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      // for(int k=0;k<bench_iterations;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      // bench_iterations = 1; // if you want to see the correct result of csr_mult, comment this line
-      for(int k=0;k<bench_iterations;k++) csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
-      t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+       for(int k=0;k<bench_iterations;k++){
+           // Prepare the output for CPO
+           vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+           t = clock();
+           // csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+           csrMult_v4(O_CSR, Kernel, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+           double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+          t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+
+           // if(k == bench_iterations-1)
+           // {
+           //  print2DVectorF(O_CSR);
+           //  cout << "-----\n" << endl;
+           // }
+       }
    }
 
+
+   // // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+   // {  
+   //    clock_t t;
+   //    t = clock(); 
+   //    // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    // for(int k=0;k<bench_iterations;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    // bench_iterations = 1; // if you want to see the correct result of csr_mult, comment this line
+   //    for(int k=0;k<bench_iterations;k++) csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+   //    t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+   // }
 
  
 #if IS_PRINT

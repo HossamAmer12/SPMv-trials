@@ -586,8 +586,8 @@ int main()
   // int Ih = 17;
   // int Iw = 17;
 
-  int Ih = 9;
-  int Iw = 9;
+  int Ih = 8;
+  int Iw = 8;
       
  
   // Kernel dimensions
