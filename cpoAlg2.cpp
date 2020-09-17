@@ -25,52 +25,134 @@ void conv(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> >
     int number = floor((Iw - Kw)/Sw) + 1;
     // number = 0; n = 1;
     
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+    
+      int shereet2 = (submat == 0)? 0:type_ptr;
+      shereet2     = (submat == 1)? 1:shereet2;   
+      for(int i = 0; i <= shereet2; ++i)
+      {
+  
+       // From ptr r t r+1
+        int shereet = (type_ptr > 0)? 1:0;
+  //     int shereet = (type_ptr > 0 and submat > 0)? 1:0;
+       // int shereet = 1;
+
+       for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+       {
+        
+         
+        // Loop on Kh for the output
+       for(int l = 0; l < Kh; ++l)
+       {
+                    int input_index = IN[type_ptr][x] - i;
+        int y_out = (input_index)/Kw - l;
+        int x_out = submat;
+        
+        if(y_out < 0 || y_out >= Oh){
+            continue;
+         }
+      
+         // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+      
+            // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+
+      } // for each raga3 el shereet
+     } // for each x from range ptr and ptr + 1
+  } // for each submat
+  
+    }
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+
+void conv_v3(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw);
+    int number = floor((Iw - Kw)/Sw) + 1;
+    // number = 0; n = 1;
+    
     // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
 
     // For each ptr type
     // int type_ptr = 0;
     for (int type_ptr = 0; type_ptr < n; ++type_ptr)
     {
-	// For each submat
- 	int submat = 0;
-	for (int submat = 0; submat < number; ++submat)
-	{
-	  for(int i = 0; i <= type_ptr; ++i)
-	  {
-	
-	   // From ptr r t r+1
-	   int shereet = (type_ptr > 0)? 1:0;
-	   // int shereet = 1;
-	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
-	   {
-             // Loop on Kh for the output
-	     for(int l = 0; l < Kh; ++l)
-	     {
-                    int input_index = IN[type_ptr][x] - i;
- 		    int y_out = (input_index)/Kw - l;
-		    int x_out = submat;
-		    
-	 	    if(y_out < 0 || y_out >= Oh){
-			continue;
-		     }
-			
-		     // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
-		
-		    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
-		    O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
-			
-	     } // for each l in Kh
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+      cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
+    
+      int shereet2 = (submat == 0)? 0:type_ptr;
+      shereet2     = (submat == 1)? 1:shereet2; 
+      for(int i = 0; i <= shereet2; ++i)
+      {
+  
+       // From ptr r t r+1
+        int shereet = (type_ptr > 0)? 1:0;
+  //     int shereet = (type_ptr > 0 and submat > 0)? 1:0;
+       // int shereet = 1;
 
-	    } // for each raga3 el shereet
-	   } // for each x from range ptr and ptr + 1
-	} // for each submat
-	
+       for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
+      {
+
+        if(x == ptr[type_ptr][submat-i*shereet])
+           cout << "*********ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+        else
+          cout << "ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
+        // cout << "x: " << x << ", type_ptr: " << type_ptr << " , submat: " << submat << ", i: " << i << ", shereet: " << shereet << ", v: " << submat-i*shereet << endl ;
+         
+         if(submat-i*shereet < 0)
+         {
+             cout << "Bug " <<  (submat-i*shereet) << endl;
+             int h = 1 + 1;
+             exit(0);
+         }
+         
+        // Loop on Kh for the output
+       for(int l = 0; l < Kh; ++l)
+       {
+                    int input_index = IN[type_ptr][x] - i;
+        int y_out = (input_index)/Kw - l;
+        int x_out = submat;
+        
+        if(y_out < 0 || y_out >= Oh){
+            cout << "continue YYY============\n" << endl;
+            continue;
+         }
+      
+         cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+      
+         // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+    
+        // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+        O[y_out][x_out] += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+
+      } // for each raga3 el shereet
+     } // for each x from range ptr and ptr + 1
+  } // for each submat
+  
     }
 
-    // cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
+    cout << "Output: " << endl;
     print2DVectorF(O);
     cout << "-----\n" << endl;
-
 }
 
 
@@ -128,68 +210,7 @@ void conv_v2(vector<vector<float> > & O, vector<int> const &K, vector<vector<int
 
 }
 
-void conv_v1(MatrixXf& O, VectorXf& K, vector<vector<int> > &IN,  vector<vector<int> > &DA, vector<vector<int> > &ptr, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
-{
-    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
-    
-    int n      = ceil(Kw/Sw);
-    int number = floor((Iw - Kw)/Sw) + 1;
-    
-    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
 
-    // For each ptr type
-    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
-    {
-	// For each submat
-	for (int submat = 0; submat < number; ++submat)
-	{
-	   cout << "\nCurrent Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
-	  
-	  for(int i = 0; i <= type_ptr; ++i)
-	  {
-	
-	   // From ptr r t r+1
-	   int shereet = (type_ptr > 0)? 1:0;
-	   	   
-	   for(int x = ptr[type_ptr][submat-i*shereet]; x < ptr[type_ptr][submat-i*shereet+1]; ++x)
-	   {
-	     if(x == ptr[type_ptr][submat-i*shereet])
-	     cout << "*********ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
-	    else
-	     cout << "ptr_type: " << type_ptr <<  " shereet: " << shereet << " i: "  << i << " submat: " << submat << ", from: " << x << ", to: " << ptr[type_ptr][submat-i+1] << endl;
-/**/	    
-             // Loop on Kh for the output
-	     for(int l = 0; l < Kh; ++l)
-	     {
-                    int input_index = IN[type_ptr][x] - i;
- 		    int y_out = (input_index)/Kw - l;
-		    int x_out = submat;
-		    
-	 	    if(y_out < 0 || y_out >= Oh){
-			cout << "continue YYY============\n" << endl;
-			continue;
-		     }
-			
-		     cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
-		
-		    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
-		    O(y_out, x_out) += DA[type_ptr][x] * K[input_index%Kw + l*Kw];
-			
-	     } // for each l in Kh
-
-	    } // for each raga3 el shereet
-	   } // for each x from range ptr and ptr + 1
-	} // for each submat
-	
-	cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
-        //if (type_ptr == 1)
-	//exit(0);	
-    }
-
-    cout << "\n===CPO Output with Size: " << O.rows() << ", " << O.cols() <<  " \n" << O << std::endl;
-    cout << "-----\n" << endl;
-
-}
 
 void bench_Sparse(const SparseMatrix<float> &m, const MatrixXf &in, MatrixXf &o) {
     // o.noalias() = m*in.transpose();
@@ -213,6 +234,18 @@ void print2DVectorF(std::vector<vector<float>>& x)
 	cout << "\n";
     }
 }
+
+void reset2DVector(std::vector<vector<float>>& x)
+{
+    for(int i = 0; i < x.size(); ++i)
+    {
+        for(int j = 0; j < x[i].size(); ++j)
+        {
+            x[i][j] = 0;
+        }
+    }
+}
+
 
 
 void print2DVector(std::vector<vector<int>>& x)
@@ -451,7 +484,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
 
 int main()
 {
-    int FREQ = 1; 
+    int FREQ = 2; 
 
     // density:
     float density = 0.1;
@@ -501,6 +534,7 @@ int main()
     std::vector<int> rows = {0,0,0,2,2,3,3};
     std::vector<double> values = {1,1,1,1,1,1,1};
     
+    
     org_fm(2, 0) = 1;
     org_fm(4, 1) = 3;
     org_fm(1, 2) = 2;
@@ -509,6 +543,40 @@ int main()
     org_fm(4, 3) = 2;
     org_fm(1, 4) = 3;
     org_fm(3, 4) = 1; 
+    /**/
+    /*
+    0 0 0 0 1 1 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 1 0 1
+    0 0 1 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 1 0 0 0 0 0 0
+*/
+    /*
+    org_fm(7, 1) = 1;
+    org_fm(4, 2) = 1;
+    org_fm(0, 5) = 1;
+    org_fm(0, 6) = 1;
+    org_fm(3, 6) = 1;
+    org_fm(3, 7) = 1;
+    */
+    
+    // org_fm(2, 0) = 1;
+    // org_fm(7, 1) = 1;
+    // org_fm(2, 2) = 1;
+    // org_fm(0, 7) = 1;
+    /*
+    0 0 0 0 0 0 1 0
+    0 0 1 0 0 0 0 0
+    1 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0
+    0 1 0 0 0 0 0 0
+    */
     /*
     for(int i=0; i < cols.size(); i++)
     {
@@ -550,11 +618,12 @@ int main()
     vector<vector<int> > DA(n); // n is the rows
     vector<vector<int> > ptr(n); // n is the rows
 	
-    // Create the Output 
-    vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+   
    
     // Create the Kernel
-    vector<int> Kernel(Kh*Kw, 1);		
+    vector<int> Kernel(Kh*Kw, 1);	
+
+    
 
 
     // Perform 50 times raw sparse matrix dense vector multiplication of CPO: d_o3 = d_m * d_b
@@ -564,15 +633,37 @@ int main()
         for(int k=0;k<1;k++) CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw,
 				IN, DA, ptr);
 	
-	clock_t t;
-	t = clock();
-	for(int k=0;k<FREQ;k++)
-		// conv_v1(d_o1, filter_vectorized, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-		conv(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        //      for(int k=0;k<1;k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
-        t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+	    for(int k=0;k<FREQ;k++)
+		{            
+
+            // Create the output
+            vector<vector<float> > O( Oh , vector<float> (Ow, 0));  
+
+            // cout << "\nPtr: ";
+            // print2DVector(ptr);
+
+            // cout << "\n\nIN: ";
+            // print2DVector(IN);
+
+            // cout << "\n\nData:";
+            // print2DVector(DA);
+            // cout << "\n" << endl;
+
+            clock_t t;
+            t = clock();
+		    conv(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+            double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+            t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+
+
+            if(k == FREQ - 1)
+            {
+                cout << "Output: " << endl;
+                print2DVectorF(O);    
+            }
+        }
     }
+
    
     cout << "CPO conv time: " << t_csr << endl; 
     return 0;
