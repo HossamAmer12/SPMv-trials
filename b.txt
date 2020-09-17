@@ -1,0 +1,225 @@
+
+===Original Feature Map (8x8):  
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+-----
+
+
+===Filter:  
+1
+1
+1
+1
+1
+1
+1
+-----
+
+
+Ptr: 
+===== 0 =====
+0, 8, 16, 24, 32, 40, 48, 56, 64, 
+
+IN: 
+===== 0 =====
+0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 
+
+Data:
+===== 0 =====
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+
+
+0 ==> Current Submat 0, ptr:  0, ptr+1: 8
+*********ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 0, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 1, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 2, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 3, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 4, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 5, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 6, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 7, to: 8
+
+0 ==> Current Submat 1, ptr:  8, ptr+1: 16
+*********ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 8, to: 16
+R) 0, C) 1, Data: 1, Index: 0, ac_Index: 0
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 9, to: 16
+R) 0, C) 1, Data: 1, Index: 1, ac_Index: 1
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 10, to: 16
+R) 0, C) 1, Data: 1, Index: 2, ac_Index: 2
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 11, to: 16
+R) 0, C) 1, Data: 1, Index: 3, ac_Index: 3
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 12, to: 16
+R) 0, C) 1, Data: 1, Index: 4, ac_Index: 4
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 13, to: 16
+R) 0, C) 1, Data: 1, Index: 5, ac_Index: 5
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 14, to: 16
+R) 0, C) 1, Data: 1, Index: 6, ac_Index: 6
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 15, to: 16
+
+0 ==> Current Submat 2, ptr:  16, ptr+1: 24
+*********ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 16, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 17, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 18, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 19, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 20, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 21, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 22, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 23, to: 24
+
+0 ==> Current Submat 3, ptr:  24, ptr+1: 32
+*********ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 24, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 25, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 26, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 27, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 28, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 29, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 30, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 31, to: 32
+
+0 ==> Current Submat 4, ptr:  32, ptr+1: 40
+*********ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 32, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 33, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 34, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 35, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 36, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 37, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 38, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 39, to: 40
+
+0 ==> Current Submat 5, ptr:  40, ptr+1: 48
+*********ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 40, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 41, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 42, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 43, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 44, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 45, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 46, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 47, to: 48
+
+0 ==> Current Submat 6, ptr:  48, ptr+1: 56
+*********ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 48, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 49, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 50, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 51, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 52, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 53, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 54, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 55, to: 56
+
+0 ==> Current Submat 7, ptr:  56, ptr+1: 64
+*********ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 56, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 57, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 58, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 59, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 60, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 61, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 62, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 63, to: 64
+Output: 
+7 7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 7 
+-----
+
+
+0 ==> Current Submat 0, ptr:  0, ptr+1: 8
+*********ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 0, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 1, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 2, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 3, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 4, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 5, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 6, to: 8
+ptr_type: 0 shereet: 0 i: 0 submat: 0, from: 7, to: 8
+
+0 ==> Current Submat 1, ptr:  8, ptr+1: 16
+*********ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 8, to: 16
+R) 0, C) 1, Data: 1, Index: 0, ac_Index: 0
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 9, to: 16
+R) 0, C) 1, Data: 1, Index: 1, ac_Index: 1
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 10, to: 16
+R) 0, C) 1, Data: 1, Index: 2, ac_Index: 2
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 11, to: 16
+R) 0, C) 1, Data: 1, Index: 3, ac_Index: 3
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 12, to: 16
+R) 0, C) 1, Data: 1, Index: 4, ac_Index: 4
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 13, to: 16
+R) 0, C) 1, Data: 1, Index: 5, ac_Index: 5
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 14, to: 16
+R) 0, C) 1, Data: 1, Index: 6, ac_Index: 6
+ptr_type: 0 shereet: 0 i: 0 submat: 1, from: 15, to: 16
+
+0 ==> Current Submat 2, ptr:  16, ptr+1: 24
+*********ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 16, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 17, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 18, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 19, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 20, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 21, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 22, to: 24
+ptr_type: 0 shereet: 0 i: 0 submat: 2, from: 23, to: 24
+
+0 ==> Current Submat 3, ptr:  24, ptr+1: 32
+*********ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 24, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 25, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 26, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 27, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 28, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 29, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 30, to: 32
+ptr_type: 0 shereet: 0 i: 0 submat: 3, from: 31, to: 32
+
+0 ==> Current Submat 4, ptr:  32, ptr+1: 40
+*********ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 32, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 33, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 34, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 35, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 36, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 37, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 38, to: 40
+ptr_type: 0 shereet: 0 i: 0 submat: 4, from: 39, to: 40
+
+0 ==> Current Submat 5, ptr:  40, ptr+1: 48
+*********ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 40, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 41, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 42, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 43, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 44, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 45, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 46, to: 48
+ptr_type: 0 shereet: 0 i: 0 submat: 5, from: 47, to: 48
+
+0 ==> Current Submat 6, ptr:  48, ptr+1: 56
+*********ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 48, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 49, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 50, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 51, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 52, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 53, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 54, to: 56
+ptr_type: 0 shereet: 0 i: 0 submat: 6, from: 55, to: 56
+
+0 ==> Current Submat 7, ptr:  56, ptr+1: 64
+*********ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 56, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 57, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 58, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 59, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 60, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 61, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 62, to: 64
+ptr_type: 0 shereet: 0 i: 0 submat: 7, from: 63, to: 64
+Output: 
+7 7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 7 
+-----
+
+7 7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 7 
+-----
+
+batch	1	density	1	density_cal	1	im2col	0	csr	0	cpo	0.0153125

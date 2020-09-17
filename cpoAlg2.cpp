@@ -33,8 +33,34 @@ void conv(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> >
     for (int submat = 0; submat < number; ++submat)
     {
     
-      int shereet2 = (submat == 0)? 0:type_ptr;
-      shereet2     = (submat == 1)? 1:shereet2;   
+      // int shereet2 = (submat == 0)? 0:type_ptr;
+      // shereet2     = (submat == 1)? 1:shereet2;   
+
+          // How many time to iterate?
+      int shereet2;
+      if(type_ptr == 0)
+      {
+        shereet2 = 0;
+      }
+      else
+      {
+        if(submat == 0)
+         {
+          shereet2 = 0;
+         } 
+         else
+         {
+          if(submat == 1)
+          {
+            shereet2 =  1;
+          }
+          else
+          {
+            shereet2 = type_ptr;
+          }
+           
+         }
+      }
       for(int i = 0; i <= shereet2; ++i)
       {
   
@@ -97,8 +123,33 @@ void conv_v3(vector<vector<float> > & O, vector<int> const &K, vector<vector<int
     {
       cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
     
-      int shereet2 = (submat == 0)? 0:type_ptr;
-      shereet2     = (submat == 1)? 1:shereet2; 
+      // int shereet2 = (submat == 0)? 0:type_ptr;
+      // shereet2     = (submat == 1)? 1:shereet2; 
+        // How many time to iterate?
+      int shereet2;
+      if(type_ptr == 0)
+      {
+        shereet2 = 0;
+      }
+      else
+      {
+        if(submat == 0)
+         {
+          shereet2 = 0;
+         } 
+         else
+         {
+          if(submat == 1)
+          {
+            shereet2 =  1;
+          }
+          else
+          {
+            shereet2 = type_ptr;
+          }
+           
+         }
+      }
       for(int i = 0; i <= shereet2; ++i)
       {
   

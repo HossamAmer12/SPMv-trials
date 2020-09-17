@@ -32,6 +32,36 @@ void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
 
 }
 
+void printVector(std::vector<int>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
+void printVector(std::vector<float>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
+void printVector(std::vector<double>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
 void print2DVectorF(std::vector<vector<float>>& x)
 {
     for(int i = 0; i < x.size(); ++i)
@@ -62,8 +92,33 @@ void conv_CPO(vector<vector<float> > & O, vector<int> const &K, vector<vector<in
     for (int submat = 0; submat < number; ++submat)
     {
     
-      int shereet2 = (submat == 0)? 0:type_ptr;
-      shereet2     = (submat == 1)? 1:shereet2;  
+      // int shereet2 = (submat == 0)? 0:type_ptr;
+      // shereet2     = (submat == 1)? 1:shereet2;  
+        // How many time to iterate?
+      int shereet2;
+      if(type_ptr == 0)
+      {
+        shereet2 = 0;
+      }
+      else
+      {
+        if(submat == 0)
+         {
+          shereet2 = 0;
+         } 
+         else
+         {
+          if(submat == 1)
+          {
+            shereet2 =  1;
+          }
+          else
+          {
+            shereet2 = type_ptr;
+          }
+           
+         }
+      }
       for(int i = 0; i <= shereet2; ++i)
       {
   

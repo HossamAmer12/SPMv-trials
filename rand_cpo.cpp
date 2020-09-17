@@ -148,9 +148,36 @@ void conv_v3(vector<vector<float> > & O, vector<int> const &K, vector<vector<int
     for (int submat = 0; submat < number; ++submat)
     {
       cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " << ptr[type_ptr][submat] <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;
-    
-      int shereet2 = (submat == 0)? 0:type_ptr;
-      shereet2     = (submat == 1)? 1:shereet2; 
+      
+
+      // How many time to iterate?
+      int shereet2;
+      if(type_ptr == 0)
+      {
+        shereet2 = 0;
+      }
+      else
+      {
+        if(submat == 0)
+         {
+          shereet2 = 0;
+         } 
+         else
+         {
+          if(submat == 1)
+          {
+            shereet2 =  1;
+          }
+          else
+          {
+            shereet2 = type_ptr;
+          }
+           
+         }
+      }
+      
+      // int shereet2 = (submat == 0)? 0:type_ptr;
+      // shereet2     = (submat == 1)? 1:shereet2; 
       for(int i = 0; i <= shereet2; ++i)
       {
   
@@ -183,10 +210,11 @@ void conv_v3(vector<vector<float> > & O, vector<int> const &K, vector<vector<int
         int x_out = submat;
         
         if(y_out < 0 || y_out >= Oh){
-            cout << "continue YYY============\n" << endl;
+            // cout << "continue YYY============\n" << endl;
             continue;
          }
-      
+        
+         if(y_out == 0 && x_out == 1)
          cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
       
          // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
@@ -561,7 +589,8 @@ int main()
   // bench iterations
 //  int bench_iterations = 100000;
 
-      int bench_iterations = 10;
+  // int bench_iterations = 10;
+  int bench_iterations = 2;
   
   // Conv parameters:
   int padding = 0;
@@ -583,19 +612,22 @@ int main()
     // int Ih = 8;
     // int Iw = 8;
 
-  // int Ih = 17;
-  // int Iw = 17;
+  int Ih = 17;
+  int Iw = 17;
 
-  int Ih = 8;
-  int Iw = 8;
+  // int Ih = 8;
+  // int Iw = 8;
       
  
   // Kernel dimensions
   // int Kh = 3;
   // int Kw = 3;
 
-  int Kh = 7;
-  int Kw = 1;
+  // int Kh = 7;
+  // int Kw = 1;
+  
+  int Kh = 1;
+  int Kw = 7;
 
 
   // adjust the iterations based on Ih  

@@ -44,6 +44,37 @@ void print2DVectorF(std::vector<vector<float>>& x)
     }   
 }
 
+void printVector(std::vector<int>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
+void printVector(std::vector<float>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
+void printVector(std::vector<double>& x)
+{
+    cout << "\nPrint 1D Vector" << endl;
+    for(int i = 0; i < x.size(); ++i)
+    {
+        cout << x[i] << ", ";
+    }
+    cout << "\n";
+}
+
+
 
 
 // CSR without eigen
@@ -61,6 +92,12 @@ void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double>
       double result = 0.0;
       int NZE_index = *Aindex_help; Aindex_help++;
       int NZE_data  = *Adata_help; Adata_help++;
+
+      if(x == Aindptr[n])
+           cout << "*********ptr_type: " << 0 <<  " shereet: " << -1 << " i: "  << 0 << " submat: " << n << ", from: " << x << ", to: " << Aindptr[n + 1]<< endl;
+        else
+          cout << "ptr_type: " << 0 <<  " shereet: " << -1 << " i: "  << 0 << " submat: " << n << ", from: " << x << ", to: " << Aindptr[n + 1]<< endl;
+
       for(int l = 0; l < Kh; ++l)
       {   
         int m      = NZE_index/Kw - l;
@@ -68,6 +105,8 @@ void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double>
         if(m < 0 || m >= Oh) continue;
                  
         // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+        if(m == 0 && n == 1)
+        cout << "R) " << m << ", C) " << n << ", Data: " << Adata[x] << ", Index: " << Aindices[x] << endl;
         O[m][n] += NZE_data*K[Kindex];
       }   
     }   
@@ -214,7 +253,7 @@ int main()
   // bench iterations
 //  int bench_iterations = 100000;
 
-  int bench_iterations = 1;
+  int bench_iterations = 2;
   
   // Conv parameters:
   int padding = 0;
@@ -236,19 +275,22 @@ int main()
     // int Ih = 8;
     // int Iw = 8;
 
-  // int Ih = 17;
-  // int Iw = 17;
+  int Ih = 17;
+  int Iw = 17;
 
-  int Ih = 8;
-  int Iw = 8;
+  // int Ih = 8;
+  // int Iw = 8;
       
  
   // Kernel dimensions
   // int Kh = 3;
   // int Kw = 3;
 
-  int Kh = 7;
-  int Kw = 1;
+  // int Kh = 7;
+  // int Kw = 1;
+
+  int Kh = 1;
+  int Kw = 7;
 
 
 
@@ -431,18 +473,29 @@ int main()
   // push back the last element the number of nnz in ptr:
   Aindptr.push_back(nz);
 
+  cout << "Ptr: " << endl;
+  printVector(Aindptr);
 
-   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
-   {  
-      clock_t t;
-      t = clock(); 
-      // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      // for(int k=0;k<bench_iterations;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      // bench_iterations = 1; // if you want to see the correct result of csr_mult, comment this line
-      for(int k=0;k<bench_iterations;k++) csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
-      double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
-      t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
-   }
+  cout << "Index: " << endl;
+  printVector(Aindices);
+
+  cout << "Data: " << endl;
+  printVector(Adata);
+
+
+
+
+   // // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b
+   // {  
+   //    clock_t t;
+   //    t = clock(); 
+   //    // for(int k=0;k<bench_iterations;k++) csrMult(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    // for(int k=0;k<bench_iterations;k++) csrMult_v1(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    // bench_iterations = 1; // if you want to see the correct result of csr_mult, comment this line
+   //    for(int k=0;k<bench_iterations;k++) csrMult_v2(d_o2, filter_vectorized, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+   //    double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
+   //    t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+   // }
 
   // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b [Without Eigen]
   {  
@@ -456,15 +509,18 @@ int main()
            double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
            t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
 
-            cout << "CSR without Eigen Output: " << endl;
-            print2DVectorF(O_CSR);
-            cout << "-----\n" << endl;
+           if(k == bench_iterations - 1)
+           {
+              cout << "CSR without Eigen Output: " << endl;
+              print2DVectorF(O_CSR);
+              cout << "-----\n" << endl;
+           }
        }
    }
 
-   // Print out the o1 from im2col:
-  std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
-  cout << "-----\n" << endl;
+  //  // Print out the o1 from im2col:
+  // std::cout << "\n===CSCC Output with Size: " << d_o2.rows() << ", " << d_o2.cols() <<  " \n" << d_o2 << std::endl;
+  // cout << "-----\n" << endl;
 
 
 
