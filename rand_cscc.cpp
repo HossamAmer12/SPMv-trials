@@ -239,7 +239,8 @@ int main()
 {
   // density:
   // float density = 0.05;
-  float density = 1;
+  // float density = 1;
+  float density = 0.5;
    
  // for(; density < 1.05; density+=0.05)
   {  
@@ -252,8 +253,8 @@ int main()
 
   // bench iterations
 //  int bench_iterations = 100000;
-
-  int bench_iterations = 2;
+  // int bench_iterations = 2;
+  int bench_iterations = 1;
   
   // Conv parameters:
   int padding = 0;
@@ -278,6 +279,10 @@ int main()
   int Ih = 17;
   int Iw = 17;
 
+
+  // int Ih = 35;
+  // int Iw = 35;
+
   // int Ih = 8;
   // int Iw = 8;
       
@@ -288,11 +293,12 @@ int main()
 
   // int Kh = 7;
   // int Kw = 1;
-
+  
   int Kh = 1;
   int Kw = 7;
 
-
+  // int Kh = 5;
+  // int Kw = 5;
 
 
   // adjust the iterations based on Ih  
@@ -527,7 +533,12 @@ int main()
 
 
   // elapsed time per feature element in the entire bench iterations
-  std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
+  // std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
+  std::cout << "CSCC:\t" <<  Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+        <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
+         <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
+
   
   
   } // density loop

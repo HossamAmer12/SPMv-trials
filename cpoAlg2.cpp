@@ -37,30 +37,31 @@ void conv(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> >
       // shereet2     = (submat == 1)? 1:shereet2;   
 
           // How many time to iterate?
-      int shereet2;
-      if(type_ptr == 0)
-      {
-        shereet2 = 0;
-      }
-      else
-      {
-        if(submat == 0)
-         {
-          shereet2 = 0;
-         } 
-         else
-         {
-          if(submat == 1)
-          {
-            shereet2 =  1;
-          }
-          else
-          {
-            shereet2 = type_ptr;
-          }
+      int shereet2 = min(submat, type_ptr);
+      // int shereet2;
+      // if(type_ptr == 0)
+      // {
+      //   shereet2 = 0;
+      // }
+      // else
+      // {
+      //   if(submat == 0)
+      //    {
+      //     shereet2 = 0;
+      //    } 
+      //    else
+      //    {
+      //     if(submat == 1)
+      //     {
+      //       shereet2 =  1;
+      //     }
+      //     else
+      //     {
+      //       shereet2 = type_ptr;
+      //     }
            
-         }
-      }
+      //    }
+      // }
       for(int i = 0; i <= shereet2; ++i)
       {
   

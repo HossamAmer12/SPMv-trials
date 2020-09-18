@@ -67,7 +67,9 @@ void conv_CPO(vector<vector<float> > & O, vector<int> const &K, vector<vector<in
             
             // How many time to iterate?
             int shereet2 = min(submat, type_ptr);
-            // int shereet2;
+
+
+
             // if(type_ptr == 0)
             // {
             //     shereet2 = 0;
@@ -360,35 +362,32 @@ void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, 
 
 
 // CSR without eigen
-// CSR without eigen
 void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double> &Adata, vector<int> &Aindices, vector<int> &Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
-  // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
-  
-  int x                 = Aindptr[0];
-  int *Aindex_help     = &Aindices[x];
-  double *Adata_help   = &Adata[x];
-  for (int n = 0; n < Ow; ++n)
-  {
-    for (; x < Aindptr[n + 1]; ++x)
-    {   
-      double result = 0.0;
-      int NZE_index = *Aindex_help; Aindex_help++;
-      int NZE_data  = *Adata_help; Adata_help++;
-
-
-      for(int l = 0; l < Kh; ++l)
-      {   
-        int m      = NZE_index/Kw - l;
-        int Kindex = NZE_index%Kw + l*Kw; 
-        if(m < 0 || m >= Oh) continue;
-                 
-        // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
-        O[m][n] += NZE_data*K[Kindex];
-      }   
-    }   
-
-  }
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int x                 = Aindptr[0];
+    int *Aindex_help     = &Aindices[x];
+    double *Adata_help   = &Adata[x];
+    for (int n = 0; n < Ow; ++n)
+    {
+        for (; x < Aindptr[n + 1]; ++x)
+        {
+            double result = 0.0;
+            int NZE_index = *Aindex_help; Aindex_help++;
+            int NZE_data  = *Adata_help; Adata_help++;
+            for(int l = 0; l < Kh; ++l)
+            {
+                int m      = NZE_index/Kw - l;
+                int Kindex = NZE_index%Kw + l*Kw;
+                if(m < 0 || m >= Oh) continue;
+                
+                // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
+                O[m][n] += NZE_data*K[Kindex];
+            }   
+        }   
+        
+    }
 } // end mult
 
 
@@ -548,13 +547,13 @@ int main()
         // int Ih = 149;
         // int Iw = 149;
         
-        // int Ih = 50;
-        // int Iw = 50;
+        int Ih = 50;
+        int Iw = 50;
 //        int Ih = 8;
 //        int Iw = 8;
         
-        int Ih = 17;
-        int Iw = 17;
+        // int Ih = 17;
+        // int Iw = 17;
         
         // Kernel dimensions
 //        int Kh = 3;
@@ -635,6 +634,9 @@ int main()
         density_cal = density_cal/(Ih*Iw);
         // cout << "Calculated density: " << density_cal << endl;
         
+
+        std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << org_fm << std::endl;
+        cout << "-----\n" << endl;
 #if IS_PRINT
         // Print out the original feature map:
         std::cout << "\n===Original Feature Map (" << Ih << "x" << Iw <<  "):  \n" << org_fm << std::endl;
@@ -839,25 +841,24 @@ int main()
         // Without Eigen:
         // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b [Without Eigen]
         {
-            // Prepare the output for CSCC
-            vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
-            
             clock_t t;
-            t = clock();
             for(int k=0;k<bench_iterations;k++){
+                // Prepare the output for CSCC
+                vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+                t = clock();
                 csrMult_v4(O_CSR, Kernel, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+                double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+                t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
+                
+
                if(k == bench_iterations-1)
-               {
-                   cout << "CSR without Eigen Output: " << endl;
-                   print2DVectorF(O_CSR);
-                   cout << "-----\n" << endl;
-               }
-            } // end k lop 
-            double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
-            t_csr += elapsed/(Ih*Iw*1.0); // normalized timing
-        
-                // include creation time:
-               // t_csr +=  t_cscc_creation;
+                {
+                    cout << "CSR without Eigen Output: " << endl;
+                    print2DVectorF(O_CSR);
+                    cout << "-----\n" << endl;
+                }
+
+            }
         }
         
         
@@ -887,32 +888,30 @@ int main()
         CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
         
         // Perform 50 times raw sparse matrix dense vector multiplication: d_CPO = d_m * d_b
-        {
-            // Prepare the output for CPO
-            vector<vector<float> > O( Oh , vector<float> (Ow, 0));
-            
+        {  
             clock_t t;
-            t = clock();
             for(int k=0;k<bench_iterations;k++){
+                // Prepare the output for CPO
+                vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+                t = clock();
                 conv_CPO(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-//                if(k == bench_iterations-1)
-//                {
-//                    print2DVectorF(O);
-//                    cout << "-----\n" << endl;
-//                }
-            } // end k lop 
-            double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
-            t_cpo+=elapsed/(Ih*Iw*1.0); // normalized timing
-                // include creation time:
-               // t_cpo += t_cpo_creation;
+                double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+                t_cpo+=elapsed/(Ih*Iw*1.0); // normalized timing
+                
+                if(k == bench_iterations-1)
+                {
+                 print2DVectorF(O);
+                 cout << "-----\n" << endl;
+                }
+            }
         }
         
         // elapsed time per feature element in the entire bench iterations
 //        std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
-        std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+        std::cout << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
         <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
-        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
+         <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
         
 //        ofstream myfile;
 //        myfile.open ("csr_log.txt", ios::out | ios::app);
