@@ -437,6 +437,7 @@ void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double>
         int Kindex = NZE_index%Kw + l*Kw; 
         if(m < 0 || m >= Oh) continue;
                  
+        cout << "R) " << m << ", C) " << n << ", Data: " << Adata[x] << ", Index: " << Aindices[x] << endl;                 
         // cout << "R) " << m << ", C) " << n << ", " << Kindex << endl;
         O[m][n] += NZE_data*K[Kindex];
       }   
@@ -755,6 +756,10 @@ int main()
        //    double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds 
        //    t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
        // } 
+
+    
+  // Create the Kernel
+  vector<int> Kernel(Kh*Kw, 1);
 
     // Perform 50 times raw sparse matrix dense vector multiplication: d_o2 = d_m * d_b [Without Eigen]
   {  

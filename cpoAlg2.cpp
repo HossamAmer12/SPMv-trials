@@ -15,6 +15,143 @@ using namespace boost::timer;
 
 void print2DVectorF(std::vector<vector<float>>& x);
 
+void conv_CPO_v2(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<vector<int> >  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+
+
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+
+      int x                = ptr[type_ptr][0];
+      int *Aindex_help     = &IN[type_ptr][x];
+      int *Adata_help      = &DA[type_ptr][x];
+
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << endl;
+      for(; x < ptr[type_ptr][submat+1]; ++x)
+      {      
+       cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help; Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int i = 0; i <= type_ptr; ++i)
+        {
+
+          cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+
+          // Loop on Kh for the output
+          for(int l = 0; l < Kh; ++l)
+          {
+            int input_index  = used_index - i;
+            int y_out        = (input_index)/Kw - l;
+            int x_out        = i + submat;
+        
+          if(y_out < 0 || y_out >= Oh){
+            // cout << "continue YYY============\n" << endl;
+            continue;
+         }
+        
+    
+        cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+       //    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+        } // end i
+      } // end x
+    } // end sumbat
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+
+void conv_CPO_v1(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    // for (int type_ptr = 0; type_ptr < 1; ++type_ptr)
+    // for (int type_ptr = 2; type_ptr < 3; ++type_ptr)
+    {
+
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << endl;
+      for(int x = ptr[type_ptr][submat]; x < ptr[type_ptr][submat+1]; ++x)
+      {      
+       cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+
+        // How many time to iterate?
+        int used_index  = IN[type_ptr][x];
+        int used_data   = DA[type_ptr][x];
+        int shereet     = (type_ptr > 0)? 1:0;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int i = 0; i <= type_ptr; ++i)
+        {
+
+          cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+
+          // Loop on Kh for the output
+          for(int l = 0; l < Kh; ++l)
+          {
+            int input_index  = used_index - i;
+            int y_out        = (input_index)/Kw - l;
+            int x_out        = i + submat;
+        
+          if(y_out < 0 || y_out >= Oh){
+            // cout << "continue YYY============\n" << endl;
+            continue;
+         }
+        
+    
+        cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+       //    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+        } // end i
+      } // end x
+    } // end sumbat
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
 
 
 void conv(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
@@ -536,7 +673,7 @@ void CPO(MatrixXf& O, VectorXf& K, MatrixXf& lowered_mat, int Kh, int Kw, int Oh
 
 int main()
 {
-    int FREQ = 2; 
+    int FREQ = 1; 
 
     // density:
     float density = 0.1;
@@ -703,7 +840,8 @@ int main()
 
             clock_t t;
             t = clock();
-		    conv(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+		        // conv(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+            conv_CPO_v1(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
             double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
             t_csr+=elapsed/(Ih*Iw*1.0); // normalized timing
 

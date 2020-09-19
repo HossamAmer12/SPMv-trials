@@ -466,7 +466,6 @@ void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, 
 
 
 // CSR without eigen
-// CSR without eigen
 void csrMult_v4(vector<vector<float> > & O, vector<int> const &K, vector<double> &Adata, vector<int> &Aindices, vector<int> &Aindptr, int Kh, int Kw, int Oh, int Ow)
 {
   // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
