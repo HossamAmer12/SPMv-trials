@@ -45,6 +45,143 @@ void print2DVectorF(std::vector<vector<float>>& x)
 }
 
 /*SSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+void conv_CPO_v2(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<vector<int> >  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+
+
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+
+      int x                = ptr[type_ptr][0];
+      int *Aindex_help     = &IN[type_ptr][x];
+      int *Adata_help      = &DA[type_ptr][x];
+
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << endl;
+
+      int end_x_loop = ptr[type_ptr][submat+1];
+      for(; x < end_x_loop; ++x)
+      {      
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int i = 0; i <= type_ptr; ++i)
+        {
+
+          // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+
+          // Loop on Kh for the output
+          for(int l = 0; l < Kh; ++l)
+          {
+            int input_index  = used_index - i;
+            int y_out        = (input_index)/Kw - l;
+            int x_out        = i + submat;
+        
+          if(y_out < 0 || y_out >= Oh){
+            // cout << "continue YYY============\n" << endl;
+            continue;
+         }
+        
+    
+        // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+       //    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+        } // end i
+      } // end x
+    } // end sumbat
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+
+void conv_CPO_v1(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+    
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    {
+
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << endl;
+      for(int x = ptr[type_ptr][submat]; x < ptr[type_ptr][submat+1]; ++x)
+      {      
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+
+        // How many time to iterate?
+        int used_index  = IN[type_ptr][x];
+        int used_data   = DA[type_ptr][x];
+        
+
+        for(int i = 0; i <= type_ptr; ++i)
+        {
+
+          // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+
+          // Loop on Kh for the output
+          for(int l = 0; l < Kh; ++l)
+          {
+            int input_index  = used_index - i;
+            int y_out        = (input_index)/Kw - l;
+            int x_out        = submat  +  i;
+        
+          if(y_out < 0 || y_out >= Oh){
+            // cout << "continue YYY============\n" << endl;
+            continue;
+         }
+        
+    
+        // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+       //    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+      
+       } // for each l in Kh
+        } // end i
+      } // end x
+    } // end sumbat
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
 
 void conv_CPO(vector<vector<float> > & O, vector<int> const &K, vector<vector<int> > const &IN,  vector<vector<int> > const &DA, vector<vector<int> > const &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
 {
@@ -520,8 +657,8 @@ int main()
         
         // int Ih = 50;
         // int Iw = 50;
-        //       int Ih = 8;
-         //      int Iw = 8;
+              // int Ih = 8;
+              // int Iw = 8;
         
          int Ih = 17;
          int Iw = 17;
@@ -530,11 +667,11 @@ int main()
               // int Kh = 3;
               // int Kw = 3;
         
-        int Kh = 7;
-        int Kw = 1;
+        // int Kh = 7;
+        // int Kw = 1;
         
-        // int Kh = 1;
-        // int Kw = 7;
+        int Kh = 1;
+        int Kw = 7;
         
         
         // adjust the iterations based on Ih
@@ -891,7 +1028,9 @@ int main()
             clock_t t;
             t = clock();
             for(int k=0;k<bench_iterations;k++){
-                conv_CPO(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // conv_CPO(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // conv_CPO_v1(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                conv_CPO_v2(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
 //                if(k == bench_iterations-1)
 //                {
 //                    print2DVectorF(O);
@@ -905,7 +1044,7 @@ int main()
                 // include creation time:
                // t_cpo += t_cpo_creation;
         }
-                
+
         // elapsed time per feature element in the entire bench iterations
         //        std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
         std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
@@ -913,14 +1052,14 @@ int main()
         <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
         <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
         
-        //        ofstream myfile;
-        //        myfile.open ("csr_log.txt", ios::out | ios::app);
-        //        int batch = 1;
-        //        myfile << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<batch
-        //        <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        //        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
-        //         <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
-        //        myfile.close();
+               ofstream myfile;
+               myfile.open ("csr_log.txt", ios::out | ios::app);
+               int batch = 1;
+               myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+        <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
+        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
+               myfile.close();
         
     } // density loop
     
