@@ -885,6 +885,8 @@ int main()
         vector<vector<int> > DA(n); // n is the rows
         vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
         CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+
+        
         
         // Perform 50 times raw sparse matrix dense vector multiplication: d_CPO = d_m * d_b
         {
