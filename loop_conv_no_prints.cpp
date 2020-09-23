@@ -70,7 +70,190 @@ void transform2dTo1d(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vecto
 
 }
 
-void conv_CPO_v3(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+
+// Trying to put everything together in terms of break... loop unrolling for 3x3 filter
+void conv_CPO_v6(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    int *Adata_help      = &DA[x];
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    int type_ptr = 0;
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+   
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = submat;
+            
+            if(y_out >= 0 && y_out < Oh) {
+               O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    type_ptr = 1;
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+   
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+            int i = 0;
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index - i;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = i + submat;
+            
+            if(y_out >= 0 && y_out < Oh) {
+               O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+
+                int input_index     = used_index - 1;
+                O[y_out][x_out + 1] += used_data * K[input_index%Kw + l*Kw];  
+
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    type_ptr = 2;
+    {
+
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+            int i = 0;
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index - i;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = i + submat;
+            
+            if(y_out >= 0 && y_out < Oh) {
+                O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+
+                int input_index     = used_index - 1;
+                O[y_out][x_out + 1] += used_data * K[input_index%Kw + l*Kw];  
+
+                i = 2;
+                input_index     = used_index - 2;
+                O[y_out][x_out + 2] += used_data * K[input_index%Kw + l*Kw]; 
+
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+// Trying to put everything together in terms of break and loop
+void conv_CPO_v5(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
 {
     // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
 
@@ -113,6 +296,179 @@ void conv_CPO_v3(vector<vector<float> > & O, vector<int> const &K, vector<int>  
         int used_data   = *Adata_help;  Adata_help++;
 
         // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+            int i = 0;
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index - i;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = i + submat;
+            
+            bool flag = true;
+
+            if(y_out >= 0 && y_out < Oh) {
+               O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+
+               for(int i = 1; i <= type_ptr; ++i)
+               {
+                 int input_index     = used_index - i;
+                 O[y_out][x_out + i] += used_data * K[input_index%Kw + l*Kw]; 
+
+                 // i = 2;
+                 // input_index     = used_index - i;
+                 // O[y_out][x_out + 2] += used_data * K[input_index%Kw + l*Kw]; 
+
+
+               } // end i for loop
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+// Hossam: conv_CPO v4 with only Ptr 2 optimizations
+void conv_CPO_v4(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    int *Adata_help      = &DA[x];
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    int type_ptr = 2;
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+   
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+            int i = 0;
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index - i;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = i + submat;
+            
+            bool flag = true;
+
+            if(y_out >= 0 && y_out < Oh) {
+               O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+
+               for(int i = 1; i <= type_ptr; ++i)
+               {
+                 int input_index     = used_index - i;
+                 O[y_out][x_out + i] += used_data * K[input_index%Kw + l*Kw]; 
+
+                 // i = 2;
+                 // input_index     = used_index - i;
+                 // O[y_out][x_out + 2] += used_data * K[input_index%Kw + l*Kw]; 
+
+
+               } // end i for loop
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+
+// conv_CPO_v3 for type ptr 2 only
+void conv_CPO_v44(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    int *Adata_help      = &DA[x];
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    int type_ptr = 2;
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+        
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
       
         for(int i = 0; i <= type_ptr; ++i)
         {
@@ -142,6 +498,90 @@ void conv_CPO_v3(vector<vector<float> > & O, vector<int> const &K, vector<int>  
 
     ++x_ptr;
   } // end type ptr
+
+  
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
+void conv_CPO_v3(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    int *Adata_help      = &DA[x];
+
+    // For each ptr type
+    for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    // int type_ptr = 0;
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+        
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+      
+        for(int i = 0; i <= type_ptr; ++i)
+        {
+
+          // Loop on Kh for the output
+        for(int l = 0; l < Kh; ++l)
+        {
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index - i;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = i + submat;
+        
+           if(y_out < 0 || y_out >= Oh){
+            // cout << "continue YYY============\n" << endl;
+            continue;
+         }
+        
+    
+        // cout << "R) " << y_out << ", C) " << x_out << ", Data: " << DA[type_ptr][x] << ", Index: " << input_index  << ", ac_Index: " << IN[type_ptr][x] << endl;
+       //    // O(y_out, x_out) += DA[type_ptr][x] * 1.0;
+          O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+      
+        } // for each l in Kh
+        } // end i
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+  
 
     // cout << "Output: " << endl;
     // print2DVectorF(O);
@@ -739,6 +1179,7 @@ int main()
         float t_im2col = 0;
         float t_csr    = 0;
         float t_cpo    = 0;
+        float t_cpo2    = 0;
         
         // bench iterations
         int bench_iterations = 100000;
@@ -762,15 +1203,18 @@ int main()
         
         // int Ih = 50;
         // int Iw = 50;
-              int Ih = 8;
+	// int Ih = 32;
+	// int Iw = 32;
+
+               int Ih = 8;
                int Iw = 8;
         
          // int Ih = 17;
          // int Iw = 17;
         
         // Kernel dimensions
-               int Kh = 3;
-               int Kw = 3;
+                int Kh = 3;
+                int Kw = 3;
         
         // int Kh = 7;
         // int Kw = 1;
@@ -1161,15 +1605,59 @@ int main()
                 // conv_CPO_v1(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
                 // conv_CPO_v2(O, Kernel, IN,  DA, ptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
 
+                // conv_CPO_v3(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                // conv_v3 ptr 2
+                // conv_CPO_v44(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                // conv_CPO_v5(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // conv_CPO_v6(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
                 conv_CPO_v3(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                // conv_CPO_v4(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
 //                if(k == bench_iterations-1)
 //                {
 //                    print2DVectorF(O);
 //                    cout << "-----\n" << endl;
 //                }
             } // end k lop 
-            double elapsed = 1000*((double)(clock()-t3))/CLOCKS_PER_SEC; // time in milliseconds
+            double elapsed  = 1000*((double)(clock()-t3))/CLOCKS_PER_SEC; // time in milliseconds
             t_cpo = elapsed/(Ih*Iw*1.0); // normalized timing
+
+        
+                // include creation time:
+               // t_cpo += t_cpo_creation;
+        }
+
+
+        // Perform 50 times raw sparse matrix dense vector multiplication: d_CPO = d_m * d_b
+        {
+            // Prepare the output for CPO
+            vector<vector<float> > O_CPO2( Oh , vector<float> (Ow, 0));
+            
+            clock_t t4;
+            t4 = clock();
+            for(int k=0;k<bench_iterations;k++){
+                
+
+                // conv_CPO_v4(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                // Conv CPO V3: 
+                // conv_CPO_v3(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                // conv_CPO_v5(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+                conv_CPO_v5(O, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+//                if(k == bench_iterations-1)
+//                {
+//                    print2DVectorF(O);
+//                    cout << "-----\n" << endl;
+//                }
+            } // end k lop 
+            double elapsed  = 1000*((double)(clock()-t4))/CLOCKS_PER_SEC; // time in milliseconds
+            t_cpo2 = elapsed/(Ih*Iw*1.0); // normalized timing
 
         
                 // include creation time:
@@ -1180,16 +1668,20 @@ int main()
         //        std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
         std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
-        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo <<"\tcpo2\t"<< t_cpo2
+        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col <<"\tpercent3\t"<< 100.0*(t_im2col-t_cpo2)/t_im2col  << "\n";
         
                ofstream myfile;
                myfile.open ("csr_log.txt", ios::out | ios::app);
                int batch = 1;
+        //        myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+        // <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
+        // <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
+        // <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
                myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo
-        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col << "\n";
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo <<"\tcpo2\t"<< t_cpo2
+        <<"\tpercent1\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercent2\t"<< 100.0*(t_im2col-t_cpo)/t_im2col <<"\tpercent3\t"<< 100.0*(t_im2col-t_cpo2)/t_im2col  << "\n";
                myfile.close();
         
     } // density loop
