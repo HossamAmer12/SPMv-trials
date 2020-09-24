@@ -530,8 +530,8 @@ int main()
         float t_cpo    = 0;
         
         // bench iterations
-        // int bench_iterations = 100000;
-        int bench_iterations = 10;
+        int bench_iterations = 100000;
+        // int bench_iterations = 10;
         
         
         // Conv parameters:
