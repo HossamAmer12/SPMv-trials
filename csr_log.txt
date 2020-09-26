@@ -879,4 +879,465 @@ B-1	7x1 | 17x17) batch	1	target_density	1	density	1	im2col	1.03806e-05	csr	7.612
 =====> Final Results
 
 
+B-100000	3x3 | 8x8) batch	1	target_density	0.05	density	0.0625	im2col	0.651719	csr	0.318984	cpoV5	0.315469	cpoV6	0.378953	cpoV7	0.273187	percentCSSC	51.0549	percentV5	51.5943	percentV6	41.8533	percentV7	58.082
+B-100000	3x3 | 8x8) batch	1	target_density	0.1	density	0.109375	im2col	0.641359	csr	0.678828	cpoV5	0.49225	cpoV6	0.654562	cpoV7	0.454984	percentCSSC	-5.84208	percentV5	23.249	percentV6	-2.05861	percentV7	29.0594
+B-100000	3x3 | 8x8) batch	1	target_density	0.15	density	0.15625	im2col	0.636531	csr	0.977531	cpoV5	0.667906	cpoV6	0.857047	cpoV7	0.63075	percentCSSC	-53.5716	percentV5	-4.92906	percentV6	-34.6433	percentV7	0.90824
+B-100000	3x3 | 8x8) batch	1	target_density	0.2	density	0.203125	im2col	0.640063	csr	1.14184	cpoV5	0.914297	cpoV6	1.18425	cpoV7	0.872734	percentCSSC	-78.3957	percentV5	-42.8449	percentV6	-85.021	percentV7	-36.3514
+B-100000	3x3 | 8x8) batch	1	target_density	0.25	density	0.25	im2col	0.645859	csr	1.8587	cpoV5	1.18194	cpoV6	1.6128	cpoV7	1.15102	percentCSSC	-187.788	percentV5	-83.0023	percentV6	-149.713	percentV7	-78.2146
+B-100000	3x3 | 8x8) batch	1	target_density	0.3	density	0.3125	im2col	0.637625	csr	2.01805	cpoV5	1.20483	cpoV6	1.62409	cpoV7	1.10233	percentCSSC	-216.494	percentV5	-88.9556	percentV6	-154.71	percentV7	-72.8803
+B-100000	3x3 | 8x8) batch	1	target_density	0.35	density	0.359375	im2col	0.646297	csr	2.06105	cpoV5	1.36581	cpoV6	1.826	cpoV7	1.24603	percentCSSC	-218.901	percentV5	-111.329	percentV6	-182.533	percentV7	-92.7955
+B-100000	3x3 | 8x8) batch	1	target_density	0.4	density	0.40625	im2col	0.642266	csr	2.39033	cpoV5	1.6343	cpoV6	2.10691	cpoV7	1.4478	percentCSSC	-272.171	percentV5	-154.458	percentV6	-228.043	percentV7	-125.42
+B-100000	3x3 | 8x8) batch	1	target_density	0.45	density	0.453125	im2col	0.640094	csr	2.76748	cpoV5	1.76137	cpoV6	2.49077	cpoV7	1.7062	percentCSSC	-332.356	percentV5	-175.175	percentV6	-289.125	percentV7	-166.555
+B-100000	3x3 | 8x8) batch	1	target_density	0.5	density	0.515625	im2col	0.645813	csr	3.08381	cpoV5	2.02072	cpoV6	2.68366	cpoV7	1.92428	percentCSSC	-377.509	percentV5	-212.896	percentV6	-315.547	percentV7	-197.963
+B-100000	3x3 | 8x8) batch	1	target_density	0.55	density	0.5625	im2col	0.6435	csr	3.28677	cpoV5	2.15587	cpoV6	2.83667	cpoV7	2.02697	percentCSSC	-410.764	percentV5	-235.023	percentV6	-340.819	percentV7	-214.991
+B-100000	3x3 | 8x8) batch	1	target_density	0.6	density	0.609375	im2col	0.657984	csr	3.59633	cpoV5	2.44189	cpoV6	3.28855	cpoV7	2.41959	percentCSSC	-446.567	percentV5	-271.117	percentV6	-399.791	percentV7	-267.728
+B-100000	3x3 | 8x8) batch	1	target_density	0.65	density	0.65625	im2col	0.665234	csr	3.70823	cpoV5	2.52072	cpoV6	3.4108	cpoV7	2.38506	percentCSSC	-457.433	percentV5	-278.922	percentV6	-412.721	percentV7	-258.53
+B-100000	3x3 | 8x8) batch	1	target_density	0.7	density	0.703125	im2col	0.674312	csr	3.85133	cpoV5	2.66931	cpoV6	3.56978	cpoV7	2.50466	percentCSSC	-471.149	percentV5	-295.857	percentV6	-429.396	percentV7	-271.439
+B-100000	3x3 | 8x8) batch	1	target_density	0.75	density	0.765625	im2col	0.650797	csr	4.54134	cpoV5	3.07933	cpoV6	4.02459	cpoV7	2.94889	percentCSSC	-597.813	percentV5	-373.163	percentV6	-518.41	percentV7	-353.12
+B-100000	3x3 | 8x8) batch	1	target_density	0.8	density	0.8125	im2col	0.709281	csr	4.82353	cpoV5	3.32777	cpoV6	4.33873	cpoV7	3.12384	percentCSSC	-580.059	percentV5	-369.174	percentV6	-511.709	percentV7	-340.424
+B-100000	3x3 | 8x8) batch	1	target_density	0.85	density	0.859375	im2col	0.642078	csr	6.44036	cpoV5	3.59528	cpoV6	4.80345	cpoV7	3.39809	percentCSSC	-903.049	percentV5	-459.945	percentV6	-648.11	percentV7	-429.234
+B-100000	3x3 | 8x8) batch	1	target_density	0.9	density	0.90625	im2col	0.644906	csr	5.06339	cpoV5	3.69566	cpoV6	4.84966	cpoV7	3.49412	percentCSSC	-685.136	percentV5	-473.053	percentV6	-651.994	percentV7	-441.804
+B-100000	3x3 | 8x8) batch	1	target_density	0.95	density	0.953125	im2col	0.651937	csr	5.60745	cpoV5	3.92281	cpoV6	5.06009	cpoV7	3.68244	percentCSSC	-760.121	percentV5	-501.716	percentV6	-676.162	percentV7	-464.845
+B-100000	3x3 | 8x8) batch	1	target_density	1	density	1	im2col	0.694188	csr	5.80408	cpoV5	4.19995	cpoV6	5.29016	cpoV7	3.84677	percentCSSC	-736.097	percentV5	-505.017	percentV6	-662.064	percentV7	-454.139
+
+B-100000	3x3 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.50836	csr	0.39564	cpoV5	0.294668	cpoV6	0.396443	cpoV7	0.269682	percentCSSC	22.1732	percentV5	42.0356	percentV6	22.0153	percentV7	46.9506
+B-100000	3x3 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.50583	csr	0.68945	cpoV5	0.509291	cpoV6	0.674498	cpoV7	0.471135	percentCSSC	-36.3006	percentV5	-0.684057	percentV6	-33.3447	percentV7	6.85912
+B-100000	3x3 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.518557	csr	1.19103	cpoV5	0.790235	cpoV6	1.04453	cpoV7	0.747678	percentCSSC	-129.682	percentV5	-52.3912	percentV6	-101.429	percentV7	-44.1844
+B-100000	3x3 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.52573	csr	1.51935	cpoV5	1.06954	cpoV6	1.43635	cpoV7	1.03981	percentCSSC	-188.997	percentV5	-103.438	percentV6	-173.211	percentV7	-97.7833
+B-100000	3x3 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.517322	csr	1.82042	cpoV5	1.23972	cpoV6	1.70195	cpoV7	1.18173	percentCSSC	-251.892	percentV5	-139.641	percentV6	-228.993	percentV7	-128.433
+B-100000	3x3 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.521993	csr	2.06748	cpoV5	1.44388	cpoV6	2.01194	cpoV7	1.38463	percentCSSC	-296.075	percentV5	-176.609	percentV6	-285.434	percentV7	-165.258
+B-100000	3x3 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.510377	csr	2.4577	cpoV5	1.69338	cpoV6	2.29267	cpoV7	1.63499	percentCSSC	-381.546	percentV5	-231.789	percentV6	-349.211	percentV7	-220.349
+B-100000	3x3 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.516747	csr	2.81966	cpoV5	1.94333	cpoV6	2.60902	cpoV7	1.86235	percentCSSC	-445.656	percentV5	-276.069	percentV6	-404.892	percentV7	-260.398
+B-100000	3x3 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.53163	csr	3.11803	cpoV5	2.13347	cpoV6	2.91825	cpoV7	2.03537	percentCSSC	-486.504	percentV5	-301.308	percentV6	-448.924	percentV7	-282.854
+B-100000	3x3 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.508401	csr	3.4482	cpoV5	2.37091	cpoV6	3.23478	cpoV7	2.27807	percentCSSC	-578.243	percentV5	-366.346	percentV6	-536.265	percentV7	-348.084
+B-100000	3x3 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.516626	csr	3.76088	cpoV5	2.60397	cpoV6	3.53244	cpoV7	2.49778	percentCSSC	-627.969	percentV5	-404.033	percentV6	-583.751	percentV7	-383.479
+B-100000	3x3 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.513125	csr	4.11783	cpoV5	2.80962	cpoV6	3.84164	cpoV7	2.72573	percentCSSC	-702.501	percentV5	-447.55	percentV6	-648.675	percentV7	-431.202
+B-100000	3x3 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.511467	csr	4.47808	cpoV5	3.01804	cpoV6	4.15476	cpoV7	2.94917	percentCSSC	-775.537	percentV5	-490.076	percentV6	-712.323	percentV7	-476.611
+B-100000	3x3 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.534246	csr	4.91912	cpoV5	3.39099	cpoV6	4.64263	cpoV7	3.28917	percentCSSC	-820.76	percentV5	-534.725	percentV6	-769.007	percentV7	-515.665
+B-100000	3x3 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.518896	csr	5.2252	cpoV5	3.59108	cpoV6	4.87394	cpoV7	3.49171	percentCSSC	-906.984	percentV5	-592.062	percentV6	-839.29	percentV7	-572.911
+B-100000	3x3 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.514848	csr	5.55714	cpoV5	3.87652	cpoV6	5.25314	cpoV7	3.74081	percentCSSC	-979.376	percentV5	-652.945	percentV6	-920.329	percentV7	-626.586
+B-100000	3x3 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.507277	csr	5.85866	cpoV5	4.05498	cpoV6	5.54747	cpoV7	3.95813	percentCSSC	-1054.92	percentV5	-699.362	percentV6	-993.579	percentV7	-680.271
+B-100000	3x3 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.511204	csr	6.20391	cpoV5	4.3136	cpoV6	6.16854	cpoV7	4.1534	percentCSSC	-1113.59	percentV5	-743.812	percentV6	-1106.67	percentV7	-712.474
+B-100000	3x3 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.49463	csr	6.42173	cpoV5	4.41067	cpoV6	6.00039	cpoV7	4.3149	percentCSSC	-1198.29	percentV5	-791.712	percentV6	-1113.11	percentV7	-772.349
+B-100000	3x3 | 17x17) batch	1	target_density	1	density	1	im2col	0.494962	csr	6.91596	cpoV5	4.58383	cpoV6	6.2681	cpoV7	4.48742	percentCSSC	-1297.27	percentV5	-826.098	percentV6	-1166.38	percentV7	-806.618
+
+B-100000	3x3 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.472082	csr	0.415847	cpoV5	0.287814	cpoV6	0.373927	cpoV7	0.27439	percentCSSC	11.9122	percentV5	39.033	percentV6	20.7919	percentV7	41.8766
+B-100000	3x3 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.473814	csr	0.818854	cpoV5	0.544275	cpoV6	0.738681	cpoV7	0.534134	percentCSSC	-72.8216	percentV5	-14.8709	percentV6	-55.9009	percentV7	-12.7307
+B-100000	3x3 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.474986	csr	1.19873	cpoV5	0.780598	cpoV6	1.07317	cpoV7	0.75971	percentCSSC	-152.372	percentV5	-64.3412	percentV6	-125.937	percentV7	-59.9437
+B-100000	3x3 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.471993	csr	1.55415	cpoV5	1.0098	cpoV6	1.37955	cpoV7	0.973967	percentCSSC	-229.274	percentV5	-113.945	percentV6	-192.282	percentV7	-106.352
+B-100000	3x3 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.473365	csr	1.95348	cpoV5	1.24381	cpoV6	1.73107	cpoV7	1.22289	percentCSSC	-312.679	percentV5	-162.76	percentV6	-265.694	percentV7	-158.34
+B-100000	3x3 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.471832	csr	2.31747	cpoV5	1.5178	cpoV6	2.10743	cpoV7	1.49049	percentCSSC	-391.163	percentV5	-221.683	percentV6	-346.649	percentV7	-215.895
+B-100000	3x3 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.482076	csr	2.73423	cpoV5	1.77017	cpoV6	2.43884	cpoV7	1.74844	percentCSSC	-467.178	percentV5	-267.196	percentV6	-405.904	percentV7	-262.69
+B-100000	3x3 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.486186	csr	3.11605	cpoV5	2.05015	cpoV6	2.81195	cpoV7	2.00583	percentCSSC	-540.917	percentV5	-321.681	percentV6	-478.369	percentV7	-312.565
+B-100000	3x3 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.484283	csr	3.48795	cpoV5	2.30239	cpoV6	3.17205	cpoV7	2.28636	percentCSSC	-620.229	percentV5	-375.422	percentV6	-555	percentV7	-372.113
+B-100000	3x3 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.479565	csr	3.88871	cpoV5	2.57324	cpoV6	3.55856	cpoV7	2.52439	percentCSSC	-710.881	percentV5	-436.579	percentV6	-642.038	percentV7	-426.391
+B-100000	3x3 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.483193	csr	4.28748	cpoV5	2.82423	cpoV6	3.86668	cpoV7	2.74445	percentCSSC	-787.321	percentV5	-484.493	percentV6	-700.236	percentV7	-467.982
+B-100000	3x3 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.475558	csr	4.60519	cpoV5	3.05474	cpoV6	4.1861	cpoV7	2.98757	percentCSSC	-868.377	percentV5	-542.349	percentV6	-780.251	percentV7	-528.224
+B-100000	3x3 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.472532	csr	4.91927	cpoV5	3.27658	cpoV6	4.53361	cpoV7	3.22736	percentCSSC	-941.045	percentV5	-593.408	percentV6	-859.429	percentV7	-582.992
+B-100000	3x3 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.472444	csr	5.27565	cpoV5	3.53524	cpoV6	4.86766	cpoV7	3.47809	percentCSSC	-1016.67	percentV5	-648.289	percentV6	-930.315	percentV7	-636.191
+B-100000	3x3 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.474219	csr	5.65079	cpoV5	3.80056	cpoV6	5.22728	cpoV7	3.72963	percentCSSC	-1091.6	percentV5	-701.437	percentV6	-1002.29	percentV7	-686.48
+B-100000	3x3 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.474539	csr	6.03712	cpoV5	4.04625	cpoV6	5.57457	cpoV7	3.97328	percentCSSC	-1172.21	percentV5	-752.67	percentV6	-1074.73	percentV7	-737.294
+B-100000	3x3 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.471006	csr	6.43159	cpoV5	4.30189	cpoV6	5.94232	cpoV7	4.24271	percentCSSC	-1265.5	percentV5	-813.341	percentV6	-1161.62	percentV7	-800.778
+B-100000	3x3 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.47402	csr	6.80248	cpoV5	4.55433	cpoV6	6.25859	cpoV7	4.53374	percentCSSC	-1335.06	percentV5	-860.789	percentV6	-1220.32	percentV7	-856.445
+B-100000	3x3 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.474526	csr	7.18298	cpoV5	4.81823	cpoV6	6.62621	cpoV7	4.75054	percentCSSC	-1413.72	percentV5	-915.377	percentV6	-1296.39	percentV7	-901.112
+B-100000	3x3 | 50x50) batch	1	target_density	1	density	1	im2col	0.474503	csr	7.57045	cpoV5	5.03054	cpoV6	6.93642	cpoV7	4.95289	percentCSSC	-1495.45	percentV5	-960.17	percentV6	-1361.83	percentV7	-943.806
+
+
+
+B-100000	7x1 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.392768	csr	0.311844	cpoV5	0.340093	cpoV6	0.261405	cpoV7	0.149554	percentCSSC	20.6035	percentV5	13.4112	percentV6	33.4455	percentV7	61.9232
+B-100000	7x1 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.390965	csr	0.645419	cpoV5	0.646024	cpoV6	0.517017	cpoV7	0.391806	percentCSSC	-65.0833	percentV5	-65.2382	percentV6	-32.2412	percentV7	-0.215061
+B-100000	7x1 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.38817	csr	1.10683	cpoV5	1.01567	cpoV6	0.806467	cpoV7	0.590765	percentCSSC	-185.141	percentV5	-161.657	percentV6	-107.762	percentV7	-52.1924
+B-100000	7x1 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.384263	csr	1.44854	cpoV5	1.32238	cpoV6	1.10137	cpoV7	0.723948	percentCSSC	-276.965	percentV5	-244.135	percentV6	-186.619	percentV7	-88.3991
+B-100000	7x1 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.393021	csr	1.69492	cpoV5	1.66715	cpoV6	1.29812	cpoV7	0.900145	percentCSSC	-331.255	percentV5	-324.189	percentV6	-230.292	percentV7	-129.033
+B-100000	7x1 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.387758	csr	1.88558	cpoV5	1.91139	cpoV6	1.48331	cpoV7	1.0963	percentCSSC	-386.278	percentV5	-392.935	percentV6	-282.535	percentV7	-182.729
+B-100000	7x1 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.380211	csr	2.37785	cpoV5	2.39133	cpoV6	1.81806	cpoV7	1.24871	percentCSSC	-525.403	percentV5	-528.948	percentV6	-378.171	percentV7	-228.424
+B-100000	7x1 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.387789	csr	2.63936	cpoV5	2.5508	cpoV6	1.99012	cpoV7	1.3451	percentCSSC	-580.617	percentV5	-557.78	percentV6	-413.198	percentV7	-246.864
+B-100000	7x1 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.394647	csr	3.18844	cpoV5	2.97769	cpoV6	2.17036	cpoV7	1.488	percentCSSC	-707.921	percentV5	-654.519	percentV6	-449.949	percentV7	-277.047
+B-100000	7x1 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.386938	csr	3.13183	cpoV5	3.24662	cpoV6	2.35365	cpoV7	1.61779	percentCSSC	-709.39	percentV5	-739.054	percentV6	-508.277	percentV7	-318.1
+B-100000	7x1 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.385273	csr	3.46486	cpoV5	3.50212	cpoV6	2.60505	cpoV7	1.7471	percentCSSC	-799.326	percentV5	-808.995	percentV6	-576.156	percentV7	-353.469
+B-100000	7x1 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.388913	csr	3.56101	cpoV5	3.77598	cpoV6	2.75028	cpoV7	1.85541	percentCSSC	-815.63	percentV5	-870.905	percentV6	-607.171	percentV7	-377.076
+B-100000	7x1 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.402118	csr	4.02993	cpoV5	4.13553	cpoV6	3.09819	cpoV7	2.10636	percentCSSC	-902.177	percentV5	-928.438	percentV6	-670.469	percentV7	-423.816
+B-100000	7x1 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.391692	csr	4.22273	cpoV5	4.43811	cpoV6	3.20875	cpoV7	2.15988	percentCSSC	-978.074	percentV5	-1033.06	percentV6	-719.203	percentV7	-451.424
+B-100000	7x1 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.377502	csr	4.43972	cpoV5	4.72799	cpoV6	3.52086	cpoV7	2.2882	percentCSSC	-1076.08	percentV5	-1152.44	percentV6	-832.675	percentV7	-506.142
+B-100000	7x1 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.385471	csr	4.67027	cpoV5	4.97378	cpoV6	3.73692	cpoV7	2.49267	percentCSSC	-1111.58	percentV5	-1190.31	percentV6	-869.443	percentV7	-546.658
+B-100000	7x1 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.396754	csr	4.99408	cpoV5	5.25027	cpoV6	4.02149	cpoV7	2.60266	percentCSSC	-1158.73	percentV5	-1223.31	percentV6	-913.596	percentV7	-555.988
+B-100000	7x1 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.387744	csr	5.19042	cpoV5	5.56319	cpoV6	4.11821	cpoV7	2.73613	percentCSSC	-1238.62	percentV5	-1334.76	percentV6	-962.096	percentV7	-605.654
+B-100000	7x1 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.388585	csr	5.5289	cpoV5	5.88952	cpoV6	4.36353	cpoV7	2.91186	percentCSSC	-1322.83	percentV5	-1415.63	percentV6	-1022.93	percentV7	-649.35
+B-100000	7x1 | 17x17) batch	1	target_density	1	density	1	im2col	0.389886	csr	5.78649	cpoV5	6.15774	cpoV6	4.59588	cpoV7	3.08862	percentCSSC	-1384.15	percentV5	-1479.37	percentV6	-1078.78	percentV7	-692.186
+
+B-100000	7x1 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.353046	csr	0.332494	cpoV5	0.305124	cpoV6	0.279755	cpoV7	0.183898	percentCSSC	5.82133	percentV5	13.5741	percentV6	20.7596	percentV7	47.9112
+B-100000	7x1 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.356543	csr	0.663699	cpoV5	0.59141	cpoV6	0.529424	cpoV7	0.355512	percentCSSC	-86.1485	percentV5	-65.8736	percentV6	-48.4881	percentV7	0.289111
+B-100000	7x1 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.354254	csr	0.96388	cpoV5	0.831474	cpoV6	0.746916	cpoV7	0.496508	percentCSSC	-172.088	percentV5	-134.711	percentV6	-110.842	percentV7	-40.1562
+B-100000	7x1 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.355543	csr	1.20886	cpoV5	1.11259	cpoV6	0.968022	cpoV7	0.63853	percentCSSC	-240.003	percentV5	-212.928	percentV6	-172.266	percentV7	-79.5929
+B-100000	7x1 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.353019	csr	1.49081	cpoV5	1.40731	cpoV6	1.19252	cpoV7	0.804838	percentCSSC	-322.303	percentV5	-298.649	percentV6	-237.807	percentV7	-127.987
+B-100000	7x1 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.354972	csr	1.81594	cpoV5	1.66002	cpoV6	1.41583	cpoV7	0.92747	percentCSSC	-411.572	percentV5	-367.648	percentV6	-298.856	percentV7	-161.28
+B-100000	7x1 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.351107	csr	2.09661	cpoV5	1.98124	cpoV6	1.64197	cpoV7	1.08864	percentCSSC	-497.142	percentV5	-464.283	percentV6	-367.653	percentV7	-210.059
+B-100000	7x1 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.353178	csr	2.37562	cpoV5	2.25736	cpoV6	1.85554	cpoV7	1.24957	percentCSSC	-572.642	percentV5	-539.158	percentV6	-425.385	percentV7	-253.807
+B-100000	7x1 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.353935	csr	2.69883	cpoV5	2.52774	cpoV6	2.10368	cpoV7	1.39994	percentCSSC	-662.522	percentV5	-614.182	percentV6	-494.369	percentV7	-295.536
+B-100000	7x1 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.353354	csr	2.96043	cpoV5	2.81363	cpoV6	2.35155	cpoV7	1.56568	percentCSSC	-737.807	percentV5	-696.263	percentV6	-565.493	percentV7	-343.091
+B-100000	7x1 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.355618	csr	3.22867	cpoV5	3.05043	cpoV6	2.58786	cpoV7	1.70899	percentCSSC	-807.904	percentV5	-757.783	percentV6	-627.707	percentV7	-380.57
+B-100000	7x1 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.35227	csr	3.53424	cpoV5	3.32246	cpoV6	2.83895	cpoV7	1.87462	percentCSSC	-903.274	percentV5	-843.158	percentV6	-705.9	percentV7	-432.154
+B-100000	7x1 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.352169	csr	3.80076	cpoV5	3.56266	cpoV6	3.08332	cpoV7	2.00759	percentCSSC	-979.241	percentV5	-911.633	percentV6	-775.523	percentV7	-470.064
+B-100000	7x1 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.352546	csr	4.11846	cpoV5	3.81592	cpoV6	3.34121	cpoV7	2.17585	percentCSSC	-1068.2	percentV5	-982.388	percentV6	-847.737	percentV7	-517.182
+B-100000	7x1 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.352974	csr	4.36819	cpoV5	4.08343	cpoV6	3.59559	cpoV7	2.33545	percentCSSC	-1137.54	percentV5	-1056.87	percentV6	-918.654	percentV7	-561.65
+B-100000	7x1 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.351985	csr	4.70585	cpoV5	4.3303	cpoV6	3.84821	cpoV7	2.49691	percentCSSC	-1236.95	percentV5	-1130.25	percentV6	-993.289	percentV7	-609.379
+B-100000	7x1 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.352359	csr	4.99423	cpoV5	4.57266	cpoV6	4.09099	cpoV7	2.62788	percentCSSC	-1317.37	percentV5	-1197.73	percentV6	-1061.03	percentV7	-645.797
+B-100000	7x1 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.355291	csr	5.29117	cpoV5	4.84069	cpoV6	4.32272	cpoV7	2.78591	percentCSSC	-1389.25	percentV5	-1262.46	percentV6	-1116.67	percentV7	-684.12
+B-100000	7x1 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.3548	csr	5.5727	cpoV5	5.07929	cpoV6	4.56152	cpoV7	2.94029	percentCSSC	-1470.66	percentV5	-1331.59	percentV6	-1185.66	percentV7	-728.716
+B-100000	7x1 | 50x50) batch	1	target_density	1	density	1	im2col	0.352568	csr	5.81765	cpoV5	5.39982	cpoV6	4.75358	cpoV7	3.0851	percentCSSC	-1550.08	percentV5	-1431.57	percentV6	-1248.27	percentV7	-775.035
+
+
+
+B-100000	1x7 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.396152	csr	0.280675	cpoV5	0.275554	cpoV6	0.380052	cpoV7	0.25054	percentCSSC	29.1498	percentV5	30.4425	percentV6	4.06418	percentV7	36.7567
+B-100000	1x7 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.39092	csr	0.515737	cpoV5	0.423481	cpoV6	0.658803	cpoV7	0.403502	percentCSSC	-31.9289	percentV5	-8.3292	percentV6	-68.5261	percentV7	-3.21838
+B-100000	1x7 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.404377	csr	0.747111	cpoV5	0.598104	cpoV6	0.963644	cpoV7	0.5631	percentCSSC	-84.7559	percentV5	-47.9074	percentV6	-138.303	percentV7	-39.2513
+B-100000	1x7 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.386239	csr	0.913668	cpoV5	0.745045	cpoV6	1.17011	cpoV7	0.725834	percentCSSC	-136.555	percentV5	-92.8975	percentV6	-202.951	percentV7	-87.9236
+B-100000	1x7 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.386433	csr	1.27169	cpoV5	0.947543	cpoV6	1.60789	cpoV7	0.940993	percentCSSC	-229.085	percentV5	-145.203	percentV6	-316.085	percentV7	-143.508
+B-100000	1x7 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.380564	csr	1.5	cpoV5	1.10259	cpoV6	1.81627	cpoV7	1.05476	percentCSSC	-294.152	percentV5	-189.726	percentV6	-377.257	percentV7	-177.157
+B-100000	1x7 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.384671	csr	1.60979	cpoV5	1.26298	cpoV6	2.0125	cpoV7	1.19166	percentCSSC	-318.484	percentV5	-228.326	percentV6	-423.174	percentV7	-209.788
+B-100000	1x7 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.389633	csr	1.93139	cpoV5	1.4503	cpoV6	2.40658	cpoV7	1.39625	percentCSSC	-395.694	percentV5	-272.223	percentV6	-517.653	percentV7	-258.351
+B-100000	1x7 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.392426	csr	2.28311	cpoV5	1.61976	cpoV6	2.77617	cpoV7	1.60207	percentCSSC	-481.795	percentV5	-312.756	percentV6	-607.438	percentV7	-308.249
+B-100000	1x7 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.387516	csr	2.22466	cpoV5	1.68628	cpoV6	2.76907	cpoV7	1.60823	percentCSSC	-474.084	percentV5	-335.152	percentV6	-614.569	percentV7	-315.011
+B-100000	1x7 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.385678	csr	2.66968	cpoV5	1.87742	cpoV6	3.12334	cpoV7	1.81443	percentCSSC	-592.204	percentV5	-386.785	percentV6	-709.83	percentV7	-370.451
+B-100000	1x7 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.388969	csr	2.91633	cpoV5	2.06804	cpoV6	3.45898	cpoV7	1.99579	percentCSSC	-649.76	percentV5	-431.672	percentV6	-789.27	percentV7	-413.097
+B-100000	1x7 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.384664	csr	3.01746	cpoV5	2.14661	cpoV6	3.67963	cpoV7	2.13058	percentCSSC	-684.441	percentV5	-458.047	percentV6	-856.581	percentV7	-453.882
+B-100000	1x7 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.386478	csr	3.42862	cpoV5	2.3726	cpoV6	4.09532	cpoV7	2.3036	percentCSSC	-787.146	percentV5	-513.903	percentV6	-959.652	percentV7	-496.05
+B-100000	1x7 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.390066	csr	3.70738	cpoV5	2.49698	cpoV6	4.33356	cpoV7	2.47122	percentCSSC	-850.451	percentV5	-540.143	percentV6	-1010.98	percentV7	-533.54
+B-100000	1x7 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.3921	csr	3.94977	cpoV5	2.62959	cpoV6	4.51497	cpoV7	2.58542	percentCSSC	-907.338	percentV5	-570.642	percentV6	-1051.48	percentV7	-559.377
+B-100000	1x7 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.386834	csr	4.88854	cpoV5	2.8752	cpoV6	4.88615	cpoV7	2.78539	percentCSSC	-1163.73	percentV5	-643.266	percentV6	-1163.11	percentV7	-620.047
+B-100000	1x7 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.39592	csr	4.37067	cpoV5	2.93013	cpoV6	5.05349	cpoV7	2.89484	percentCSSC	-1003.93	percentV5	-640.081	percentV6	-1176.39	percentV7	-631.168
+B-100000	1x7 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.39118	csr	4.51909	cpoV5	3.05254	cpoV6	5.30837	cpoV7	3.03071	percentCSSC	-1055.24	percentV5	-680.342	percentV6	-1257.02	percentV7	-674.762
+B-100000	1x7 | 17x17) batch	1	target_density	1	density	1	im2col	0.392955	csr	4.84185	cpoV5	3.17518	cpoV6	5.59006	cpoV7	3.16002	percentCSSC	-1132.17	percentV5	-708.025	percentV6	-1322.57	percentV7	-704.168
+
+B-100000	1x7 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.356621	csr	0.361737	cpoV5	0.255476	cpoV6	0.449074	cpoV7	0.248295	percentCSSC	-1.43457	percentV5	28.362	percentV6	-25.9246	percentV7	30.3756
+B-100000	1x7 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.352632	csr	0.690566	cpoV5	0.432464	cpoV6	0.765804	cpoV7	0.425496	percentCSSC	-95.832	percentV5	-22.6389	percentV6	-117.168	percentV7	-20.6629
+B-100000	1x7 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.3512	csr	1.08875	cpoV5	0.629333	cpoV6	1.19148	cpoV7	0.620239	percentCSSC	-210.008	percentV5	-79.1949	percentV6	-239.261	percentV7	-76.6054
+B-100000	1x7 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.354057	csr	1.35889	cpoV5	0.821126	cpoV6	1.54647	cpoV7	0.818623	percentCSSC	-283.807	percentV5	-131.919	percentV6	-336.787	percentV7	-131.212
+B-100000	1x7 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.360384	csr	1.736	cpoV5	1.02138	cpoV6	1.935	cpoV7	1.01282	percentCSSC	-381.707	percentV5	-183.415	percentV6	-436.927	percentV7	-181.04
+B-100000	1x7 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.352399	csr	2.06923	cpoV5	1.1874	cpoV6	2.23029	cpoV7	1.18099	percentCSSC	-487.185	percentV5	-236.948	percentV6	-532.887	percentV7	-235.129
+B-100000	1x7 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.353263	csr	2.53134	cpoV5	1.38878	cpoV6	2.65155	cpoV7	1.38922	percentCSSC	-616.559	percentV5	-293.131	percentV6	-650.589	percentV7	-293.254
+B-100000	1x7 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.354634	csr	2.75003	cpoV5	1.57635	cpoV6	2.99398	cpoV7	1.57718	percentCSSC	-675.457	percentV5	-344.502	percentV6	-744.247	percentV7	-344.734
+B-100000	1x7 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.352758	csr	3.11237	cpoV5	1.76657	cpoV6	3.39891	cpoV7	1.76319	percentCSSC	-782.295	percentV5	-400.788	percentV6	-863.523	percentV7	-399.83
+B-100000	1x7 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.354592	csr	3.58034	cpoV5	1.97085	cpoV6	3.78655	cpoV7	1.96123	percentCSSC	-909.707	percentV5	-455.807	percentV6	-967.86	percentV7	-453.093
+B-100000	1x7 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.353382	csr	3.79333	cpoV5	2.12935	cpoV6	4.08401	cpoV7	2.13049	percentCSSC	-973.436	percentV5	-502.563	percentV6	-1055.69	percentV7	-502.887
+B-100000	1x7 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.352231	csr	4.25387	cpoV5	2.34305	cpoV6	4.50003	cpoV7	2.34565	percentCSSC	-1107.69	percentV5	-565.204	percentV6	-1177.58	percentV7	-565.94
+B-100000	1x7 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.353455	csr	4.58718	cpoV5	2.51114	cpoV6	4.84624	cpoV7	2.51241	percentCSSC	-1197.81	percentV5	-610.456	percentV6	-1271.1	percentV7	-610.813
+B-100000	1x7 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.357988	csr	4.8998	cpoV5	2.71669	cpoV6	5.22331	cpoV7	2.70896	percentCSSC	-1268.71	percentV5	-658.878	percentV6	-1359.08	percentV7	-656.719
+B-100000	1x7 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.353773	csr	5.21494	cpoV5	2.88463	cpoV6	5.61003	cpoV7	2.89721	percentCSSC	-1374.09	percentV5	-715.39	percentV6	-1485.77	percentV7	-718.946
+B-100000	1x7 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.352284	csr	5.51427	cpoV5	3.07341	cpoV6	5.94533	cpoV7	3.08234	percentCSSC	-1465.29	percentV5	-772.423	percentV6	-1587.65	percentV7	-774.958
+B-100000	1x7 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.352159	csr	5.83165	cpoV5	3.26107	cpoV6	6.29086	cpoV7	3.27102	percentCSSC	-1555.97	percentV5	-826.022	percentV6	-1686.37	percentV7	-828.849
+B-100000	1x7 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.354575	csr	6.32303	cpoV5	3.45986	cpoV6	6.67906	cpoV7	3.46988	percentCSSC	-1683.27	percentV5	-875.776	percentV6	-1783.68	percentV7	-878.602
+B-100000	1x7 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.352909	csr	6.54619	cpoV5	3.6538	cpoV6	7.09313	cpoV7	3.66776	percentCSSC	-1754.92	percentV5	-935.339	percentV6	-1909.91	percentV7	-939.293
+B-100000	1x7 | 50x50) batch	1	target_density	1	density	1	im2col	0.351604	csr	6.91575	cpoV5	3.8105	cpoV6	7.42636	cpoV7	3.86446	percentCSSC	-1866.92	percentV5	-983.75	percentV6	-2012.14	percentV7	-999.096
+
+
+========Final results V7 (better way of timing)
+
+B-100000	3x3 | 8x8) batch	1	target_density	0.05	density	0.0625	im2col	3.11361	csr	2.11436	cpoV5	2.09931	cpoV6	2.16486	cpoV7	2.0363	percentCSSC	32.0929	percentV5	32.5765	percentV6	30.4712	percentV7	34.6001	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.1	density	0.109375	im2col	3.20019	csr	2.42554	cpoV5	2.20804	cpoV6	2.40176	cpoV7	2.20515	percentCSSC	24.2063	percentV5	31.0027	percentV6	24.9494	percentV7	31.0932	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.15	density	0.15625	im2col	3.20354	csr	2.83076	cpoV5	2.40198	cpoV6	2.58249	cpoV7	2.32332	percentCSSC	11.6364	percentV5	25.0211	percentV6	19.3864	percentV7	27.4765	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.2	density	0.203125	im2col	3.17756	csr	3.22647	cpoV5	2.66471	cpoV6	2.89171	cpoV7	2.58434	percentCSSC	-1.53921	percentV5	16.1397	percentV6	8.99598	percentV7	18.669	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.25	density	0.25	im2col	3.24453	csr	3.98581	cpoV5	2.93187	cpoV6	3.36648	cpoV7	2.91467	percentCSSC	-22.8472	percentV5	9.6364	percentV6	-3.75879	percentV7	10.1665	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.3	density	0.3125	im2col	3.1703	csr	3.93265	cpoV5	2.93123	cpoV6	3.35087	cpoV7	2.8605	percentCSSC	-24.0468	percentV5	7.54098	percentV6	-5.69584	percentV7	9.77197	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.35	density	0.359375	im2col	3.2802	csr	4.55466	cpoV5	3.08285	cpoV6	3.57913	cpoV7	2.99273	percentCSSC	-38.8532	percentV5	6.01636	percentV6	-9.11313	percentV7	8.76376	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.4	density	0.40625	im2col	3.19725	csr	4.90403	cpoV5	3.28846	cpoV6	4.01851	cpoV7	3.18234	percentCSSC	-53.3829	percentV5	-2.85298	percentV6	-25.6867	percentV7	0.466115	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.45	density	0.453125	im2col	3.23254	csr	5.54434	cpoV5	3.51385	cpoV6	4.22951	cpoV7	3.41547	percentCSSC	-71.5165	percentV5	-8.70253	percentV6	-30.8417	percentV7	-5.6589	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.5	density	0.515625	im2col	3.25824	csr	5.86247	cpoV5	3.79693	cpoV6	4.50449	cpoV7	3.67498	percentCSSC	-79.9279	percentV5	-16.5332	percentV6	-38.2493	percentV7	-12.7904	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.55	density	0.5625	im2col	3.14144	csr	6.08362	cpoV5	3.9027	cpoV6	4.68212	cpoV7	3.71575	percentCSSC	-93.6571	percentV5	-24.233	percentV6	-49.0436	percentV7	-18.2817	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.6	density	0.609375	im2col	3.12414	csr	6.73618	cpoV5	4.27532	cpoV6	5.15813	cpoV7	4.13737	percentCSSC	-115.617	percentV5	-36.8479	percentV6	-65.1056	percentV7	-32.4322	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.65	density	0.65625	im2col	3.18373	csr	6.7754	cpoV5	4.3948	cpoV6	5.21636	cpoV7	4.12019	percentCSSC	-112.813	percentV5	-38.0392	percentV6	-63.8444	percentV7	-29.414	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.7	density	0.703125	im2col	3.156	csr	7.00173	cpoV5	4.35927	cpoV6	5.41004	cpoV7	4.27606	percentCSSC	-121.854	percentV5	-38.1262	percentV6	-71.4208	percentV7	-35.4897	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.75	density	0.765625	im2col	3.17883	csr	7.8502	cpoV5	4.85092	cpoV6	5.87824	cpoV7	4.61923	percentCSSC	-146.952	percentV5	-52.6008	percentV6	-84.9185	percentV7	-45.3123	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.8	density	0.8125	im2col	3.17341	csr	8.63936	cpoV5	5.08187	cpoV6	6.17459	cpoV7	4.92538	percentCSSC	-172.242	percentV5	-60.1391	percentV6	-94.5727	percentV7	-55.2079	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.85	density	0.859375	im2col	3.17796	csr	9.17321	cpoV5	5.36905	cpoV6	6.68042	cpoV7	5.12836	percentCSSC	-188.651	percentV5	-68.9462	percentV6	-110.211	percentV7	-61.3724	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.9	density	0.90625	im2col	3.11935	csr	9.0801	cpoV5	5.47364	cpoV6	6.69408	cpoV7	5.3104	percentCSSC	-191.089	percentV5	-75.4736	percentV6	-114.599	percentV7	-70.2406	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.95	density	0.953125	im2col	3.20516	csr	9.59669	cpoV5	5.72444	cpoV6	6.99571	cpoV7	5.46548	percentCSSC	-199.413	percentV5	-78.6007	percentV6	-118.264	percentV7	-70.5212	1
+B-100000	3x3 | 8x8) batch	1	target_density	1	density	1	im2col	3.22906	csr	9.8254	cpoV5	5.83425	cpoV6	7.13276	cpoV7	5.60185	percentCSSC	-204.28	percentV5	-80.6794	percentV6	-120.893	percentV7	-73.4823	1
+
+B-100000	3x3 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	1.09507	csr	0.877776	cpoV5	0.679865	cpoV6	0.800901	cpoV7	0.665891	percentCSSC	19.8433	percentV5	37.9161	percentV6	26.8633	percentV7	39.1922	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	1.09968	csr	1.48928	cpoV5	0.921041	cpoV6	1.13036	cpoV7	0.894996	percentCSSC	-35.4294	percentV5	16.2444	percentV6	-2.7905	percentV7	18.6127	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	1.09346	csr	2.08611	cpoV5	1.23898	cpoV6	1.52575	cpoV7	1.19448	percentCSSC	-90.7804	percentV5	-13.3078	percentV6	-39.534	percentV7	-9.23883	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	1.09347	csr	2.51393	cpoV5	1.39802	cpoV6	1.78018	cpoV7	1.37823	percentCSSC	-129.904	percentV5	-27.8519	percentV6	-62.801	percentV7	-26.0415	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	1.10517	csr	3.04151	cpoV5	1.71101	cpoV6	2.18034	cpoV7	1.64302	percentCSSC	-175.206	percentV5	-54.818	percentV6	-97.2846	percentV7	-48.6661	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	1.11583	csr	3.47636	cpoV5	1.8676	cpoV6	2.40586	cpoV7	1.81241	percentCSSC	-211.55	percentV5	-67.3737	percentV6	-115.612	percentV7	-62.4279	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	1.10239	csr	3.74045	cpoV5	1.977	cpoV6	2.67098	cpoV7	1.95733	percentCSSC	-239.303	percentV5	-79.3373	percentV6	-142.289	percentV7	-77.5525	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	1.08939	csr	4.45603	cpoV5	2.26476	cpoV6	2.9737	cpoV7	2.20192	percentCSSC	-309.039	percentV5	-107.893	percentV6	-172.969	percentV7	-102.125	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	1.12855	csr	5.02104	cpoV5	2.51561	cpoV6	3.31038	cpoV7	2.47221	percentCSSC	-344.909	percentV5	-122.905	percentV6	-193.33	percentV7	-119.06	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	1.09535	csr	5.30387	cpoV5	2.73664	cpoV6	3.59436	cpoV7	2.65592	percentCSSC	-384.218	percentV5	-149.842	percentV6	-228.148	percentV7	-142.473	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	1.10416	csr	6.04042	cpoV5	3.00572	cpoV6	3.96814	cpoV7	2.94532	percentCSSC	-447.062	percentV5	-172.219	percentV6	-259.382	percentV7	-166.749	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	1.10004	csr	6.47546	cpoV5	3.28126	cpoV6	4.24511	cpoV7	3.15464	percentCSSC	-488.658	percentV5	-198.287	percentV6	-285.906	percentV7	-186.775	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	1.08968	csr	6.98628	cpoV5	3.46535	cpoV6	4.60607	cpoV7	3.38735	percentCSSC	-541.133	percentV5	-218.016	percentV6	-322.7	percentV7	-210.858	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	1.10751	csr	7.54594	cpoV5	3.73371	cpoV6	4.9943	cpoV7	3.63746	percentCSSC	-581.345	percentV5	-237.127	percentV6	-350.95	percentV7	-228.437	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	1.09706	csr	8.05773	cpoV5	3.96263	cpoV6	5.24745	cpoV7	3.89099	percentCSSC	-634.481	percentV5	-261.203	percentV6	-378.318	percentV7	-254.673	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	1.09832	csr	8.61438	cpoV5	4.19188	cpoV6	5.5807	cpoV7	4.12523	percentCSSC	-684.321	percentV5	-281.662	percentV6	-408.111	percentV7	-275.594	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	1.09631	csr	8.96155	cpoV5	4.43752	cpoV6	5.9978	cpoV7	4.34811	percentCSSC	-717.427	percentV5	-304.768	percentV6	-447.088	percentV7	-296.612	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	1.09233	csr	9.62572	cpoV5	4.72387	cpoV6	6.27808	cpoV7	4.60384	percentCSSC	-781.206	percentV5	-332.456	percentV6	-474.74	percentV7	-321.468	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	1.10913	csr	10.1569	cpoV5	4.94526	cpoV6	6.63356	cpoV7	4.85381	percentCSSC	-815.754	percentV5	-345.869	percentV6	-498.087	percentV7	-337.623	1
+B-100000	3x3 | 17x17) batch	1	target_density	1	density	1	im2col	1.10122	csr	10.4108	cpoV5	5.06841	cpoV6	6.80499	cpoV7	4.95781	percentCSSC	-845.386	percentV5	-360.253	percentV6	-517.948	percentV7	-350.209	1
+
+
+
+B-100000	3x3 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.563824	csr	0.646619	cpoV5	0.339813	cpoV6	0.428484	cpoV7	0.328354	percentCSSC	-14.6846	percentV5	39.7306	percentV6	24.0039	percentV7	41.7631	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.560703	csr	1.23642	cpoV5	0.606055	cpoV6	0.805478	cpoV7	0.590411	percentCSSC	-120.512	percentV5	-8.08846	percentV6	-43.6551	percentV7	-5.2984	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.559545	csr	1.80882	cpoV5	0.845624	cpoV6	1.15197	cpoV7	0.829153	percentCSSC	-223.267	percentV5	-51.1272	percentV6	-105.876	percentV7	-48.1835	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.561203	csr	2.31072	cpoV5	1.07551	cpoV6	1.46481	cpoV7	1.05042	percentCSSC	-311.743	percentV5	-91.644	percentV6	-161.013	percentV7	-87.1723	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.560129	csr	2.91659	cpoV5	1.32313	cpoV6	1.82656	cpoV7	1.29785	percentCSSC	-420.698	percentV5	-136.218	percentV6	-226.096	percentV7	-131.706	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.561522	csr	3.48592	cpoV5	1.57766	cpoV6	2.17083	cpoV7	1.55309	percentCSSC	-520.798	percentV5	-180.961	percentV6	-286.598	percentV7	-176.585	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.55948	csr	4.08218	cpoV5	1.84256	cpoV6	2.55285	cpoV7	1.8123	percentCSSC	-629.638	percentV5	-229.335	percentV6	-356.289	percentV7	-223.925	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.557928	csr	4.69927	cpoV5	2.07366	cpoV6	2.83968	cpoV7	2.06613	percentCSSC	-742.271	percentV5	-271.672	percentV6	-408.969	percentV7	-270.322	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.559095	csr	5.3192	cpoV5	2.37972	cpoV6	3.27866	cpoV7	2.34647	percentCSSC	-851.395	percentV5	-325.638	percentV6	-486.424	percentV7	-319.69	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.558575	csr	5.87733	cpoV5	2.63357	cpoV6	3.59924	cpoV7	2.54777	percentCSSC	-952.2	percentV5	-371.48	percentV6	-544.361	percentV7	-356.119	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.557684	csr	6.41774	cpoV5	2.83857	cpoV6	3.89505	cpoV7	2.78484	percentCSSC	-1050.78	percentV5	-408.992	percentV6	-598.434	percentV7	-399.359	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.551106	csr	6.84939	cpoV5	3.09718	cpoV6	4.25377	cpoV7	3.04331	percentCSSC	-1142.84	percentV5	-461.994	percentV6	-671.86	percentV7	-452.218	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.543955	csr	7.36587	cpoV5	3.32445	cpoV6	4.58017	cpoV7	3.27015	percentCSSC	-1254.13	percentV5	-511.161	percentV6	-742.012	percentV7	-501.181	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.540448	csr	7.88587	cpoV5	3.58375	cpoV6	4.94034	cpoV7	3.52764	percentCSSC	-1359.14	percentV5	-563.108	percentV6	-814.121	percentV7	-552.725	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.547005	csr	8.59296	cpoV5	3.84091	cpoV6	5.28047	cpoV7	3.77762	percentCSSC	-1470.91	percentV5	-602.17	percentV6	-865.34	percentV7	-590.6	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.545735	csr	9.20467	cpoV5	4.16894	cpoV6	5.66596	cpoV7	4.02569	percentCSSC	-1586.66	percentV5	-663.912	percentV6	-938.225	percentV7	-637.663	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.5485	csr	9.70454	cpoV5	4.35485	cpoV6	5.97323	cpoV7	4.28301	percentCSSC	-1669.29	percentV5	-693.955	percentV6	-989.012	percentV7	-680.859	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.543442	csr	10.2373	cpoV5	4.60849	cpoV6	6.33012	cpoV7	4.53558	percentCSSC	-1783.79	percentV5	-748.019	percentV6	-1064.82	percentV7	-734.603	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.542698	csr	10.8619	cpoV5	4.86593	cpoV6	6.68531	cpoV7	4.78548	percentCSSC	-1901.46	percentV5	-796.618	percentV6	-1131.86	percentV7	-781.795	1
+B-100000	3x3 | 50x50) batch	1	target_density	1	density	1	im2col	0.544479	csr	11.325	cpoV5	5.06742	cpoV6	6.99692	cpoV7	5.03654	percentCSSC	-1979.97	percentV5	-830.692	percentV6	-1185.07	percentV7	-825.02	1
+
+
+
+B-100000	7x1 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.978992	csr	0.701969	cpoV5	0.732474	cpoV6	0.643849	cpoV7	0.51012	percentCSSC	28.2967	percentV5	25.1808	percentV6	34.2335	percentV7	47.8933	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.963987	csr	1.07159	cpoV5	1.05334	cpoV6	0.921722	cpoV7	0.730354	percentCSSC	-11.1624	percentV5	-9.26879	percentV6	4.38444	percentV7	24.2361	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.968814	csr	1.54733	cpoV5	1.4355	cpoV6	1.22069	cpoV7	0.922435	percentCSSC	-59.7136	percentV5	-48.1709	percentV6	-25.9988	percentV7	4.78724	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.971836	csr	1.83846	cpoV5	1.74081	cpoV6	1.50706	cpoV7	1.07232	percentCSSC	-89.1736	percentV5	-79.1259	percentV6	-55.0734	percentV7	-10.3395	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.962653	csr	2.26655	cpoV5	2.13409	cpoV6	1.7024	cpoV7	1.20633	percentCSSC	-135.448	percentV5	-121.689	percentV6	-76.8444	percentV7	-25.3131	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.975136	csr	2.58082	cpoV5	2.39648	cpoV6	1.92025	cpoV7	1.33411	percentCSSC	-164.662	percentV5	-145.758	percentV6	-96.9216	percentV7	-36.8128	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.97015	csr	3.10348	cpoV5	2.77721	cpoV6	2.24123	cpoV7	1.61285	percentCSSC	-219.897	percentV5	-186.266	percentV6	-131.019	percentV7	-66.2472	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.980677	csr	3.49314	cpoV5	3.01429	cpoV6	2.45922	cpoV7	1.65105	percentCSSC	-256.197	percentV5	-207.369	percentV6	-150.767	percentV7	-68.3577	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.974889	csr	3.49909	cpoV5	3.51013	cpoV6	2.62972	cpoV7	1.83506	percentCSSC	-258.922	percentV5	-260.054	percentV6	-169.745	percentV7	-88.2333	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.96966	csr	4.10185	cpoV5	3.75226	cpoV6	2.8656	cpoV7	1.90827	percentCSSC	-323.019	percentV5	-286.966	percentV6	-195.526	percentV7	-96.798	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.973873	csr	4.51871	cpoV5	3.99485	cpoV6	3.17334	cpoV7	2.00408	percentCSSC	-363.994	percentV5	-310.202	percentV6	-225.847	percentV7	-105.784	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.968556	csr	4.85184	cpoV5	4.25422	cpoV6	3.20893	cpoV7	2.02607	percentCSSC	-400.936	percentV5	-339.234	percentV6	-231.31	percentV7	-109.185	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.969514	csr	5.19644	cpoV5	4.62085	cpoV6	3.71357	cpoV7	2.347	percentCSSC	-435.984	percentV5	-376.615	percentV6	-283.034	percentV7	-142.08	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.964503	csr	5.59884	cpoV5	4.90621	cpoV6	3.78824	cpoV7	2.42408	percentCSSC	-480.489	percentV5	-408.678	percentV6	-292.766	percentV7	-151.329	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.976979	csr	6.37808	cpoV5	5.17644	cpoV6	4.05945	cpoV7	2.69117	percentCSSC	-552.837	percentV5	-429.842	percentV6	-315.51	percentV7	-175.459	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.974075	csr	6.63555	cpoV5	5.42385	cpoV6	4.30793	cpoV7	2.69219	percentCSSC	-581.215	percentV5	-456.821	percentV6	-342.259	percentV7	-176.384	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.96979	csr	6.97158	cpoV5	5.77143	cpoV6	4.5498	cpoV7	2.79483	percentCSSC	-618.875	percentV5	-495.121	percentV6	-369.153	percentV7	-188.189	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.952678	csr	7.42236	cpoV5	6.10262	cpoV6	4.82056	cpoV7	2.9333	percentCSSC	-679.104	percentV5	-540.575	percentV6	-406.001	percentV7	-207.9	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.963231	csr	8.02262	cpoV5	6.35162	cpoV6	5.0312	cpoV7	2.98972	percentCSSC	-732.886	percentV5	-559.408	percentV6	-422.325	percentV7	-210.385	1
+B-100000	7x1 | 17x17) batch	1	target_density	1	density	1	im2col	0.957709	csr	7.96788	cpoV5	6.65018	cpoV6	5.1871	cpoV7	3.1541	percentCSSC	-731.973	percentV5	-594.384	percentV6	-441.615	percentV7	-229.338	1
+
+B-100000	7x1 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.433309	csr	0.478417	cpoV5	0.361411	cpoV6	0.321363	cpoV7	0.201539	percentCSSC	-10.4102	percentV5	16.5929	percentV6	25.8352	percentV7	53.4884	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.432947	csr	0.921587	cpoV5	0.6491	cpoV6	0.58106	cpoV7	0.360186	percentCSSC	-112.864	percentV5	-49.9261	percentV6	-34.2106	percentV7	16.8059	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.433429	csr	1.339	cpoV5	0.905446	cpoV6	0.809285	cpoV7	0.475987	percentCSSC	-208.931	percentV5	-108.903	percentV6	-86.7167	percentV7	-9.818811
+B-100000	7x1 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.433815	csr	1.79144	cpoV5	1.17249	cpoV6	1.02777	cpoV7	0.603995	percentCSSC	-312.95	percentV5	-170.274	percentV6	-136.914	percentV7	-39.2285	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.431491	csr	2.21159	cpoV5	1.50611	cpoV6	1.26246	cpoV7	0.743674	percentCSSC	-412.545	percentV5	-249.048	percentV6	-192.581	percentV7	-72.3497	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.432284	csr	2.62201	cpoV5	1.7685	cpoV6	1.49858	cpoV7	0.853727	percentCSSC	-506.547	percentV5	-309.106	percentV6	-246.664	percentV7	-97.4921	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.435676	csr	3.06707	cpoV5	2.08208	cpoV6	1.74323	cpoV7	1.00935	percentCSSC	-603.98	percentV5	-377.897	percentV6	-300.12	percentV7	-131.675	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.438203	csr	3.48257	cpoV5	2.32514	cpoV6	1.95778	cpoV7	1.0915	percentCSSC	-694.739	percentV5	-430.607	percentV6	-346.773	percentV7	-149.085	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.433734	csr	3.91053	cpoV5	2.63171	cpoV6	2.216	cpoV7	1.2353	percentCSSC	-801.597	percentV5	-506.756	percentV6	-410.913	percentV7	-184.806	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.433554	csr	4.405	cpoV5	2.87092	cpoV6	2.44074	cpoV7	1.3873	percentCSSC	-916.019	percentV5	-562.182	percentV6	-462.961	percentV7	-219.982	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.437918	csr	4.87039	cpoV5	3.09503	cpoV6	2.69585	cpoV7	1.50355	percentCSSC	-1012.17	percentV5	-606.76	percentV6	-515.606	percentV7	-243.341	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.438754	csr	5.35855	cpoV5	3.38101	cpoV6	2.95342	cpoV7	1.62674	percentCSSC	-1121.31	percentV5	-670.594	percentV6	-573.139	percentV7	-270.764	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.431994	csr	5.78167	cpoV5	3.63416	cpoV6	3.17788	cpoV7	1.74266	percentCSSC	-1238.37	percentV5	-741.252	percentV6	-635.632	percentV7	-303.4	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.428891	csr	6.21929	cpoV5	3.90268	cpoV6	3.43704	cpoV7	1.8593	percentCSSC	-1350.09	percentV5	-809.946	percentV6	-701.379	percentV7	-333.513	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.426956	csr	6.63824	cpoV5	4.13184	cpoV6	3.68046	cpoV7	1.97711	percentCSSC	-1454.78	percentV5	-867.744	percentV6	-762.023	percentV7	-363.07	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.425694	csr	7.08418	cpoV5	4.38897	cpoV6	3.93216	cpoV7	2.12663	percentCSSC	-1564.15	percentV5	-931.015	percentV6	-823.706	percentV7	-399.567	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.426512	csr	7.57451	cpoV5	4.61696	cpoV6	4.18728	cpoV7	2.21829	percentCSSC	-1675.92	percentV5	-982.494	percentV6	-881.75	percentV7	-420.101	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.425772	csr	7.99702	cpoV5	4.89101	cpoV6	4.39371	cpoV7	2.32299	percentCSSC	-1778.24	percentV5	-1048.74	percentV6	-931.94	percentV7	-445.594	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.431789	csr	8.49765	cpoV5	5.16232	cpoV6	4.62016	cpoV7	2.43743	percentCSSC	-1868.01	percentV5	-1095.57	percentV6	-970.005	percentV7	-464.495	1
+B-100000	7x1 | 50x50) batch	1	target_density	1	density	1	im2col	0.428289	csr	8.79684	cpoV5	5.42871	cpoV6	4.87488	cpoV7	2.56525	percentCSSC	-1953.95	percentV5	-1167.54	percentV6	-1038.22	percentV7	-498.953	1
+
+
+
+B-100000	1x7 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.945569	csr	0.734644	cpoV5	0.668883	cpoV6	0.776432	cpoV7	0.639693	percentCSSC	22.3067	percentV5	29.2613	percentV6	17.8873	percentV7	32.3483	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.95065	csr	1.00692	cpoV5	0.823315	cpoV6	1.05667	cpoV7	0.778283	percentCSSC	-5.91946	percentV5	13.3945	percentV6	-11.1525	percentV7	18.1315	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.939414	csr	1.1684	cpoV5	0.961822	cpoV6	1.36035	cpoV7	0.936356	percentCSSC	-24.375	percentV5	-2.38538	percentV6	-44.8085	percentV7	0.325479	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.943076	csr	1.59931	cpoV5	1.12459	cpoV6	1.57179	cpoV7	1.08323	percentCSSC	-69.5841	percentV5	-19.2466	percentV6	-66.6668	percentV7	-14.8615	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.95049	csr	1.87156	cpoV5	1.34266	cpoV6	2.00272	cpoV7	1.31063	percentCSSC	-96.9052	percentV5	-41.2602	percentV6	-110.704	percentV7	-37.8895	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.945785	csr	1.9505	cpoV5	1.50337	cpoV6	2.21098	cpoV7	1.46887	percentCSSC	-106.231	percentV5	-58.9547	percentV6	-133.772	percentV7	-55.3068	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.957819	csr	2.27525	cpoV5	1.62332	cpoV6	2.40676	cpoV7	1.56101	percentCSSC	-137.545	percentV5	-69.4807	percentV6	-151.275	percentV7	-62.9756	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.95168	csr	2.80657	cpoV5	1.8219	cpoV6	2.81383	cpoV7	1.76408	percentCSSC	-194.907	percentV5	-91.4401	percentV6	-195.67	percentV7	-85.3652	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.964844	csr	2.79729	cpoV5	1.99607	cpoV6	3.33332	cpoV7	1.9854	percentCSSC	-189.921	percentV5	-106.88	percentV6	-245.477	percentV7	-105.775	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.950287	csr	2.95479	cpoV5	2.06529	cpoV6	3.2221	cpoV7	2.0103	percentCSSC	-210.936	percentV5	-117.333	percentV6	-239.066	percentV7	-111.547	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.938587	csr	3.15891	cpoV5	2.26782	cpoV6	3.58285	cpoV7	2.20881	percentCSSC	-236.56	percentV5	-141.621	percentV6	-281.728	percentV7	-135.333	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.944819	csr	3.55479	cpoV5	2.4195	cpoV6	4.15613	cpoV7	2.38172	percentCSSC	-276.24	percentV5	-156.08	percentV6	-339.886	percentV7	-152.082	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.957016	csr	3.45812	cpoV5	2.5519	cpoV6	4.12015	cpoV7	2.49973	percentCSSC	-261.344	percentV5	-166.651	percentV6	-330.52	percentV7	-161.201	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.943286	csr	4.10886	cpoV5	2.77512	cpoV6	4.52147	cpoV7	2.67776	percentCSSC	-335.59	percentV5	-194.197	percentV6	-379.332	percentV7	-183.875	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.96106	csr	4.17201	cpoV5	2.89571	cpoV6	5.01226	cpoV7	2.89068	percentCSSC	-334.105	percentV5	-201.304	percentV6	-421.535	percentV7	-200.78	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.949907	csr	4.2912	cpoV5	3.03255	cpoV6	5.01408	cpoV7	2.9859	percentCSSC	-351.749	percentV5	-219.247	percentV6	-427.85	percentV7	-214.336	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.953365	csr	4.61087	cpoV5	3.22239	cpoV6	5.32454	cpoV7	3.1418	percentCSSC	-383.642	percentV5	-238.002	percentV6	-458.5	percentV7	-229.549	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.957085	csr	4.72491	cpoV5	3.33532	cpoV6	5.53242	cpoV7	3.26471	percentCSSC	-393.677	percentV5	-248.487	percentV6	-478.049	percentV7	-241.11	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.943015	csr	4.93741	cpoV5	3.48453	cpoV6	5.80505	cpoV7	3.42154	percentCSSC	-423.577	percentV5	-269.51	percentV6	-515.585	percentV7	-262.83	1
+B-100000	1x7 | 17x17) batch	1	target_density	1	density	1	im2col	0.942309	csr	5.21182	cpoV5	3.58611	cpoV6	6.04706	cpoV7	3.53843	percentCSSC	-453.09	percentV5	-280.566	percentV6	-541.727	percentV7	-275.506	1
+
+B-100000	1x7 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.425464	csr	0.399196	cpoV5	0.301797	cpoV6	0.488634	cpoV7	0.295258	percentCSSC	6.17394	percentV5	29.0664	percentV6	-14.8473	percentV7	30.6034	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.428451	csr	0.709246	cpoV5	0.478456	cpoV6	0.827452	cpoV7	0.471466	percentCSSC	-65.5371	percentV5	-11.6709	percentV6	-93.1262	percentV7	-10.0395	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.42861	csr	1.06403	cpoV5	0.675517	cpoV6	1.21814	cpoV7	0.66619	percentCSSC	-148.251	percentV5	-57.6066	percentV6	-184.206	percentV7	-55.4306	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.42503	csr	1.39691	cpoV5	0.873786	cpoV6	1.59684	cpoV7	0.860601	percentCSSC	-228.662	percentV5	-105.582	percentV6	-275.701	percentV7	-102.48	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.429566	csr	1.76236	cpoV5	1.06664	cpoV6	1.99922	cpoV7	1.05843	percentCSSC	-310.266	percentV5	-148.306	percentV6	-365.406	percentV7	-146.394	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.435554	csr	2.06411	cpoV5	1.26533	cpoV6	2.3695	cpoV7	1.23491	percentCSSC	-373.904	percentV5	-190.511	percentV6	-444.02	percentV7	-183.526	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.438119	csr	2.67644	cpoV5	1.47159	cpoV6	2.75736	cpoV7	1.4647	percentCSSC	-510.893	percentV5	-235.888	percentV6	-529.364	percentV7	-234.316	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.430816	csr	2.75114	cpoV5	1.6506	cpoV6	3.1366	cpoV7	1.63863	percentCSSC	-538.587	percentV5	-283.133	percentV6	-628.06	percentV7	-280.355	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.433389	csr	3.11861	cpoV5	1.84773	cpoV6	3.51604	cpoV7	1.83371	percentCSSC	-619.588	percentV5	-326.346	percentV6	-711.29	percentV7	-323.109	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.431533	csr	3.49057	cpoV5	2.01917	cpoV6	3.87339	cpoV7	2.04682	percentCSSC	-708.876	percentV5	-367.905	percentV6	-797.587	percentV7	-374.312	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.438278	csr	3.81962	cpoV5	2.24103	cpoV6	4.23707	cpoV7	2.23808	percentCSSC	-771.507	percentV5	-411.327	percentV6	-866.753	percentV7	-410.653	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.441341	csr	4.18927	cpoV5	2.47299	cpoV6	4.73863	cpoV7	2.46499	percentCSSC	-849.213	percentV5	-460.335	percentV6	-973.69	percentV7	-458.522	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.440161	csr	4.45414	cpoV5	2.57634	cpoV6	5.10284	cpoV7	2.64637	percentCSSC	-911.933	percentV5	-485.317	percentV6	-1059.31	percentV7	-501.227	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.440052	csr	4.82255	cpoV5	2.82288	cpoV6	5.38004	cpoV7	2.84481	percentCSSC	-995.904	percentV5	-541.488	percentV6	-1122.59	percentV7	-546.471	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.439872	csr	5.21385	cpoV5	2.98886	cpoV6	5.71512	cpoV7	2.9696	percentCSSC	-1085.31	percentV5	-579.483	percentV6	-1199.27	percentV7	-575.107	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.434186	csr	5.43344	cpoV5	3.14687	cpoV6	6.04549	cpoV7	3.1389	percentCSSC	-1151.41	percentV5	-624.775	percentV6	-1292.37	percentV7	-622.938	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.430701	csr	6.14657	cpoV5	3.37631	cpoV6	6.49682	cpoV7	3.44608	percentCSSC	-1327.11	percentV5	-683.912	percentV6	-1408.43	percentV7	-700.111	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.439431	csr	6.20451	cpoV5	3.52838	cpoV6	6.92456	cpoV7	3.60858	percentCSSC	-1311.94	percentV5	-702.944	percentV6	-1475.8	percentV7	-721.194	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.434296	csr	6.44472	cpoV5	3.82031	cpoV6	7.37829	cpoV7	3.81816	percentCSSC	-1383.95	percentV5	-779.657	percentV6	-1598.91	percentV7	-779.161	1
+B-100000	1x7 | 50x50) batch	1	target_density	1	density	1	im2col	0.438908	csr	7.24068	cpoV5	3.99039	cpoV6	7.63853	cpoV7	3.90542	percentCSSC	-1549.7	percentV5	-809.163	percentV6	-1640.35	percentV7	-789.803	1
+
+
+================== Final Results V8 Results:
+
+B-100000	3x3 | 8x8) batch	1	target_density	0.05	density	0.0625	im2col	3.14582	csr	2.13391	cpoV5	2.0638	cpoV6	2.13697	cpoV8	2.02765	percentCSSC	32.1668	percentV5	34.3955	percentV6	32.0696	percentV8	35.5445	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.1	density	0.109375	im2col	3.17894	csr	2.57859	cpoV5	2.24002	cpoV6	2.40385	cpoV8	2.15688	percentCSSC	18.8852	percentV5	29.5357	percentV6	24.382	percentV8	32.1508	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.15	density	0.15625	im2col	3.16214	csr	2.80776	cpoV5	2.43543	cpoV6	2.61872	cpoV8	2.27203	percentCSSC	11.207	percentV5	22.9817	percentV6	17.1855	percentV8	28.1492	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.2	density	0.203125	im2col	3.15615	csr	3.20832	cpoV5	2.67659	cpoV6	2.93137	cpoV8	2.49268	percentCSSC	-1.65284	percentV5	15.1946	percentV6	7.12212	percentV8	21.0217	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.25	density	0.25	im2col	3.15843	csr	4.13903	cpoV5	2.99555	cpoV6	3.45339	cpoV8	2.78543	percentCSSC	-31.0468	percentV5	5.15721	percentV6	-9.33869	percentV8	11.8097	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.3	density	0.3125	im2col	3.19412	csr	3.92333	cpoV5	2.9441	cpoV6	3.42819	cpoV8	2.75699	percentCSSC	-22.83	percentV5	7.82745	percentV6	-7.32825	percentV8	13.6854	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.35	density	0.359375	im2col	3.18574	csr	4.50701	cpoV5	3.11383	cpoV6	3.62859	cpoV8	2.88571	percentCSSC	-41.4745	percentV5	2.25725	percentV6	-13.9008	percentV8	9.41784	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.4	density	0.40625	im2col	3.1233	csr	4.83667	cpoV5	3.23854	cpoV6	3.97108	cpoV8	2.95115	percentCSSC	-54.8578	percentV5	-3.68994	percentV6	-27.1439	percentV8	5.51186	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.45	density	0.453125	im2col	3.16729	csr	5.38335	cpoV5	3.49662	cpoV6	4.35771	cpoV8	3.28033	percentCSSC	-69.9669	percentV5	-10.3977	percentV6	-37.5847	percentV8	-3.569	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.5	density	0.515625	im2col	3.15729	csr	5.77797	cpoV5	3.8977	cpoV6	4.5014	cpoV8	3.43785	percentCSSC	-83.0039	percentV5	-23.4507	percentV6	-42.5716	percentV8	-8.88613	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.55	density	0.5625	im2col	3.1563	csr	6.03391	cpoV5	3.90412	cpoV6	4.65171	cpoV8	3.47581	percentCSSC	-91.1703	percentV5	-23.6928	percentV6	-47.3786	percentV8	-10.1228	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.6	density	0.609375	im2col	3.17318	csr	6.4887	cpoV5	4.23896	cpoV6	5.08817	cpoV8	3.84139	percentCSSC	-104.486	percentV5	-33.5871	percentV6	-60.3493	percentV8	-21.0582	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.65	density	0.65625	im2col	3.16501	csr	6.72035	cpoV5	4.33512	cpoV6	5.34376	cpoV8	3.84511	percentCSSC	-112.332	percentV5	-36.97	percentV6	-68.8386	percentV8	-21.488	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.7	density	0.703125	im2col	3.15841	csr	6.75522	cpoV5	4.52966	cpoV6	5.65466	cpoV8	3.98322	percentCSSC	-113.88	percentV5	-43.4159	percentV6	-79.035	percentV8	-26.1148	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.75	density	0.765625	im2col	3.16227	csr	7.61047	cpoV5	4.82555	cpoV6	5.88948	cpoV8	4.23195	percentCSSC	-140.665	percentV5	-52.5975	percentV6	-86.2423	percentV8	-33.8262	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.8	density	0.8125	im2col	3.1593	csr	8.35451	cpoV5	5.15592	cpoV6	6.34713	cpoV8	4.3768	percentCSSC	-164.442	percentV5	-63.1983	percentV6	-100.903	percentV8	-38.5371	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.85	density	0.859375	im2col	3.17113	csr	9.00576	cpoV5	5.25715	cpoV6	6.54941	cpoV8	4.58507	percentCSSC	-183.992	percentV5	-65.7816	percentV6	-106.532	percentV8	-44.5879	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.9	density	0.90625	im2col	3.19335	csr	8.9614	cpoV5	5.44336	cpoV6	6.80043	cpoV8	4.69959	percentCSSC	-180.627	percentV5	-70.4594	percentV6	-112.956	percentV8	-47.1682	1
+B-100000	3x3 | 8x8) batch	1	target_density	0.95	density	0.953125	im2col	3.15968	csr	9.3974	cpoV5	5.64638	cpoV6	7.03938	cpoV8	4.84432	percentCSSC	-197.416	percentV5	-78.7008	percentV6	-122.787	percentV8	-53.3166	1
+B-100000	3x3 | 8x8) batch	1	target_density	1	density	1	im2col	3.15504	csr	9.54913	cpoV5	5.78884	cpoV6	7.21063	cpoV8	4.97543	percentCSSC	-202.662	percentV5	-83.4789	percentV6	-128.543	percentV8	-57.6978	1
+
+B-100000	3x3 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	1.07446	csr	0.966743	cpoV5	0.700875	cpoV6	0.771812	cpoV8	0.624507	percentCSSC	10.0249	percentV5	34.7694	percentV6	28.1672	percentV8	41.8769	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	1.08903	csr	1.30689	cpoV5	0.898522	cpoV6	1.05202	cpoV8	0.796012	percentCSSC	-20.0044	percentV5	17.4935	percentV6	3.39859	percentV8	26.9064	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	1.08996	csr	1.9471	cpoV5	1.17275	cpoV6	1.44852	cpoV8	1.00864	percentCSSC	-78.64	percentV5	-7.59633	percentV6	-32.8973	percentV8	7.4606	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	1.07224	csr	2.53042	cpoV5	1.44484	cpoV6	1.81764	cpoV8	1.21649	percentCSSC	-135.993	percentV5	-34.7491	percentV6	-69.5169	percentV8	-13.4524	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	1.079	csr	2.96135	cpoV5	1.62345	cpoV6	2.08339	cpoV8	1.36534	percentCSSC	-174.452	percentV5	-50.4581	percentV6	-93.0847	percentV8	-26.5371	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	1.07783	csr	3.39699	cpoV5	1.82651	cpoV6	2.42095	cpoV8	1.51673	percentCSSC	-215.17	percentV5	-69.4617	percentV6	-124.613	percentV8	-40.7213	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	1.08619	csr	3.9333	cpoV5	2.07846	cpoV6	2.74441	cpoV8	1.70622	percentCSSC	-262.12	percentV5	-91.3533	percentV6	-152.664	percentV8	-57.0838	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	1.0726	csr	4.44143	cpoV5	2.32805	cpoV6	3.04106	cpoV8	1.84122	percentCSSC	-314.08	percentV5	-117.047	percentV6	-183.522	percentV8	-71.6593	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	1.08279	csr	4.98223	cpoV5	2.50929	cpoV6	3.35859	cpoV8	2.01983	percentCSSC	-360.131	percentV5	-131.744	percentV6	-210.181	percentV8	-86.5402	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	1.08767	csr	5.40922	cpoV5	2.78293	cpoV6	3.65945	cpoV8	2.18969	percentCSSC	-397.319	percentV5	-155.861	percentV6	-236.447	percentV8	-101.318	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	1.09513	csr	5.91249	cpoV5	2.99482	cpoV6	3.98024	cpoV8	2.42062	percentCSSC	-439.891	percentV5	-173.468	percentV6	-263.45	percentV8	-121.036	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	1.07567	csr	6.44593	cpoV5	3.1871	cpoV6	4.28259	cpoV8	2.53302	percentCSSC	-499.245	percentV5	-196.289	percentV6	-298.131	percentV8	-135.482	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	1.07734	csr	6.93411	cpoV5	3.41321	cpoV6	4.54244	cpoV8	2.70858	percentCSSC	-543.634	percentV5	-216.819	percentV6	-321.635	percentV8	-151.414	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	1.07954	csr	7.62338	cpoV5	3.75089	cpoV6	5.10507	cpoV8	3.05289	percentCSSC	-606.171	percentV5	-247.453	percentV6	-372.894	percentV8	-182.796	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	1.08568	csr	8.35641	cpoV5	4.01502	cpoV6	5.36038	cpoV8	3.1039	percentCSSC	-669.69	percentV5	-269.815	percentV6	-393.733	percentV8	-185.893	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	1.08316	csr	8.73839	cpoV5	4.24134	cpoV6	5.72973	cpoV8	3.3397	percentCSSC	-706.748	percentV5	-291.57	percentV6	-428.981	percentV8	-208.329	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	1.07996	csr	9.31333	cpoV5	4.48123	cpoV6	6.02724	cpoV8	3.52544	percentCSSC	-762.375	percentV5	-314.943	percentV6	-458.097	percentV8	-226.441	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	1.0791	csr	9.69033	cpoV5	4.71184	cpoV6	6.2653	cpoV8	3.72842	percentCSSC	-798.003	percentV5	-336.646	percentV6	-480.605	percentV8	-245.512	1
+B-100000	3x3 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	1.08173	csr	10.1422	cpoV5	4.90464	cpoV6	6.62091	cpoV8	3.80775	percentCSSC	-837.592	percentV5	-353.407	percentV6	-512.066	percentV8	-252.006	1
+B-100000	3x3 | 17x17) batch	1	target_density	1	density	1	im2col	1.09593	csr	10.4489	cpoV5	5.0604	cpoV6	6.84707	cpoV8	3.91162	percentCSSC	-853.432	percentV5	-361.747	percentV6	-524.775	percentV8	-256.924	1
+
+B-100000	3x3 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.555039	csr	0.626371	cpoV5	0.33759	cpoV6	0.424265	cpoV8	0.272822	percentCSSC	-12.8518	percentV5	39.1772	percentV6	23.5612	percentV8	50.8463	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.555938	csr	1.21772	cpoV5	0.602741	cpoV6	0.807608	cpoV8	0.479408	percentCSSC	-119.038	percentV5	-8.41879	percentV6	-45.2696	percentV8	13.7658	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.557945	csr	1.7918	cpoV5	0.844793	cpoV6	1.14327	cpoV8	0.651238	percentCSSC	-221.143	percentV5	-51.4116	percentV6	-104.907	percentV8	-16.7209	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.55554	csr	2.29429	cpoV5	1.06062	cpoV6	1.43975	cpoV8	0.832533	percentCSSC	-312.983	percentV5	-90.9167	percentV6	-159.161	percentV8	-49.86	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.560727	csr	2.85972	cpoV5	1.30115	cpoV6	1.7848	cpoV8	1.01542	percentCSSC	-410.002	percentV5	-132.047	percentV6	-218.302	percentV8	-81.0894	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.5576	csr	3.43701	cpoV5	1.54593	cpoV6	2.15365	cpoV8	1.22133	percentCSSC	-516.394	percentV5	-177.247	percentV6	-286.236	percentV8	-119.033	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.558292	csr	4.00456	cpoV5	1.81884	cpoV6	2.51205	cpoV8	1.42293	percentCSSC	-617.287	percentV5	-225.787	percentV6	-349.952	percentV8	-154.871	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.557289	csr	4.61837	cpoV5	2.0808	cpoV6	2.86912	cpoV8	1.62427	percentCSSC	-728.72	percentV5	-273.38	percentV6	-414.834	percentV8	-191.459	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.555444	csr	5.20782	cpoV5	2.36071	cpoV6	3.254	cpoV8	1.85568	percentCSSC	-837.596	percentV5	-325.014	percentV6	-485.837	percentV8	-234.089	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.558603	csr	5.75797	cpoV5	2.56657	cpoV6	3.53862	cpoV8	1.99082	percentCSSC	-930.78	percentV5	-359.463	percentV6	-533.477	percentV8	-256.392	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.550913	csr	6.34991	cpoV5	2.83893	cpoV6	3.93536	cpoV8	2.19253	percentCSSC	-1052.62	percentV5	-415.314	percentV6	-614.334	percentV8	-297.981	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.548074	csr	6.90409	cpoV5	3.10172	cpoV6	4.32697	cpoV8	2.4656	percentCSSC	-1159.7	percentV5	-465.931	percentV6	-689.487	percentV8	-349.867	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.565343	csr	7.49079	cpoV5	3.331	cpoV6	4.673	cpoV8	2.58835	percentCSSC	-1225	percentV5	-489.199	percentV6	-726.579	percentV8	-357.837	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.545651	csr	8.03038	cpoV5	3.59886	cpoV6	4.95313	cpoV8	2.75174	percentCSSC	-1371.71	percentV5	-559.554	percentV6	-807.747	percentV8	-404.303	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.550349	csr	8.60309	cpoV5	3.88006	cpoV6	5.29528	cpoV8	2.95778	percentCSSC	-1463.21	percentV5	-605.018	percentV6	-862.168	percentV8	-437.437	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.559173	csr	9.17399	cpoV5	4.09664	cpoV6	5.63283	cpoV8	3.13469	percentCSSC	-1540.64	percentV5	-632.624	percentV6	-907.35	percentV8	-460.594	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.554428	csr	9.78173	cpoV5	4.36401	cpoV6	6.00066	cpoV8	3.3427	percentCSSC	-1664.29	percentV5	-687.119	percentV6	-982.315	percentV8	-502.91	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.556564	csr	10.3655	cpoV5	4.60537	cpoV6	6.33659	cpoV8	3.52378	percentCSSC	-1762.4	percentV5	-727.465	percentV6	-1038.52	percentV8	-533.131	1
+B-100000	3x3 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.553467	csr	10.9109	cpoV5	4.87059	cpoV6	6.81552	cpoV8	3.82493	percentCSSC	-1871.38	percentV5	-780.015	percentV6	-1131.42	percentV8	-591.086	1
+B-100000	3x3 | 50x50) batch	1	target_density	1	density	1	im2col	0.563769	csr	11.4751	cpoV5	5.10082	cpoV6	7.01814	cpoV8	3.88889	percentCSSC	-1935.43	percentV5	-804.772	percentV6	-1144.86	percentV8	-589.803	1
+
+
+
+B-100000	7x1 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.971417	csr	0.678231	cpoV5	0.703716	cpoV6	0.631153	cpoV8	0.543762	percentCSSC	30.1813	percentV5	27.5578	percentV6	35.0276	percentV8	44.0238	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.983823	csr	1.08809	cpoV5	1.03465	cpoV6	0.912764	cpoV8	0.785261	percentCSSC	-10.5979	percentV5	-5.1663	percentV6	7.22268	percentV8	20.1827	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.974067	csr	1.46442	cpoV5	1.41318	cpoV6	1.17623	cpoV8	0.992762	percentCSSC	-50.341	percentV5	-45.0802	percentV6	-20.7545	percentV8	-1.91932	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.973297	csr	1.93188	cpoV5	1.76369	cpoV6	1.50968	cpoV8	1.13165	percentCSSC	-98.4879	percentV5	-81.2078	percentV6	-55.1101	percentV8	-16.2695	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.970813	csr	2.25863	cpoV5	2.16995	cpoV6	1.69527	cpoV8	1.33932	percentCSSC	-132.653	percentV5	-123.519	percentV6	-74.6236	percentV8	-37.9581	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.968138	csr	2.55912	cpoV5	2.37456	cpoV6	1.94071	cpoV8	1.46689	percentCSSC	-164.334	percentV5	-145.271	percentV6	-100.458	percentV8	-51.5167	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.97227	csr	3.09896	cpoV5	2.86793	cpoV6	2.29998	cpoV8	1.67472	percentCSSC	-218.734	percentV5	-194.972	percentV6	-136.557	percentV8	-72.248	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.981976	csr	3.48737	cpoV5	3.10917	cpoV6	2.43697	cpoV8	1.71941	percentCSSC	-255.139	percentV5	-216.624	percentV6	-148.17	percentV8	-75.0972	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.969307	csr	3.46938	cpoV5	3.54352	cpoV6	2.59705	cpoV8	1.95388	percentCSSC	-257.923	percentV5	-265.572	percentV6	-167.928	percentV8	-101.575	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.979715	csr	4.04694	cpoV5	3.75522	cpoV6	2.80962	cpoV8	2.11221	percentCSSC	-313.073	percentV5	-283.297	percentV6	-186.779	percentV8	-115.594	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.970002	csr	4.53473	cpoV5	4.04606	cpoV6	3.08986	cpoV8	2.29321	percentCSSC	-367.497	percentV5	-317.118	percentV6	-218.542	percentV8	-136.413	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.976609	csr	4.95943	cpoV5	4.34842	cpoV6	3.29067	cpoV8	2.33273	percentCSSC	-407.822	percentV5	-345.257	percentV6	-236.948	percentV8	-138.86	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.976403	csr	5.30221	cpoV5	4.66276	cpoV6	3.55012	cpoV8	2.59318	percentCSSC	-443.036	percentV5	-377.545	percentV6	-263.592	percentV8	-165.585	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.974307	csr	5.72593	cpoV5	5.01209	cpoV6	3.70399	cpoV8	2.58852	percentCSSC	-487.693	percentV5	-414.426	percentV6	-280.167	percentV8	-165.678	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.966928	csr	6.32633	cpoV5	5.21459	cpoV6	4.01955	cpoV8	2.76364	percentCSSC	-554.271	percentV5	-439.295	percentV6	-315.704	percentV8	-185.816	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.985764	csr	6.60051	cpoV5	5.58548	cpoV6	4.20486	cpoV8	2.83361	percentCSSC	-569.584	percentV5	-466.615	percentV6	-326.558	percentV8	-187.453	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.968547	csr	7.00488	cpoV5	5.80245	cpoV6	4.46265	cpoV8	3.02298	percentCSSC	-623.236	percentV5	-499.089	percentV6	-360.757	percentV8	-212.115	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.964239	csr	7.38527	cpoV5	6.11261	cpoV6	4.653	cpoV8	3.11299	percentCSSC	-665.916	percentV5	-533.93	percentV6	-382.557	percentV8	-222.845	1
+B-100000	7x1 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.981015	csr	7.87464	cpoV5	6.38638	cpoV6	4.8773	cpoV8	3.51243	percentCSSC	-702.703	percentV5	-550.997	percentV6	-397.169	percentV8	-258.041	1
+B-100000	7x1 | 17x17) batch	1	target_density	1	density	1	im2col	0.985267	csr	8.09336	cpoV5	6.63142	cpoV6	5.19515	cpoV8	3.58956	percentCSSC	-721.439	percentV5	-573.059	percentV6	-427.283	percentV8	-264.323	1
+
+B-100000	7x1 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.434797	csr	0.464343	cpoV5	0.358305	cpoV6	0.323716	cpoV8	0.21352	percentCSSC	-6.79539	percentV5	17.5925	percentV6	25.5478	percentV8	50.8921	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.438302	csr	0.934129	cpoV5	0.661155	cpoV6	0.580927	cpoV8	0.369586	percentCSSC	-113.124	percentV5	-50.8446	percentV6	-32.5403	percentV8	15.6777	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.437983	csr	1.36992	cpoV5	0.907906	cpoV6	0.809349	cpoV8	0.481773	percentCSSC	-212.778	percentV5	-107.293	percentV6	-84.7901	percentV8	-9.99815	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.435488	csr	1.77629	cpoV5	1.18161	cpoV6	1.02898	cpoV8	0.598116	percentCSSC	-307.886	percentV5	-171.33	percentV6	-136.282	percentV8	-37.3439	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.432531	csr	2.21265	cpoV5	1.52041	cpoV6	1.24991	cpoV8	0.739693	percentCSSC	-411.56	percentV5	-251.514	percentV6	-188.975	percentV8	-71.0151	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.436233	csr	2.58859	cpoV5	1.75893	cpoV6	1.4772	cpoV8	0.866341	percentCSSC	-493.395	percentV5	-303.209	percentV6	-238.625	percentV8	-98.5957	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.434685	csr	3.04683	cpoV5	2.087	cpoV6	1.70789	cpoV8	1.01847	percentCSSC	-600.928	percentV5	-380.117	percentV6	-292.902	percentV8	-134.301	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.439268	csr	3.45281	cpoV5	2.33745	cpoV6	1.91499	cpoV8	1.14781	percentCSSC	-686.037	percentV5	-432.124	percentV6	-335.949	percentV8	-161.301	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.43752	csr	3.89786	cpoV5	2.61585	cpoV6	2.15887	cpoV8	1.25256	percentCSSC	-790.899	percentV5	-497.881	percentV6	-393.433	percentV8	-186.287	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.437442	csr	4.34747	cpoV5	2.88136	cpoV6	2.40728	cpoV8	1.40174	percentCSSC	-893.839	percentV5	-558.683	percentV6	-450.309	percentV8	-220.441	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.436458	csr	4.84077	cpoV5	3.10682	cpoV6	2.66187	cpoV8	1.50718	percentCSSC	-1009.1	percentV5	-611.824	percentV6	-509.879	percentV8	-245.319	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.436348	csr	5.30307	cpoV5	3.38995	cpoV6	2.89512	cpoV8	1.63522	percentCSSC	-1115.33	percentV5	-676.89	percentV6	-563.488	percentV8	-274.751	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.438814	csr	5.77389	cpoV5	3.65069	cpoV6	3.13846	cpoV8	1.79319	percentCSSC	-1215.8	percentV5	-731.945	percentV6	-615.214	percentV8	-308.644	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.437725	csr	6.29133	cpoV5	3.95594	cpoV6	3.45398	cpoV8	1.93038	percentCSSC	-1337.28	percentV5	-803.751	percentV6	-689.076	percentV8	-341.002	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.437651	csr	6.75956	cpoV5	4.21706	cpoV6	3.69673	cpoV8	2.05935	percentCSSC	-1444.51	percentV5	-863.567	percentV6	-744.674	percentV8	-370.545	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.436071	csr	7.18396	cpoV5	4.46316	cpoV6	3.94594	cpoV8	2.19773	percentCSSC	-1547.43	percentV5	-923.495	percentV6	-804.886	percentV8	-403.986	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.437777	csr	7.69968	cpoV5	4.7171	cpoV6	4.21063	cpoV8	2.30458	percentCSSC	-1658.81	percentV5	-977.512	percentV6	-861.821	percentV8	-426.429	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.435176	csr	8.16014	cpoV5	4.98231	cpoV6	4.44456	cpoV8	2.46521	percentCSSC	-1775.14	percentV5	-1044.9	percentV6	-921.325	percentV8	-466.486	1
+B-100000	7x1 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.434675	csr	8.62111	cpoV5	5.23006	cpoV6	4.67547	cpoV8	2.56503	percentCSSC	-1883.35	percentV5	-1103.21	percentV6	-975.626	percentV8	-490.103	1
+B-100000	7x1 | 50x50) batch	1	target_density	1	density	1	im2col	0.437075	csr	8.92415	cpoV5	5.51684	cpoV6	4.8351	cpoV8	2.70976	percentCSSC	-1941.79	percentV5	-1162.22	percentV6	-1006.24	percentV8	-519.975	1
+
+
+
+B-100000	1x7 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	0.96663	csr	0.664204	cpoV5	0.665658	cpoV6	0.818687	cpoV8	0.622139	percentCSSC	31.2866	percentV5	31.1362	percentV6	15.305	percentV8	35.6383	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	0.97339	csr	0.878393	cpoV5	0.81912	cpoV6	1.0918	cpoV8	0.75012	percentCSSC	9.75942	percentV5	15.8487	percentV6	-12.1643	percentV8	22.9373	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	0.972999	csr	1.14521	cpoV5	0.994625	cpoV6	1.44772	cpoV8	0.873641	percentCSSC	-17.699	percentV5	-2.22266	percentV6	-48.7891	percentV8	10.2115	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	0.971086	csr	1.35253	cpoV5	1.14779	cpoV6	1.64965	cpoV8	1.01256	percentCSSC	-39.2803	percentV5	-18.1967	percentV6	-69.8767	percentV8	-4.27066	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	0.98084	csr	1.65636	cpoV5	1.35724	cpoV6	2.06627	cpoV8	1.16263	percentCSSC	-68.8718	percentV5	-38.3753	percentV6	-110.663	percentV8	-18.5338	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	0.983801	csr	1.84479	cpoV5	1.49701	cpoV6	2.31872	cpoV8	1.32398	percentCSSC	-87.5166	percentV5	-52.1664	percentV6	-135.69	percentV8	-34.5783	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	0.967874	csr	2.18644	cpoV5	1.65875	cpoV6	2.50866	cpoV8	1.41131	percentCSSC	-125.902	percentV5	-71.3805	percentV6	-159.193	percentV8	-45.8151	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	0.969956	csr	2.3729	cpoV5	1.88199	cpoV6	2.99898	cpoV8	1.55939	percentCSSC	-144.64	percentV5	-94.0282	percentV6	-209.187	percentV8	-60.7693	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	0.978056	csr	2.66599	cpoV5	2.04001	cpoV6	3.26824	cpoV8	1.73381	percentCSSC	-172.58	percentV5	-108.578	percentV6	-234.156	percentV8	-77.2711	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	0.981773	csr	2.69221	cpoV5	2.0755	cpoV6	3.2564	cpoV8	1.77211	percentCSSC	-174.219	percentV5	-111.403	percentV6	-231.685	percentV8	-80.5013	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	0.981276	csr	3.04334	cpoV5	2.266	cpoV6	3.64767	cpoV8	1.92394	percentCSSC	-210.141	percentV5	-130.924	percentV6	-271.727	percentV8	-96.0653	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	0.987778	csr	3.37121	cpoV5	2.44698	cpoV6	3.97922	cpoV8	2.07767	percentCSSC	-241.292	percentV5	-147.726	percentV6	-302.846	percentV8	-110.338	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	0.971157	csr	3.49587	cpoV5	2.572	cpoV6	4.21942	cpoV8	2.1589	percentCSSC	-259.969	percentV5	-164.839	percentV6	-334.474	percentV8	-122.302	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	0.97916	csr	3.84001	cpoV5	2.76942	cpoV6	4.54145	cpoV8	2.30318	percentCSSC	-292.174	percentV5	-182.836	percentV6	-363.81	percentV8	-135.22	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	0.976096	csr	4.01168	cpoV5	2.93718	cpoV6	4.81613	cpoV8	2.42042	percentCSSC	-310.992	percentV5	-200.911	percentV6	-393.407	percentV8	-147.969	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	0.968254	csr	4.27798	cpoV5	3.09231	cpoV6	5.11172	cpoV8	2.68465	percentCSSC	-341.824	percentV5	-219.37	percentV6	-427.931	percentV8	-177.267	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	0.971497	csr	4.53289	cpoV5	3.24563	cpoV6	5.39816	cpoV8	2.65552	percentCSSC	-366.588	percentV5	-234.086	percentV6	-455.654	percentV8	-173.343	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	0.976203	csr	4.81169	cpoV5	3.37945	cpoV6	5.58887	cpoV8	2.77418	percentCSSC	-392.899	percentV5	-246.183	percentV6	-472.511	percentV8	-184.181	1
+B-100000	1x7 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	0.979644	csr	5.05985	cpoV5	3.54136	cpoV6	5.86222	cpoV8	2.91531	percentCSSC	-416.499	percentV5	-261.494	percentV6	-498.403	percentV8	-197.589	1
+B-100000	1x7 | 17x17) batch	1	target_density	1	density	1	im2col	0.977496	csr	5.29513	cpoV5	3.65978	cpoV6	6.13503	cpoV8	2.97474	percentCSSC	-441.703	percentV5	-274.403	percentV6	-527.627	percentV8	-204.323	1
+
+B-100000	1x7 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	0.434977	csr	0.416252	cpoV5	0.308753	cpoV6	0.522763	cpoV8	0.241652	percentCSSC	4.30479	percentV5	29.0186	percentV6	-20.1818	percentV8	44.445	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	0.437159	csr	0.717984	cpoV5	0.489627	cpoV6	0.863	cpoV8	0.387574	percentCSSC	-64.2386	percentV5	-12.0021	percentV6	-97.4112	percentV8	11.3426	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	0.438488	csr	1.05176	cpoV5	0.691301	cpoV6	1.26588	cpoV8	0.549206	percentCSSC	-139.861	percentV5	-57.6556	percentV6	-188.693	percentV8	-25.25	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	0.436953	csr	1.48153	cpoV5	0.884806	cpoV6	1.64529	cpoV8	0.678773	percentCSSC	-239.06	percentV5	-102.494	percentV6	-276.537	percentV8	-55.3423	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	0.433743	csr	1.79388	cpoV5	1.08634	cpoV6	2.0602	cpoV8	0.84409	percentCSSC	-313.581	percentV5	-150.458	percentV6	-374.983	percentV8	-94.6062	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	0.436475	csr	2.07518	cpoV5	1.26106	cpoV6	2.33556	cpoV8	0.938119	percentCSSC	-375.441	percentV5	-188.918	percentV6	-435.095	percentV8	-114.931	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	0.435316	csr	2.4381	cpoV5	1.45977	cpoV6	2.73603	cpoV8	1.11632	percentCSSC	-460.075	percentV5	-235.336	percentV6	-528.517	percentV8	-156.439	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	0.435356	csr	2.76142	cpoV5	1.64106	cpoV6	3.11996	cpoV8	1.24723	percentCSSC	-534.29	percentV5	-276.945	percentV6	-616.645	percentV8	-186.485	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	0.433724	csr	3.12783	cpoV5	1.83446	cpoV6	3.48921	cpoV8	1.39434	percentCSSC	-621.156	percentV5	-322.956	percentV6	-704.477	percentV8	-221.482	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	0.436174	csr	3.47802	cpoV5	2.02228	cpoV6	3.89122	cpoV8	1.53043	percentCSSC	-697.393	percentV5	-363.64	percentV6	-792.126	percentV8	-250.877	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	0.441282	csr	3.76777	cpoV5	2.18549	cpoV6	4.19586	cpoV8	1.65098	percentCSSC	-753.823	percentV5	-395.258	percentV6	-850.833	percentV8	-274.132	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	0.435969	csr	4.15265	cpoV5	2.40058	cpoV6	4.641	cpoV8	1.81302	percentCSSC	-852.509	percentV5	-450.63	percentV6	-964.526	percentV8	-315.86	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	0.438085	csr	4.44516	cpoV5	2.5626	cpoV6	4.9951	cpoV8	1.95159	percentCSSC	-914.679	percentV5	-484.954	percentV6	-1040.21	percentV8	-345.483	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	0.434288	csr	4.75437	cpoV5	2.76782	cpoV6	5.39535	cpoV8	2.10925	percentCSSC	-994.751	percentV5	-537.324	percentV6	-1142.34	percentV8	-385.679	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	0.433826	csr	5.18762	cpoV5	2.98118	cpoV6	5.77102	cpoV8	2.24249	percentCSSC	-1095.78	percentV5	-587.184	percentV6	-1230.26	percentV8	-416.91	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	0.435363	csr	5.41525	cpoV5	3.14707	cpoV6	6.07624	cpoV8	2.37724	percentCSSC	-1143.85	percentV5	-622.861	percentV6	-1295.67	percentV8	-446.035	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	0.434079	csr	5.75515	cpoV5	3.33101	cpoV6	6.47589	cpoV8	2.50398	percentCSSC	-1225.83	percentV5	-667.375	percentV6	-1391.87	percentV8	-476.849	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	0.432999	csr	6.08481	cpoV5	3.50721	cpoV6	6.83264	cpoV8	2.67445	percentCSSC	-1305.27	percentV5	-709.981	percentV6	-1477.98	percentV8	-517.658	1
+B-100000	1x7 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	0.434796	csr	6.42654	cpoV5	3.70433	cpoV6	7.21347	cpoV8	2.7974	percentCSSC	-1378.06	percentV5	-751.969	percentV6	-1559.05	percentV8	-543.382	1
+B-100000	1x7 | 50x50) batch	1	target_density	1	density	1	im2col	0.432352	csr	6.77089	cpoV5	3.8611	cpoV6	7.56505	cpoV8	2.94188	percentCSSC	-1466.06	percentV5	-793.045	percentV6	-1649.74	percentV8	-580.437	1
+
 

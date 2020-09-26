@@ -203,6 +203,185 @@ void conv_CPO_v7(vector<vector<float> > & O, vector<int> const &K, vector<int>  
 }
 
 
+void conv_CPO_v8_trim(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<double> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    const int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    const int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    double *Adata_help      = &DA[x];
+
+    // For each ptr type
+    // for (int type_ptr = 0; type_ptr < n; ++type_ptr)
+    int type_ptr = 0;
+    {
+
+       // Submat 0
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+       // x loop
+      // l loop
+            // cout << "V7) Sumbat: " << 0 << ", type_ptr: " << type_ptr << " start " << x  << " end: " << end_x_loop  << endl;    
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int y_out        = (used_index/Kw) - l;
+
+            // 2, 1, 0
+            // cout << "Y_out " << y_out << endl;
+            if(y_out >= 0 && y_out < Oh) {
+               // O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+              O[y_out][0] += used_data * K[used_index%Kw + l*Kw];
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+
+      // Submat number - 1
+      x              = *x_ptr; 
+      end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+
+      // cout << "V7) Sumbat: " << (number-1) << ", type_ptr: " << type_ptr << " start " << x  << " end: " << end_x_loop  << endl;    
+      // x loop
+      // l loop
+            // cout << "V7) Sumbat: " << (number) << ", type_ptr: " << type_ptr << " start " << x  << " end: " << end_x_loop  << endl;    
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int y_out        = (used_index/Kw) - l;
+
+            // 2, 1, 0
+            // cout << "Y_out " << y_out << endl;
+            if(y_out >= 0 && y_out < Oh) {
+               // O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+              O[y_out][number - 1] += used_data * K[used_index%Kw + l*Kw];
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+
+
+      ++x_ptr;
+    }
+
+    // Type ptr 1
+    // for (int type_ptr = 10000; type_ptr < n; ++type_ptr)
+    for (int type_ptr = 1; type_ptr < n; ++type_ptr)
+    {
+
+     
+    // For each submat
+    for (int submat = 0; submat < number; ++submat)
+    {
+     
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+      // cout << "V7) Sumbat: " << submat << ", type_ptr: " << type_ptr << " start " << x  << " end: " << end_x_loop  << endl;   
+      // cout << "Sumbat: " << submat << ", type_ptr: " << type_ptr << " ind to fetch: " << type_ptr*number + submat + 1 << " start " << x  << " end: " << end_x_loop  << endl;
+
+   
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        // int shereet2 = min(submat, type_ptr); 
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int input_index  = used_index;
+            int y_out        = (input_index/Kw) - l;
+            int x_out        = submat;
+            int kernel_common_index  = input_index%Kw + l*Kw;
+
+            if(y_out >= 0 && y_out < Oh) {
+               O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+               
+
+               for(int i = 1; i <= type_ptr; ++i)
+               {
+
+
+                 int input_index     = used_index - i;
+                 // O[y_out][x_out + i] += used_data * K[input_index%Kw + l*Kw]; 
+                 // O[y_out][x_out + i] += used_data * K[input_index%Kw + l*Kw]; 
+                 O[y_out][x_out + i] += used_data * K[kernel_common_index - i]; 
+
+                 // cout << "l: " << l  << " i: " << i <<  " KERNEL DEBUG: " << " input_index: " << input_index << " Kw: " << Kw <<  " l*Kw: " 
+                 // << l*Kw <<  " (input_index mod Kw): " << (input_index%Kw) << " first i: " << (used_index%Kw + l*Kw) << " current i: " << (input_index%Kw + l*Kw) << endl;
+
+                 // i = 2;
+                 // input_index     = used_index - i;
+                 // O[y_out][x_out + 2] += used_data * K[input_index%Kw + l*Kw]; 
+
+
+               } // end i for loop
+
+          } // end if(y_out >= 0 && y_out < Oh) 
+          // cout << "\n";
+
+       } // end l loop
+
+      } // end x
+    } // end sumbat
+
+    ++x_ptr;
+  } // end type ptr
+
+    // cout << "Output: " << endl;
+    // print2DVectorF(O);
+    // cout << "-----\n" << endl;
+}
+
+
 void conv_CPO_v7_trim(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<double> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
 {
     // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
@@ -1141,7 +1320,7 @@ int main()
     // int bench_iterations = 100;
   // int bench_iterations = 1;
 
-      std::vector<int> I_list = {8,17,50};
+  std::vector<int> I_list = {8,17,50};
   std::vector<int> Kh_list = {3,7, 1};
   std::vector<int> Kw_list = {3,1, 7};
 
@@ -1740,7 +1919,8 @@ int main()
                 t4 = clock();
 
                   // conv_CPO_v7_trim(O_v7, Kernel, IN_1d_v7,  DA_1d_v7, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-                conv_CPO_v7_trim(O_v7, Kernel, IN_1d_v7,  DA_1d_v7_d, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // conv_CPO_v7_trim(O_v7, Kernel, IN_1d_v7,  DA_1d_v7_d, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                conv_CPO_v8_trim(O_v7, Kernel, IN_1d_v7,  DA_1d_v7_d, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
 
                  // if(k == bench_iterations-1)
                  // {
@@ -1801,9 +1981,9 @@ int main()
         //        std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
         std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV7\t"<< t_cpoV7
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV8\t"<< t_cpoV7
         <<"\tpercentCSSC\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercentV5\t"<< 100.0*(t_im2col-t_cpoV5)/t_im2col <<"\tpercentV6\t"<< 100.0*(t_im2col-t_cpoV6)/t_im2col  
-        <<"\tpercentV7\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col << "\t" << s << "\n";
+        <<"\tpercentV8\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col << "\t" << s << "\n";
         
         ofstream myfile;
         myfile.open ("csr_log.txt", ios::out | ios::app);
@@ -1832,9 +2012,9 @@ int main()
         
         myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV7\t"<< t_cpoV7
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV8\t"<< t_cpoV7
         <<"\tpercentCSSC\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercentV5\t"<< 100.0*(t_im2col-t_cpoV5)/t_im2col <<"\tpercentV6\t"<< 100.0*(t_im2col-t_cpoV6)/t_im2col  
-        <<"\tpercentV7\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col << "\t" << s << "\n";
+        <<"\tpercentV8\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col << "\t" << s << "\n";
         myfile.close();
 
         
