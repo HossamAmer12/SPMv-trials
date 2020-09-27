@@ -81,6 +81,118 @@ void transform2dTo1d(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vecto
 
 }
 
+
+void transform2dTo1dv9(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<vector<int> >  &ptr, vector<int>  &IN_1d,  vector<int> &DA_1d, vector<int>  &ptr_1d)
+{ 
+
+       int c = 0;
+       for(int i = 0 ; i < ptr.size(); ++i)
+       {
+        for(int j = 0; j < ptr[i].size(); ++j)
+        {
+          // if(i == 0)
+          // For all ptrs except the last one
+          if(i <= ptr.size() - 2)
+          {
+            // Remove repeats
+            if(j <= 1 || j == ptr[i].size() - 1)
+            {
+                ptr_1d[c++] = ptr[i][j];
+            }
+            
+          }
+          else{
+            ptr_1d[c++] = ptr[i][j];
+          } 
+          
+        }
+       } 
+      
+       int c1  = 0;
+       for(int i = 0 ; i < DA.size(); ++i)
+       {
+        for(int j = 0; j < DA[i].size(); ++j)
+        {
+          DA_1d[c1] = DA[i][j];
+          IN_1d[c1++] = IN[i][j];
+        }
+       }
+
+}
+
+
+void conv_CPO_v9(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
+{
+    // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
+
+    const int n      = ceil(Kw/Sw); // n is the number of ptr (NPO, PO2, PO3)
+    const int number = floor((Iw - Kw)/Sw) + 1; // number of elements in each ptr
+    // number = 0; n = 1;
+    
+    // cout << "# of submatrices: " << number << ", # of ptrs: " << n << "\n\n\n";
+
+    int *x_ptr           = &ptr[0];
+    int  x               = *x_ptr;
+    int *Aindex_help     = &IN[x];
+    int *Adata_help      = &DA[x];
+
+    // For each ptr type
+    // int type_ptr = 0;
+    for (int type_ptr = 0; type_ptr < n-1; ++type_ptr)
+    {
+
+
+       // Submat 0
+      x              = *x_ptr; 
+      int end_x_loop = *(x_ptr+1); 
+      ++x_ptr;
+
+       // x loop
+      // l loop
+            // cout << "V7) Sumbat: " << 0 << ", type_ptr: " << type_ptr << " start " << x  << " end: " << end_x_loop  << endl;    
+      for(; x < end_x_loop; ++x)
+      {    
+
+        
+       // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << ptr[type_ptr][submat+1]  << endl;  
+        // cout << "\n" << type_ptr << " ==> Current Submat " << submat << ", ptr:  " <<  x <<  ", ptr+1: " << end_x_loop << " ind to fetch: " <<  type_ptr*number + submat + 1 << endl;  
+
+        // How many time to iterate?
+        int used_index  = *Aindex_help; Aindex_help++;
+        int used_data   = *Adata_help;  Adata_help++;
+
+        for(int l = 0; l < Kh; ++l)
+        {
+              // I = 0:
+             // cout << "Use x:  " << i << ", with ind: " << used_index << endl;
+            int y_out        = (used_index/Kw) - l;
+
+            // 2, 1, 0
+            // cout << "Y_out " << y_out << endl;
+            if(y_out >= 0 && y_out < Oh) 
+            {
+               // O[y_out][x_out] += used_data * K[input_index%Kw + l*Kw];
+              O[y_out][0] += used_data * K[used_index%Kw + l*Kw];
+
+
+              // for loop for i and sumbat 0
+            int kernel_common_index  = used_index%Kw + l*Kw;
+
+            for(int i = 1; i <= type_ptr; ++i)
+            {
+              O[y_out][0 + i] += used_data * K[kernel_common_index - i]; 
+
+            } // end i for loop
+
+          } // end if(y_out >= 0 && y_out < Oh) 
+
+       } // end l loop
+
+      } // end x
+    } // end type ptr loop
+}
+
+
 void conv_CPO_v8(vector<vector<float> > & O, vector<int> const &K, vector<int>  &IN,  vector<int> &DA, vector<int>  &ptr, const int Kh, const int Kw, const int Oh, const int Ow, const int Sh, const int Sw, const int Ih, const int Iw)
 {
     // cout << "Shape " << O.rows() << ", " << O.cols() << endl;
@@ -1728,7 +1840,46 @@ int main()
         }
     }
 
-   
+
+    int count_d = 0;
+    for(int i = 0 ; i < DA.size(); ++i)
+    {
+
+      count_d += DA[i].size();
+    }   
+
+    int count_ptr_v9 = 0;
+    for(int i = 0 ; i < ptr.size(); ++i)
+    {
+
+      if(i < ptr.size() - 1)
+      {
+        int f = ptr[i].size();
+        count_ptr_v9 += min(f, 3);  
+      }
+      else
+      {
+        count_ptr_v9 += ptr[i].size();
+      }
+      
+    }
+
+    std::vector<int> IN_1d_v9(count_d, 0);
+    std::vector<int> DA_1d_v9(count_d, 0);
+    std::vector<int> ptr_1d_v9(count_ptr_v9, 0);
+
+
+    cout << "Ptr: ";
+    print2DVector(ptr);
+    transform2dTo1dv9(IN, DA, ptr, IN_1d_v9, DA_1d_v9, ptr_1d_v9);
+    
+    ///////////
+    cout << "Ptr: ";
+    printVector(ptr_1d_v9);
+    exit(0);
+
+    // You should call v9 here
+
     cout << "CPO conv time: " << t_csr << endl; 
     return 0;
 }
