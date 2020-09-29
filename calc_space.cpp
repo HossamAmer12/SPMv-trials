@@ -6,6 +6,10 @@
 #include <time.h>
 #include <fstream>
 
+// Set percision
+#include <iomanip>
+
+
 
 #define IS_PRINT        0
 #define IS_PRINT_SIZE   0
@@ -396,11 +400,18 @@ int main()
 
   // bench iterations
     int bench_iterations = 1;
+
+    int DOUBLE_SIZE = 64;
    
 
-  std::vector<int> I_list = {8};
-  std::vector<int> Kh_list = {3};
-  std::vector<int> Kw_list = {3};
+ std::vector<int> I_list = {8,17,50};
+  std::vector<int> Kh_list = {3,7, 1};
+  std::vector<int> Kw_list = {3,1, 7};
+
+
+  // std::vector<int> I_list = {8};
+  // std::vector<int> Kh_list = {3};
+  // std::vector<int> Kw_list = {3};
 
   // std::vector<int> I_list = {17};
   // std::vector<int> Kh_list = {3};
@@ -435,14 +446,9 @@ int main()
         // timer for im2col, csr
         float t_im2col = 0;
         float t_csr    = 0;
-        float t_cpoV5    = 0;
-        float t_cpoV6    = 0;
-        float t_cpoV7    = 0;
-        float t_cpoV9    = 0;
+        float t_cpo    = 0;
         
-    
-        
-        
+
         // Conv parameters:
         int padding = 0;
         int stride  = 1;
@@ -626,57 +632,13 @@ int main()
 
 
         // Space for im2col:
-        t_im2col = im2col_mat.rows()*im2col_mat.cols()*64;
-        
-#if IS_PRINT
-        // Print out the im2col interedmiate feature map:
-        std::cout << "\n===im2col Intermediate Feature Map with Size: " << im2col_mat.rows() << ", " << im2col_mat.cols() <<  " \n" << im2col_mat << std::endl;
-        cout << "-----\n" << endl;
-#endif
-        
-        
-#if IS_PRINT_SIZE
-        // Print out the im2col interedmiate feature map:
-        std::cout << "\n===im2col Intermediate Feature Map with Size: " << im2col_mat.rows() << ", " << im2col_mat.cols() <<  " \n" << std::endl;
-        cout << "-----\n" << endl;
-#endif
-        
+        t_im2col = im2col_mat.rows()*im2col_mat.cols()*DOUBLE_SIZE;
+
+            
+        // Prepare the Adata, Aindices, AindPtr for CSR multiplication
         // Create the sparse representation of the lowered matrix:
         SparseMatrix<float, RowMajor> lowered_mat_sparse = lowered_mat.sparseView();
-        // SparseMatrix<int> lowered_mat_sparse = lowered_mat.sparseView();
         lowered_mat_sparse.makeCompressed();
-        
-#if IS_PRINT
-        // Print out the im2col interedmiate feature map:
-        std::cout << "\n===CSR of Lowered Feature Map: " <<  " \n" << lowered_mat_sparse << std::endl;
-        cout << "-----\n" << endl;
-#endif
-        
-        // Create the filter K and its vectorized version:
-        MatrixXf filter             = MatrixXf::Ones(Kh, Kw);
-        VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
-        
-        
-#if IS_PRINT
-        // Print out the im2col interedmiate feature map:
-        std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
-        cout << "-----\n" << endl;
-#endif
-        
-#if IS_PRINT_SIZE
-        // Print out the im2col interedmiate feature map:
-        std::cout << "\n===Filter: " <<  " \n" << filter_vectorized  << std::endl;
-        cout << "-----\n" << endl;
-#endif
-        
-        
-        // Create the Kernel
-        vector<int> Kernel(Kh*Kw, 1);
-        
-        
-        // Prepare the Adata, Aindices, AindPtr for CSR multiplication
-        clock_t t_cscc_creation_c;
-        t_cscc_creation_c = clock();
 
         int nz = lowered_mat_sparse.nonZeros();
         vector<double> Adata (lowered_mat_sparse.valuePtr(), lowered_mat_sparse.valuePtr() + nz);
@@ -685,23 +647,82 @@ int main()
         // push back the last element the number of nnz in ptr:
         Aindptr.push_back(nz);
     
-        double t_cscc_creation = 1000*((double)(clock()-t_cscc_creation_c))/CLOCKS_PER_SEC; // time in milliseconds
-        t_cscc_creation = t_cscc_creation/(Ih*Iw*1.0); // normalized timing        
         // cout << "creation cscc: " << t_cscc_creation << endl;
       
 
         // Space for CSCC:
-        t_csr = Adata.size() + Aindices.size() + Aindptr.size();
+        t_csr = (Adata.size() + Aindices.size() + Aindptr.size())*DOUBLE_SIZE;
 
+
+        // ******************** CPO:
+        int n = ceil(Kw / Sw);
+        if (Kw % Sw == 0)
+        {
+            n = Kw / Sw;
+        }
+        
+        vector<vector<int> > IN(n); // n is the rows
+        vector<vector<int> > DA(n); // n is the rows
+        vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
+        CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+
+
+        // V7 Code:
+        // Remove repeats and transofrm 2d to 1d:
+        int count_ptr_v7 = 0;
+        for(int i = 0 ; i < ptr.size(); ++i)
+        {
+
+          // if it one ptr, don't do anything
+          if(i == 0 && n != 1)
+          {
+            int f = ptr[i].size();
+            count_ptr_v7 += min(f, 3);   
+          }
+          else
+          {
+            count_ptr_v7 += ptr[i].size();
+          }
+          
+        } 
+
+        int count_d_v7 = 0;
+        for(int i = 0 ; i < DA.size(); ++i)
+        {
+
+          count_d_v7 += DA[i].size();
+        }   
+
+      std::vector<int> IN_1d_v7(count_d_v7, 0);
+      std::vector<int> DA_1d_v7(count_d_v7, 0);
+      std::vector<int> ptr_1d_v7(count_ptr_v7, 0);
+
+      transform2dTo1dv1(IN, DA, ptr, IN_1d_v7, DA_1d_v7, ptr_1d_v7);
+      
+
+
+        if(n != 1)
+        {
+            // Space for CPO:  
+            t_cpo = (ptr_1d_v7.size() + IN_1d_v7.size() + DA_1d_v7.size())*DOUBLE_SIZE;
+      
+        }
+        else
+        {
+            // Space for CPO:  
+            t_cpo = ( n * (1 + Ow) + IN_1d_v7.size() + DA_1d_v7.size())*DOUBLE_SIZE;      
+        }
+
+      
     
-        bool s = (t_cpoV9 <= t_csr);
+        bool s = (t_cpo <= t_csr);
         // elapsed time per feature element in the entire bench iterations
         //        std::cout<<"batch\t"<<In<<"\tdensity\t"<<density<<"\tdensity\t"<<density_cal<<"\tim2col\t"<< t_im2col <<"\tcsr\t"<< t_csr <<"\tcpo\t"<< t_cpo <<std::endl;
         
         std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
         <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV7\t"<< t_cpoV7 <<"\tcpoV9\t"<< t_cpoV9
-        << "\tCR_CSCC\t"<< t_im2col/t_csr  <<"\tpercentV5\t"<< 100.0*(t_im2col-t_cpoV5)/t_im2col <<"\tpercentV6\t"<< 100.0*(t_im2col-t_cpoV6)/t_im2col << "\n";        
+        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo 
+        << "\tCR_CSCC\t"<< t_im2col/t_csr  <<"x\tCR_CPO\t"<< t_im2col/t_cpo << "\t" << s << "\n";
 
        
         
@@ -709,22 +730,26 @@ int main()
         myfile.open ("space_csr_log.txt", ios::out | ios::app);
         int batch = 1;
         
-        myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
-        <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
-        <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpoV5\t"<< t_cpoV5 <<"\tcpoV6\t"<< t_cpoV6 <<"\tcpoV7\t"<< t_cpoV7 <<"\tcpoV9\t"<< t_cpoV9
-        << "\tCR_CSCC\t"<< t_im2col/t_csr  <<"x\tpercentV5\t"<< 100.0*(t_im2col-t_cpoV5)/t_im2col <<"\tpercentV6\t"<< 100.0*(t_im2col-t_cpoV6)/t_im2col << "\n";
+        // myfile << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+        // <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
+        // <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr <<"\tcpo\t"<< t_cpo 
+        // << "\tCR_CSCC\t"<< t_im2col/t_csr  <<"x\tCR_CPO\t"<< t_im2col/t_cpo << "\t" << s << "\n";
+
+        
+        myfile << std::setprecision(3) << t_im2col/t_csr <<"\t" << t_im2col/t_cpo << "\n";
+
         
 
         
     } // density loop
 
     ofstream myfile;
-    myfile.open ("csr_log.txt", ios::out | ios::app);
+    myfile.open ("space_csr_log.txt", ios::out | ios::app);
     myfile << "\n";
   } // end I loop
 
     ofstream myfile;
-    myfile.open ("csr_log.txt", ios::out | ios::app);
+    myfile.open ("space_csr_log.txt", ios::out | ios::app);
     myfile << "\n";
 } // end K loop
     

@@ -2629,11 +2629,11 @@ int main()
        }
    }
 
-   // For V7:
-   // bool error = isEqualVectors(O_CSR, OV7);
+   // For V7 and V8:
+   bool error = isEqualVectors(O_CSR, OV7);
 
    // For V9:
-   bool error = isEqualVectors(O_CSR, OV9);
+   // bool error = isEqualVectors(O_CSR, OV9);
 
    // print2DVectorF(O);
    // print2DVectorF(O_CSR);

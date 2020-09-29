@@ -1,0 +1,156 @@
+B-1	3x3 | 8x8) batch	1	target_density	0.05	density	0.0625	im2col	20736	csr	1472	cpo	1600	CR_CSCC	14.087x	CR_CPO	12.96	0
+B-1	3x3 | 8x8) batch	1	target_density	0.1	density	0.109375	im2col	20736	csr	2496	cpo	1984	CR_CSCC	8.30769x	CR_CPO	10.4516	1
+B-1	3x3 | 8x8) batch	1	target_density	0.15	density	0.15625	im2col	20736	csr	3264	cpo	2368	CR_CSCC	6.35294x	CR_CPO	8.75676	1
+B-1	3x3 | 8x8) batch	1	target_density	0.2	density	0.203125	im2col	20736	csr	3904	cpo	2752	CR_CSCC	5.31148x	CR_CPO	7.53488	1
+B-1	3x3 | 8x8) batch	1	target_density	0.25	density	0.25	im2col	20736	csr	5568	cpo	3136	CR_CSCC	3.72414x	CR_CPO	6.61225	1
+B-1	3x3 | 8x8) batch	1	target_density	0.3	density	0.3125	im2col	20736	csr	5952	cpo	3648	CR_CSCC	3.48387x	CR_CPO	5.68421	1
+B-1	3x3 | 8x8) batch	1	target_density	0.35	density	0.359375	im2col	20736	csr	6848	cpo	4032	CR_CSCC	3.02804x	CR_CPO	5.14286	1
+B-1	3x3 | 8x8) batch	1	target_density	0.4	density	0.40625	im2col	20736	csr	8000	cpo	4416	CR_CSCC	2.592x	CR_CPO	4.69565	1
+B-1	3x3 | 8x8) batch	1	target_density	0.45	density	0.453125	im2col	20736	csr	9024	cpo	4800	CR_CSCC	2.29787x	CR_CPO	4.32	1
+B-1	3x3 | 8x8) batch	1	target_density	0.5	density	0.515625	im2col	20736	csr	9920	cpo	5312	CR_CSCC	2.09032x	CR_CPO	3.90361	1
+B-1	3x3 | 8x8) batch	1	target_density	0.55	density	0.5625	im2col	20736	csr	10432	cpo	5696	CR_CSCC	1.98773x	CR_CPO	3.64045	1
+B-1	3x3 | 8x8) batch	1	target_density	0.6	density	0.609375	im2col	20736	csr	11712	cpo	6080	CR_CSCC	1.77049x	CR_CPO	3.41053	1
+B-1	3x3 | 8x8) batch	1	target_density	0.65	density	0.65625	im2col	20736	csr	12480	cpo	6464	CR_CSCC	1.66154x	CR_CPO	3.20792	1
+B-1	3x3 | 8x8) batch	1	target_density	0.7	density	0.703125	im2col	20736	csr	12992	cpo	6848	CR_CSCC	1.59606x	CR_CPO	3.02804	1
+B-1	3x3 | 8x8) batch	1	target_density	0.75	density	0.765625	im2col	20736	csr	14400	cpo	7360	CR_CSCC	1.44x	CR_CPO	2.81739	1
+B-1	3x3 | 8x8) batch	1	target_density	0.8	density	0.8125	im2col	20736	csr	15296	cpo	7744	CR_CSCC	1.35565x	CR_CPO	2.67769	1
+B-1	3x3 | 8x8) batch	1	target_density	0.85	density	0.859375	im2col	20736	csr	16576	cpo	8128	CR_CSCC	1.25097x	CR_CPO	2.55118	1
+B-1	3x3 | 8x8) batch	1	target_density	0.9	density	0.90625	im2col	20736	csr	16960	cpo	8512	CR_CSCC	1.22264x	CR_CPO	2.43609	1
+B-1	3x3 | 8x8) batch	1	target_density	0.95	density	0.953125	im2col	20736	csr	17856	cpo	8896	CR_CSCC	1.16129x	CR_CPO	2.33094	1
+B-1	3x3 | 8x8) batch	1	target_density	1	density	1	im2col	20736	csr	18880	cpo	9280	CR_CSCC	1.09831x	CR_CPO	2.23448	1
+
+B-1	3x3 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	129600	csr	5760	cpo	4160	CR_CSCC	22.5x	CR_CPO	31.1538	1
+B-1	3x3 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	129600	csr	9600	cpo	5952	CR_CSCC	13.5x	CR_CPO	21.7742	1
+B-1	3x3 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	129600	csr	15744	cpo	7872	CR_CSCC	8.23171x	CR_CPO	16.4634	1
+B-1	3x3 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	129600	csr	21248	cpo	9664	CR_CSCC	6.0994x	CR_CPO	13.4106	1
+B-1	3x3 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	129600	csr	25856	cpo	11584	CR_CSCC	5.01238x	CR_CPO	11.1878	1
+B-1	3x3 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	129600	csr	30336	cpo	13376	CR_CSCC	4.27215x	CR_CPO	9.689	1
+B-1	3x3 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	129600	csr	35072	cpo	15296	CR_CSCC	3.69526x	CR_CPO	8.4728	1
+B-1	3x3 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	129600	csr	40192	cpo	17088	CR_CSCC	3.22452x	CR_CPO	7.58427	1
+B-1	3x3 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	129600	csr	45824	cpo	19008	CR_CSCC	2.82821x	CR_CPO	6.81818	1
+B-1	3x3 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	129600	csr	50560	cpo	20800	CR_CSCC	2.56329x	CR_CPO	6.23077	1
+B-1	3x3 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	129600	csr	55040	cpo	22592	CR_CSCC	2.35465x	CR_CPO	5.73654	1
+B-1	3x3 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	129600	csr	60032	cpo	24512	CR_CSCC	2.15885x	CR_CPO	5.28721	1
+B-1	3x3 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	129600	csr	64128	cpo	26304	CR_CSCC	2.02096x	CR_CPO	4.92701	1
+B-1	3x3 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	129600	csr	71040	cpo	28224	CR_CSCC	1.82432x	CR_CPO	4.59184	1
+B-1	3x3 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	129600	csr	74880	cpo	30016	CR_CSCC	1.73077x	CR_CPO	4.3177	1
+B-1	3x3 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	129600	csr	80256	cpo	31936	CR_CSCC	1.61483x	CR_CPO	4.05812	1
+B-1	3x3 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	129600	csr	84608	cpo	33728	CR_CSCC	1.53177x	CR_CPO	3.8425	1
+B-1	3x3 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	129600	csr	89600	cpo	35648	CR_CSCC	1.44643x	CR_CPO	3.63555	1
+B-1	3x3 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	129600	csr	94592	cpo	37440	CR_CSCC	1.37009x	CR_CPO	3.46154	1
+B-1	3x3 | 17x17) batch	1	target_density	1	density	1	im2col	129600	csr	98944	cpo	39232	CR_CSCC	1.30983x	CR_CPO	3.30343	1
+
+B-1	3x3 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	1.3271e+06	csr	48064	cpo	22464	CR_CSCC	27.6112x	CR_CPO	59.0769	1
+B-1	3x3 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	1.3271e+06	csr	96192	cpo	38464	CR_CSCC	13.7964x	CR_CPO	34.5025	1
+B-1	3x3 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	1.3271e+06	csr	142144	cpo	54464	CR_CSCC	9.33634x	CR_CPO	24.3666	1
+B-1	3x3 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	1.3271e+06	csr	185408	cpo	70464	CR_CSCC	7.15775x	CR_CPO	18.8338	1
+B-1	3x3 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	1.3271e+06	csr	234176	cpo	86464	CR_CSCC	5.66712x	CR_CPO	15.3486	1
+B-1	3x3 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	1.3271e+06	csr	278848	cpo	102464	CR_CSCC	4.75924x	CR_CPO	12.9519	1
+B-1	3x3 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	1.3271e+06	csr	325440	cpo	118592	CR_CSCC	4.07788x	CR_CPO	11.1905	1
+B-1	3x3 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	1.3271e+06	csr	371392	cpo	134592	CR_CSCC	3.57332x	CR_CPO	9.8602	1
+B-1	3x3 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	1.3271e+06	csr	420672	cpo	150592	CR_CSCC	3.15472x	CR_CPO	8.81258	1
+B-1	3x3 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	1.3271e+06	csr	463680	cpo	166592	CR_CSCC	2.86211x	CR_CPO	7.96619	1
+B-1	3x3 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	1.3271e+06	csr	513984	cpo	182592	CR_CSCC	2.58199x	CR_CPO	7.26814	1
+B-1	3x3 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	1.3271e+06	csr	558272	cpo	198592	CR_CSCC	2.37716x	CR_CPO	6.68257	1
+B-1	3x3 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	1.3271e+06	csr	600640	cpo	214592	CR_CSCC	2.20948x	CR_CPO	6.18431	1
+B-1	3x3 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	1.3271e+06	csr	647616	cpo	230592	CR_CSCC	2.04921x	CR_CPO	5.7552	1
+B-1	3x3 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	1.3271e+06	csr	694464	cpo	246592	CR_CSCC	1.91098x	CR_CPO	5.38178	1
+B-1	3x3 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	1.3271e+06	csr	740544	cpo	262592	CR_CSCC	1.79207x	CR_CPO	5.05386	1
+B-1	3x3 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	1.3271e+06	csr	787264	cpo	278592	CR_CSCC	1.68572x	CR_CPO	4.76361	1
+B-1	3x3 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	1.3271e+06	csr	833216	cpo	294592	CR_CSCC	1.59275x	CR_CPO	4.50489	1
+B-1	3x3 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	1.3271e+06	csr	878656	cpo	310592	CR_CSCC	1.51038x	CR_CPO	4.27282	1
+B-1	3x3 | 50x50) batch	1	target_density	1	density	1	im2col	1.3271e+06	csr	924736	cpo	326464	CR_CSCC	1.43512x	CR_CPO	4.06509	1
+
+
+
+B-1	7x1 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	83776	csr	3072	cpo	3072	CR_CSCC	27.2708x	CR_CPO	27.2708	1
+B-1	7x1 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	83776	csr	4864	cpo	4864	CR_CSCC	17.2237x	CR_CPO	17.2237	1
+B-1	7x1 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	83776	csr	6784	cpo	6784	CR_CSCC	12.3491x	CR_CPO	12.3491	1
+B-1	7x1 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	83776	csr	8576	cpo	8576	CR_CSCC	9.76866x	CR_CPO	9.76866	1
+B-1	7x1 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	83776	csr	10496	cpo	10496	CR_CSCC	7.98171x	CR_CPO	7.98171	1
+B-1	7x1 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	83776	csr	12288	cpo	12288	CR_CSCC	6.81771x	CR_CPO	6.81771	1
+B-1	7x1 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	83776	csr	14208	cpo	14208	CR_CSCC	5.8964x	CR_CPO	5.8964	1
+B-1	7x1 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	83776	csr	16000	cpo	16000	CR_CSCC	5.236x	CR_CPO	5.236	1
+B-1	7x1 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	83776	csr	17920	cpo	17920	CR_CSCC	4.675x	CR_CPO	4.675	1
+B-1	7x1 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	83776	csr	19712	cpo	19712	CR_CSCC	4.25x	CR_CPO	4.25	1
+B-1	7x1 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	83776	csr	21504	cpo	21504	CR_CSCC	3.89583x	CR_CPO	3.89583	1
+B-1	7x1 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	83776	csr	23424	cpo	23424	CR_CSCC	3.5765x	CR_CPO	3.5765	1
+B-1	7x1 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	83776	csr	25216	cpo	25216	CR_CSCC	3.32234x	CR_CPO	3.32234	1
+B-1	7x1 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	83776	csr	27136	cpo	27136	CR_CSCC	3.08726x	CR_CPO	3.08726	1
+B-1	7x1 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	83776	csr	28928	cpo	28928	CR_CSCC	2.89602x	CR_CPO	2.89602	1
+B-1	7x1 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	83776	csr	30848	cpo	30848	CR_CSCC	2.71577x	CR_CPO	2.71577	1
+B-1	7x1 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	83776	csr	32640	cpo	32640	CR_CSCC	2.56667x	CR_CPO	2.56667	1
+B-1	7x1 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	83776	csr	34560	cpo	34560	CR_CSCC	2.42407x	CR_CPO	2.42407	1
+B-1	7x1 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	83776	csr	36352	cpo	36352	CR_CSCC	2.30458x	CR_CPO	2.30458	1
+B-1	7x1 | 17x17) batch	1	target_density	1	density	1	im2col	83776	csr	38144	cpo	38144	CR_CSCC	2.19631x	CR_CPO	2.19631	1
+
+B-1	7x1 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	985600	csr	19264	cpo	19264	CR_CSCC	51.1628x	CR_CPO	51.1628	1
+B-1	7x1 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	985600	csr	35264	cpo	35264	CR_CSCC	27.9492x	CR_CPO	27.9492	1
+B-1	7x1 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	985600	csr	51264	cpo	51264	CR_CSCC	19.226x	CR_CPO	19.226	1
+B-1	7x1 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	985600	csr	67264	cpo	67264	CR_CSCC	14.6527x	CR_CPO	14.6527	1
+B-1	7x1 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	985600	csr	83264	cpo	83264	CR_CSCC	11.837x	CR_CPO	11.837	1
+B-1	7x1 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	985600	csr	99264	cpo	99264	CR_CSCC	9.92908x	CR_CPO	9.92908	1
+B-1	7x1 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	985600	csr	115392	cpo	115392	CR_CSCC	8.54132x	CR_CPO	8.54132	1
+B-1	7x1 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	985600	csr	131392	cpo	131392	CR_CSCC	7.50122x	CR_CPO	7.50122	1
+B-1	7x1 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	985600	csr	147392	cpo	147392	CR_CSCC	6.68693x	CR_CPO	6.68693	1
+B-1	7x1 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	985600	csr	163392	cpo	163392	CR_CSCC	6.03212x	CR_CPO	6.03212	1
+B-1	7x1 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	985600	csr	179392	cpo	179392	CR_CSCC	5.49411x	CR_CPO	5.49411	1
+B-1	7x1 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	985600	csr	195392	cpo	195392	CR_CSCC	5.04422x	CR_CPO	5.04422	1
+B-1	7x1 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	985600	csr	211392	cpo	211392	CR_CSCC	4.66243x	CR_CPO	4.66243	1
+B-1	7x1 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	985600	csr	227392	cpo	227392	CR_CSCC	4.33437x	CR_CPO	4.33437	1
+B-1	7x1 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	985600	csr	243392	cpo	243392	CR_CSCC	4.04943x	CR_CPO	4.04943	1
+B-1	7x1 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	985600	csr	259392	cpo	259392	CR_CSCC	3.79965x	CR_CPO	3.79965	1
+B-1	7x1 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	985600	csr	275392	cpo	275392	CR_CSCC	3.5789x	CR_CPO	3.5789	1
+B-1	7x1 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	985600	csr	291392	cpo	291392	CR_CSCC	3.38239x	CR_CPO	3.38239	1
+B-1	7x1 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	985600	csr	307392	cpo	307392	CR_CSCC	3.20633x	CR_CPO	3.20633	1
+B-1	7x1 | 50x50) batch	1	target_density	1	density	1	im2col	985600	csr	323264	cpo	323264	CR_CSCC	3.0489x	CR_CPO	3.0489	1
+
+
+
+B-1	1x7 | 17x17) batch	1	target_density	0.05	density	0.0519031	im2col	83776	csr	8960	cpo	6720	CR_CSCC	9.35x	CR_CPO	12.4667	1
+B-1	1x7 | 17x17) batch	1	target_density	0.1	density	0.100346	im2col	83776	csr	16896	cpo	8512	CR_CSCC	4.95833x	CR_CPO	9.8421	1
+B-1	1x7 | 17x17) batch	1	target_density	0.15	density	0.152249	im2col	83776	csr	25344	cpo	10432	CR_CSCC	3.30556x	CR_CPO	8.03067	1
+B-1	1x7 | 17x17) batch	1	target_density	0.2	density	0.200692	im2col	83776	csr	32128	cpo	12224	CR_CSCC	2.60757x	CR_CPO	6.8534	1
+B-1	1x7 | 17x17) batch	1	target_density	0.25	density	0.252595	im2col	83776	csr	44032	cpo	14144	CR_CSCC	1.90262x	CR_CPO	5.92308	1
+B-1	1x7 | 17x17) batch	1	target_density	0.3	density	0.301038	im2col	83776	csr	51072	cpo	15936	CR_CSCC	1.64035x	CR_CPO	5.25703	1
+B-1	1x7 | 17x17) batch	1	target_density	0.35	density	0.352941	im2col	83776	csr	56832	cpo	17856	CR_CSCC	1.4741x	CR_CPO	4.69176	1
+B-1	1x7 | 17x17) batch	1	target_density	0.4	density	0.401384	im2col	83776	csr	68608	cpo	19648	CR_CSCC	1.22108x	CR_CPO	4.26384	1
+B-1	1x7 | 17x17) batch	1	target_density	0.45	density	0.453287	im2col	83776	csr	80000	cpo	21568	CR_CSCC	1.0472x	CR_CPO	3.88427	1
+B-1	1x7 | 17x17) batch	1	target_density	0.5	density	0.50173	im2col	83776	csr	78976	cpo	23360	CR_CSCC	1.06078x	CR_CPO	3.5863	1
+B-1	1x7 | 17x17) batch	1	target_density	0.55	density	0.550173	im2col	83776	csr	90752	cpo	25152	CR_CSCC	0.923131x	CR_CPO	3.33079	1
+B-1	1x7 | 17x17) batch	1	target_density	0.6	density	0.602076	im2col	83776	csr	101888	cpo	27072	CR_CSCC	0.822236x	CR_CPO	3.09456	1
+B-1	1x7 | 17x17) batch	1	target_density	0.65	density	0.650519	im2col	83776	csr	107392	cpo	28864	CR_CSCC	0.780095x	CR_CPO	2.90244	1
+B-1	1x7 | 17x17) batch	1	target_density	0.7	density	0.702422	im2col	83776	csr	118912	cpo	30784	CR_CSCC	0.704521x	CR_CPO	2.72141	1
+B-1	1x7 | 17x17) batch	1	target_density	0.75	density	0.750865	im2col	83776	csr	127488	cpo	32576	CR_CSCC	0.657129x	CR_CPO	2.57171	1
+B-1	1x7 | 17x17) batch	1	target_density	0.8	density	0.802768	im2col	83776	csr	134272	cpo	34496	CR_CSCC	0.623928x	CR_CPO	2.42857	1
+B-1	1x7 | 17x17) batch	1	target_density	0.85	density	0.851211	im2col	83776	csr	144768	cpo	36288	CR_CSCC	0.578691x	CR_CPO	2.30864	1
+B-1	1x7 | 17x17) batch	1	target_density	0.9	density	0.903114	im2col	83776	csr	150912	cpo	38208	CR_CSCC	0.555131x	CR_CPO	2.19263	1
+B-1	1x7 | 17x17) batch	1	target_density	0.95	density	0.951557	im2col	83776	csr	158592	cpo	40000	CR_CSCC	0.528249x	CR_CPO	2.0944	1
+B-1	1x7 | 17x17) batch	1	target_density	1	density	1	im2col	83776	csr	168320	cpo	41792	CR_CSCC	0.497719x	CR_CPO	2.00459	1
+
+B-1	1x7 | 50x50) batch	1	target_density	0.05	density	0.05	im2col	985600	csr	103616	cpo	33472	CR_CSCC	9.51204x	CR_CPO	29.4455	1
+B-1	1x7 | 50x50) batch	1	target_density	0.1	density	0.1	im2col	985600	csr	192064	cpo	49472	CR_CSCC	5.13162x	CR_CPO	19.9224	1
+B-1	1x7 | 50x50) batch	1	target_density	0.15	density	0.15	im2col	985600	csr	298176	cpo	65472	CR_CSCC	3.30543x	CR_CPO	15.0538	1
+B-1	1x7 | 50x50) batch	1	target_density	0.2	density	0.2	im2col	985600	csr	398400	cpo	81472	CR_CSCC	2.4739x	CR_CPO	12.0974	1
+B-1	1x7 | 50x50) batch	1	target_density	0.25	density	0.25	im2col	985600	csr	503872	cpo	97472	CR_CSCC	1.95605x	CR_CPO	10.1116	1
+B-1	1x7 | 50x50) batch	1	target_density	0.3	density	0.3	im2col	985600	csr	588224	cpo	113472	CR_CSCC	1.67555x	CR_CPO	8.68584	1
+B-1	1x7 | 50x50) batch	1	target_density	0.35	density	0.3504	im2col	985600	csr	697280	cpo	129600	CR_CSCC	1.41349x	CR_CPO	7.60494	1
+B-1	1x7 | 50x50) batch	1	target_density	0.4	density	0.4004	im2col	985600	csr	790720	cpo	145600	CR_CSCC	1.24646x	CR_CPO	6.76923	1
+B-1	1x7 | 50x50) batch	1	target_density	0.45	density	0.4504	im2col	985600	csr	894400	cpo	161600	CR_CSCC	1.10197x	CR_CPO	6.09901	1
+B-1	1x7 | 50x50) batch	1	target_density	0.5	density	0.5004	im2col	985600	csr	998848	cpo	177600	CR_CSCC	0.986737x	CR_CPO	5.54955	1
+B-1	1x7 | 50x50) batch	1	target_density	0.55	density	0.5504	im2col	985600	csr	1.08154e+06	cpo	193600	CR_CSCC	0.911297x	CR_CPO	5.09091	1
+B-1	1x7 | 50x50) batch	1	target_density	0.6	density	0.6004	im2col	985600	csr	1.19827e+06	cpo	209600	CR_CSCC	0.822518x	CR_CPO	4.70229	1
+B-1	1x7 | 50x50) batch	1	target_density	0.65	density	0.6504	im2col	985600	csr	1.28429e+06	cpo	225600	CR_CSCC	0.767429x	CR_CPO	4.36879	1
+B-1	1x7 | 50x50) batch	1	target_density	0.7	density	0.7004	im2col	985600	csr	1.38912e+06	cpo	241600	CR_CSCC	0.709514x	CR_CPO	4.07947	1
+B-1	1x7 | 50x50) batch	1	target_density	0.75	density	0.7504	im2col	985600	csr	1.48486e+06	cpo	257600	CR_CSCC	0.663764x	CR_CPO	3.82609	1
+B-1	1x7 | 50x50) batch	1	target_density	0.8	density	0.8004	im2col	985600	csr	1.57818e+06	cpo	273600	CR_CSCC	0.624518x	CR_CPO	3.60234	1
+B-1	1x7 | 50x50) batch	1	target_density	0.85	density	0.8504	im2col	985600	csr	1.67635e+06	cpo	289600	CR_CSCC	0.587943x	CR_CPO	3.40331	1
+B-1	1x7 | 50x50) batch	1	target_density	0.9	density	0.9004	im2col	985600	csr	1.77875e+06	cpo	305600	CR_CSCC	0.554096x	CR_CPO	3.22513	1
+B-1	1x7 | 50x50) batch	1	target_density	0.95	density	0.9504	im2col	985600	csr	1.88e+06	cpo	321600	CR_CSCC	0.524255x	CR_CPO	3.06468	1
+B-1	1x7 | 50x50) batch	1	target_density	1	density	1	im2col	985600	csr	1.97408e+06	cpo	337472	CR_CSCC	0.499271x	CR_CPO	2.92054	1
+
+
+
+
+
+

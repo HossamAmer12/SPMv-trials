@@ -1323,9 +1323,14 @@ int main()
   // std::vector<int> Kh_list = {3,7, 1};
   // std::vector<int> Kw_list = {3,1, 7};
 
+  // std::vector<int> I_list = {8};
+  // std::vector<int> Kh_list = {3};
+  // std::vector<int> Kw_list = {3};
+
+
   std::vector<int> I_list = {8};
   std::vector<int> Kh_list = {3};
-  std::vector<int> Kw_list = {3};
+  std::vector<int> Kw_list = {1};
 
   // std::vector<int> I_list = {17};
   // std::vector<int> Kh_list = {3};

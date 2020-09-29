@@ -1145,9 +1145,13 @@ int main()
   // std::vector<int> Kh_list = {3,7, 1};
   // std::vector<int> Kw_list = {3,1, 7};
 
-  std::vector<int> I_list = {8};
+  // std::vector<int> I_list = {8};
+  // std::vector<int> Kh_list = {3};
+  // std::vector<int> Kw_list = {3};
+
+    std::vector<int> I_list = {8};
   std::vector<int> Kh_list = {3};
-  std::vector<int> Kw_list = {3};
+  std::vector<int> Kw_list = {1};
 
   // std::vector<int> I_list = {17};
   // std::vector<int> Kh_list = {3};
@@ -1382,11 +1386,11 @@ int main()
         // cout << "creation cscc: " << t_cscc_creation << endl;
      
      
-        // std::vector <int> hdata;
-        // for(int g = 0; g < Adata.size(); ++g)
-        // {
-        //   hdata.push_back(int(Adata[g]));
-        // }
+//         std::vector <int> hdata;
+//         for(int g = 0; g < Adata.size(); ++g)
+//         {
+//           hdata.push_back(int(Adata[g]));
+//         }
 
        {
             // Prepare the output for CSCC
@@ -1415,6 +1419,29 @@ int main()
                 // include creation time:
                // t_csr +=  t_cscc_creation;
         }
+
+        // New place for CSR:
+            // {
+
+            //     vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+               
+
+            // for(int k=0;k<bench_iterations;k++){
+
+
+            // clock_t t5;
+            // t5 = clock();
+            //   conv_CPO_v7(O_CSR, Kernel, Aindices,  Adata, Aindptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+            //   double elapsed  = 1000*((double)(clock()-t5))/CLOCKS_PER_SEC; // time in milliseconds
+
+            //   if(k > 0)
+            //     t_csr += elapsed/(Ih*Iw*1.0); // normalized timing
+            
+            // } // end k lop                     
+
+            
+            // } // end else
         
 #if IS_PRINT
         // Print out the o1 from im2col:
