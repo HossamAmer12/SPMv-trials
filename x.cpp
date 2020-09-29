@@ -1575,9 +1575,9 @@ int main()
 
 
   // Big test
-  std::vector<int> I_list = {8,17,50};
-  std::vector<int> Kh_list = {3, 1, 3, 7, 1};
-  std::vector<int> Kw_list = {3, 3, 1, 1, 7};
+  // std::vector<int> I_list = {8,17,50};
+  // std::vector<int> Kh_list = {3, 1, 3, 7, 1};
+  // std::vector<int> Kw_list = {3, 3, 1, 1, 7};
 
   // std::vector<int> I_list = {8};
   // std::vector<int> Kh_list = {3};
@@ -1592,9 +1592,9 @@ int main()
   // std::vector<int> Kh_list = {7};
   // std::vector<int> Kw_list = {1};
 
-  // std::vector<int> I_list = {8};
-  // std::vector<int> Kh_list = {3};
-  // std::vector<int> Kw_list = {1};
+  std::vector<int> I_list = {8};
+  std::vector<int> Kh_list = {3};
+  std::vector<int> Kw_list = {1};
   
 
   // std::vector<int> I_list = {17};
@@ -2149,20 +2149,40 @@ int main()
             {
                 
                 // copy data to double
-                std::vector<double> DA_1d_v7_d(DA_1d_v7.size(), 0);
+                std::vector<double> DA_1d_v7_d(Adata.size(), 0);
 
                 for(int h = 0; h < DA_1d_v7.size(); ++h)
                 {
-                  DA_1d_v7_d[h] = DA_1d[h];
-                }              
+                  DA_1d_v7_d[h] = Adata[h];
+                }
+
+                // copy indices to doub
+                std::vector<int> IN_1d_v7_d(Aindices.size(), 0);
+                for(int h = 0; h < IN_1d_v7_d.size(); ++h)
+                {
+                  IN_1d_v7_d[h] = Aindices[h];
+                }
+
+                std::vector<int> ptr_1d_v7(Aindptr.size(), 0);
+                for(int h = 0; h < ptr_1d_v7.size(); ++h)
+                {
+                  ptr_1d_v7[h] = Aindptr[h];
+                }
 
             for(int k=0;k<bench_iterations;k++){
 
 
             clock_t t5;
             t5 = clock();
-                // conv_CPO_v7(O_v7, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-              conv_CPO_v7(O_CSR, Kernel, IN_1d, DA_1d_v7_d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                
+                // 1
+              // csrMult_v4(O_CSR, Kernel, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+
+            // 2
+            conv_CPO_v7(O_CSR, Kernel, IN_1d_v7_d, DA_1d_v7_d, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+
+            // csrMult_v4(O_CSR, Kernel, DA_1d_v7_d, IN_1d, Aindptr, Kh, Kw, Oh, Ow);
 
               double elapsed  = 1000*((double)(clock()-t5))/CLOCKS_PER_SEC; // time in milliseconds
 

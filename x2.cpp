@@ -1775,7 +1775,7 @@ int main()
   // std::vector<int> I_list = {8};
   // std::vector<int> Kh_list = {3};
   // std::vector<int> Kw_list = {1};
-
+  
 
   // std::vector<int> I_list = {17};
   // std::vector<int> Kh_list = {1};
@@ -2103,6 +2103,39 @@ int main()
         // {
         //   hdata.push_back(int(Adata[g]));
         // }
+
+       // Adele come back 
+//        {
+//             // Prepare the output for CSCC
+//             vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+            
+//             for(int k=0;k<bench_iterations;k++){
+//               clock_t t2;
+//               t2 = clock();
+//                 csrMult_v4(O_CSR, Kernel, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
+//               // csrMult_v5(O_CSR, Kernel, Aindices,  Adata, Aindptr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+            
+
+// //                if(k == bench_iterations-1)
+// //                {
+// //                    cout << "CSR without Eigen Output: " << endl;
+// //                    print2DVectorF(O_CSR);
+// //                    cout << "-----\n" << endl;
+// //                }
+
+//                 double elapsed = 1000*((double)(clock()-t2))/CLOCKS_PER_SEC; // time in milliseconds
+//                 if(k > 0)
+//                   t_csr += elapsed/(Ih*Iw*1.0); // normalized timing
+//                 // cout << "a1: " << t_csr  << " " << elapsed << endl;
+//             } // end k lop 
+            
+            
+//             // cout << "t_csr : " << t_csr << endl;
+        
+//                 // include creation time:
+//                // t_csr +=  t_cscc_creation;
+//         }
+        
         
         // Prepare the Adata, Aindices, AindPtr for CPO multiplication
         clock_t t_cpo_creation_c;
@@ -2147,45 +2180,7 @@ int main()
         transform2dTo1d(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
         ///////////
 
-        // V3 Code:
-         // Perform 50 times raw sparse matrix dense vector multiplication: d_CPO = d_m * d_b
-        {
-            // Prepare the output for CPO
-            vector<vector<float> > O_CPO2( Oh , vector<float> (Ow, 0));
-            
-            for(int k=0;k<bench_iterations;k++){
-                
-
-
-                clock_t t4;
-                t4 = clock();
-                // conv_CPO_v4(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
-                // Conv CPO V3: 
-                conv_CPO_v3(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
-                // conv_CPO_v5(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
-              // Hossam: call if n = 3
-              // if(n == 3)
-              //   conv_CPO_v6(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
-               // if(k == bench_iterations-1)
-               // {
-               //     print2DVectorF(O_CPO2);
-               //     cout << "-----\n" << endl;
-               // }
-
-                double elapsed  = 1000*((double)(clock()-t4))/CLOCKS_PER_SEC; // time in milliseconds
-
-                if(k > 0)
-                t_cpoV6 += elapsed/(Ih*Iw*1.0); // normalized timing
-            } // end k lop 
-            
-
-                // include creation time:
-               // t_cpo += t_cpo_creation;
-        }              
+              
 
         
         // V7 Code:
@@ -2299,6 +2294,34 @@ int main()
 
 
             // // New place for CSR:
+            // {
+
+            //     vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+            //     // copy data to double
+            //     std::vector<double> DA_1d_v7_d(DA_1d.size(), 0);
+
+            //     for(int h = 0; h < DA_1d.size(); ++h)
+            //     {
+            //       DA_1d_v7_d[h] = DA_1d[h];
+            //     }
+
+
+            // for(int k=0;k<bench_iterations;k++){
+
+
+            // clock_t t5;
+            // t5 = clock();
+            //   conv_CPO_v7(O_CSR, Kernel, IN_1d,  DA_1d_v7_d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+
+            //   double elapsed  = 1000*((double)(clock()-t5))/CLOCKS_PER_SEC; // time in milliseconds
+
+            //   if(k > 0)
+            //     t_csr += elapsed/(Ih*Iw*1.0); // normalized timing
+            
+            // } // end k lop                     
+
+            
+            // } // end else
             //CSR:
         {
             // Prepare the output for CPO
@@ -2357,13 +2380,6 @@ int main()
 
             // 2
             conv_CPO_v7(O_CSR, Kernel, IN_1d_v7_d, DA_1d_v7_d, ptr_1d_v7, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
-               // if(k == bench_iterations-1)
-               // {
-               //     cout << "CSR: " << endl;
-               //     print2DVectorF(O_CSR);
-               //     cout << "-----\n" << endl;
-               // }
 
 
             // csrMult_v4(O_CSR, Kernel, DA_1d_v7_d, IN_1d, Aindptr, Kh, Kw, Oh, Ow);
@@ -2446,17 +2462,16 @@ int main()
         // // <<"\tpercentV7\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col  <<"\tpercentV8\t"<< 100.0*(t_im2col-t_cpoV8)/t_im2col << "\t" << s << "\n";
 
         // // Note: t_cpoV6 is t_cpoV3
-        myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
-        "\t" << t_im2col << "\t" << t_csr << "\t" << t_cpoV6 << "\t" << t_cpoV8 << 
-        "\t"<< 100.0*(t_im2col-t_csr)/t_im2col <<"\t" << 100.0*(t_im2col-t_cpoV6)/t_im2col << "\t" << 100.0*(t_im2col-t_cpoV8)/t_im2col 
-        <<  "\t" << 1.0*s_im2col/s_csr <<"x\t" << 1.0*s_im2col/s_cpo  << "x\n";
-
-        // This is for checking
-        //  myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
+        // myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
         // "\t" << t_im2col << "\t" << t_csr << "\t" << t_cpoV6 << "\t" << t_cpoV8 << 
         // "\t"<< 100.0*(t_im2col-t_csr)/t_im2col <<"\t" << 100.0*(t_im2col-t_cpoV6)/t_im2col << "\t" << 100.0*(t_im2col-t_cpoV8)/t_im2col 
         // <<  "\t" << 1.0*s_im2col/s_csr <<"x\t" << 1.0*s_im2col/s_cpo  << "x\n";
-        // myfile.close();
+
+         myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
+        "\t" << t_im2col << "\t" << t_csr << "\t" << t_cpoV6 << "\t" << t_cpoV8 << 
+        "\t"<< 100.0*(t_im2col-t_csr)/t_im2col <<"\t" << 100.0*(t_im2col-t_cpoV6)/t_im2col << "\t" << 100.0*(t_im2col-t_cpoV8)/t_im2col 
+        <<  "\t" << 1.0*s_im2col/s_csr <<"x\t" << 1.0*s_im2col/s_cpo  << "x\n";
+        myfile.close();
 
         
 
