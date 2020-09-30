@@ -6,6 +6,11 @@
 #include <time.h>
 #include <math.h>
 #include <chrono>
+
+// Set percision
+#include <iomanip>
+
+
 typedef std::chrono::high_resolution_clock Clock;
 
 using namespace Eigen;
@@ -46,6 +51,53 @@ void printVector(std::vector<int>& x)
     std::cout << "\n";
 }
 
+
+double generate_org_featureMap(MatrixXf& org_fm, int Ih, int Iw, double density)
+{
+    for (int i = 0; i < ceil(density * Ih * Iw); ++i)
+    {
+        int r = rand() % Ih;
+        int c = rand() % Iw;
+        if(org_fm(r, c) == 0)
+        {
+            org_fm(r, c) = 1;
+        }
+        else
+        {
+            bool found = false;
+            for(int u = 0; u < Ih; ++u)
+            {
+                for(int v = 0; v < Iw; ++v)
+                {
+                    if(org_fm(u, v) == 0)
+                    {
+                        org_fm(u, v) = 1;
+                        found = true;
+                        break;
+                    }
+                }
+                if(found)
+                    break;
+            }
+        }
+    }
+
+     // Calculate the actual dennsity
+        double density_cal = 0;
+        for (unsigned i = 0; i < Ih; ++i)
+        {
+            for (unsigned j = 0; j < Iw; ++j)
+            {
+                if (org_fm(i, j) != 0){
+                    density_cal += 1;
+                }
+            }
+        }
+        
+        density_cal = density_cal/(Ih*Iw);
+        return density_cal;
+        
+}
 
 void CPO1(MatrixXf& O, VectorXf& K, MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw)
 {
@@ -643,216 +695,248 @@ void Im2col(MatrixXf& O, VectorXf& K, MatrixXf& org_fm, int Kh, int Kw, int Oh, 
 
 int main()
 {
-    // density:
-    float density = 0.1;
 
-    // timer for im2col, csr
-    float t_im2col = 0;
-    float t_csr = 0;
 
     // bench iterations
-    int bench_iterations = 1;
+   int bench_iterations = 1;
 
+    // Big test
+    // std::vector<int> I_list = {8,17,50};
+    // std::vector<int> Kh_list = {3, 1, 3, 7, 1};
+    // std::vector<int> Kw_list = {3, 3, 1, 1, 7};
 
-    // Conv parameters:
-    int padding = 0;
-    int stride = 1;
-    int Sh, Sw;
-    Sh = Sw = stride;
-    int num_filters = 1; // 64
+  std::vector<int> I_list = {8};
+  std::vector<int> Kh_list = {3};
+  std::vector<int> Kw_list = {3};
 
-    // mixed 0: conv_node 3
-    int Ih, Iw;
-    Ih = Iw = 8;
-
-    int Ic = 1; // put it as articial for now
-    int In = 1;
-
-    int K = 1; // number of filters
-
-    // Kernel dimensions
-    int Kh;
-    int Kw;
-    Kh = 3;
-    Kw = 3;
-
-    int Oh = (1 + Ih - Kh + 2 * padding) / stride; // removed + 1
-    int Ow = (1 + Iw - Kw + 2 * padding) / stride;
-
-    int iter = 1;  // total number of times to perform the test for each of dense, sparse multiplication
-
-    // Create your original input feature map:
-    MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
-
-    org_fm(0, 6) = 1;
-    org_fm(1, 2) = 1;
-    org_fm(2, 0) = 1;
-    org_fm(7, 1) = 1;
-    //org_fm(1, 2) = 2;
-    //org_fm(4, 2) = 1;
-    //org_fm(1, 3) = 1;
-    //org_fm(2, 3) = 1;
-    //org_fm(3, 3) = 1;
-    //org_fm(4, 3) = 1;
-    //org_fm(5, 3) = 1;
-   // org_fm(1, 4) = 1;
-    //org_fm(2, 4) = 1;
-   // org_fm(3, 4) = 2;
-    //org_fm(4, 4) = 1;
-    //org_fm(1, 5) = 2;
-    //org_fm(4, 5) = 1;
-   // org_fm(5, 5) = 8;
-   // org_fm(0, 3) = 1;
-   // org_fm(0, 4) = 3;
-   // org_fm(2, 0) = 1;
-    //org_fm(3, 0) = 2;
-    //org_fm(1, 6) = 5;
-
-
-
-    // Create the lowered matrix:
-    MatrixXf lowered_mat  = MatrixXf::Zero(Ow, Ih*Kw);
-    int sub_matrix_index  = 0;
+   for(int KK = 0; KK < Kh_list.size(); ++KK)
+   {
     
-    // For each submatrix:
-    for (int sub_m_start_col = 0; sub_m_start_col < Ow; sub_m_start_col = sub_m_start_col + stride)
-    {
-        
-        if(sub_m_start_col + Kw > Iw)
+      for(int I: I_list)
+      {
+        int Ih = I;
+        int Iw = I;
+
+
+        // density:
+        // float density = 0.1;
+        float density = 0.05;
+        for(; density < 1.05; density+=0.05)
         {
-            break;
-        }
-        
-        int lowered_mat_col_index = 0;
-        // Fetch this piece (all rows, all cols in this current submatrix)
-        for(int row_int = 0; row_int < Ih; ++row_int)
-        {
-            for(int col_int = sub_m_start_col; col_int < sub_m_start_col + Kw; ++col_int)
-            {
-                // cout << (org_fm(row_int, col_int)) << ", ";
-                
-                lowered_mat(sub_matrix_index, lowered_mat_col_index) = org_fm(row_int, col_int);
-                lowered_mat_col_index++;
-            } // end inner loop
+
+            // timer for im2col, csr
+            float t_im2col = 0;
+            float t_csr = 0;
+
+
+            // Conv parameters:
+            int padding = 0;
+            int stride = 1;
+            int Sh, Sw;
+            Sh = Sw = stride;
+            int num_filters = 1; // 64
+
+            int Ic = 1; // put it as articial for now
+            int In = 1;
+
+            int K = 1; // number of filters
+
+            // Kernel dimensions
+            int Kh = Kh_list[KK];
+            int Kw = Kw_list[KK];
+
+            int Oh = (1 + Ih - Kh + 2 * padding) / stride; // removed + 1
+            int Ow = (1 + Iw - Kw + 2 * padding) / stride;
+
+
+            // Create your original input feature map:
+            MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
+
+            // Generate random feature map:
+            double density_cal = generate_org_featureMap(org_fm, Ih, Iw, density);
+
+            // org_fm(0, 6) = 1;
+            // org_fm(1, 2) = 1;
+            // org_fm(2, 0) = 1;
+            // org_fm(7, 1) = 1;
+            //org_fm(1, 2) = 2;
+            //org_fm(4, 2) = 1;
+            //org_fm(1, 3) = 1;
+            //org_fm(2, 3) = 1;
+            //org_fm(3, 3) = 1;
+            //org_fm(4, 3) = 1;
+            //org_fm(5, 3) = 1;
+           // org_fm(1, 4) = 1;
+            //org_fm(2, 4) = 1;
+           // org_fm(3, 4) = 2;
+            //org_fm(4, 4) = 1;
+            //org_fm(1, 5) = 2;
+            //org_fm(4, 5) = 1;
+           // org_fm(5, 5) = 8;
+           // org_fm(0, 3) = 1;
+           // org_fm(0, 4) = 3;
+           // org_fm(2, 0) = 1;
+            //org_fm(3, 0) = 2;
+            //org_fm(1, 6) = 5;
+
+
+
+            // Create the lowered matrix:
+            MatrixXf lowered_mat  = MatrixXf::Zero(Ow, Ih*Kw);
+            int sub_matrix_index  = 0;
             
-        } // end outer loop
-        
-        sub_matrix_index++;
-        
-    } // end outer outer loop
+            // For each submatrix:
+            for (int sub_m_start_col = 0; sub_m_start_col < Ow; sub_m_start_col = sub_m_start_col + stride)
+            {
+                
+                if(sub_m_start_col + Kw > Iw)
+                {
+                    break;
+                }
+                
+                int lowered_mat_col_index = 0;
+                // Fetch this piece (all rows, all cols in this current submatrix)
+                for(int row_int = 0; row_int < Ih; ++row_int)
+                {
+                    for(int col_int = sub_m_start_col; col_int < sub_m_start_col + Kw; ++col_int)
+                    {
+                        // cout << (org_fm(row_int, col_int)) << ", ";
+                        
+                        lowered_mat(sub_matrix_index, lowered_mat_col_index) = org_fm(row_int, col_int);
+                        lowered_mat_col_index++;
+                    } // end inner loop
+                    
+                } // end outer loop
+                
+                sub_matrix_index++;
+                
+            } // end outer outer loop
 
 
-    // Print out the lowered feature map:
-    std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
-    cout << "-----\n" << endl;
+            // Print out the lowered feature map:
+            // std::cout << "\n===Lowered Feature Map of Size: " << lowered_mat.rows() << ", " << lowered_mat.cols() <<  "\n" << lowered_mat << std::endl;
+            // cout << "-----\n" << endl;
 
-    // Create the sparse representation of the lowered matrix:
-    SparseMatrix<float, RowMajor> lowered_mat_sparse = lowered_mat.sparseView();
+            // Create the sparse representation of the lowered matrix:
+            SparseMatrix<float, RowMajor> lowered_mat_sparse = lowered_mat.sparseView();
 
-    // SparseMatrix<int> lowered_mat_sparse = lowered_mat.sparseView();
-    lowered_mat_sparse.makeCompressed();
-
-
-    int nz = lowered_mat_sparse.nonZeros();
-    vector<double> Adata (lowered_mat_sparse.valuePtr(), lowered_mat_sparse.valuePtr() + nz);
-    vector<int> Aindices (lowered_mat_sparse.innerIndexPtr(), lowered_mat_sparse.innerIndexPtr() + nz);
-    vector<int> Aindptr (lowered_mat_sparse.outerIndexPtr(), lowered_mat_sparse.outerIndexPtr() + lowered_mat_sparse.outerSize()); // +1 for the last element
-    // push back the last element the number of nnz in ptr:
-    Aindptr.push_back(nz);
-
-    cout << "Eigen CSR: " << endl;
-    cout << "Data: "; 
-    printVectorD(Adata);
-    cout << "Indices: ";
-    printVector(Aindices);
-    cout << "ptr: ";
-    printVector(Aindptr);
+            // SparseMatrix<int> lowered_mat_sparse = lowered_mat.sparseView();
+            lowered_mat_sparse.makeCompressed();
 
 
-    // Create the filter K and its vectorized version:
-    MatrixXf filter = MatrixXf::Ones(Kh, Kw);
-    VectorXf filter_vectorized = VectorXf::Ones(Kh * Kw);
+            int nz = lowered_mat_sparse.nonZeros();
+            vector<double> Adata (lowered_mat_sparse.valuePtr(), lowered_mat_sparse.valuePtr() + nz);
+            vector<int> Aindices (lowered_mat_sparse.innerIndexPtr(), lowered_mat_sparse.innerIndexPtr() + nz);
+            vector<int> Aindptr (lowered_mat_sparse.outerIndexPtr(), lowered_mat_sparse.outerIndexPtr() + lowered_mat_sparse.outerSize()); // +1 for the last element
+            // push back the last element the number of nnz in ptr:
+            Aindptr.push_back(nz);
+
+            cout << "Eigen CSR: " << endl;
+            cout << "Data: "; 
+            printVectorD(Adata);
+            cout << "Indices: ";
+            printVector(Aindices);
+            cout << "ptr: ";
+            printVector(Aindptr);
 
 
-    // Prepare the output for im2col, sparseMat, CPO
-    MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
-    MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
-    MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
+            // Create the filter K and its vectorized version:
+            MatrixXf filter = MatrixXf::Ones(Kh, Kw);
+            VectorXf filter_vectorized = VectorXf::Ones(Kh * Kw);
 
 
-    double elapsed_1, elapsed_2, elapsed_3, elapsed_4, elapsed_5, elapsed_6, elapsed_7;
+            // Prepare the output for im2col, sparseMat, CPO
+            MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
+            MatrixXf d_o2 = MatrixXf::Zero(Oh, Ow);
+            MatrixXf d_o3 = MatrixXf::Zero(Oh, Ow);
 
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) CPO1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        elapsed_1 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        // auto t2 = Clock::now();
-        std::cout << "1st version CPO Time : " << elapsed_1 / bench_iterations << " msec\n" << endl;
-    }
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) CPO2(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        elapsed_2 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        // auto t2 = Clock::now();
-        std::cout << "2nd version CPO Time : " << elapsed_2 / bench_iterations << " msec\n" << endl;
-    }
-    // std::cout << "Diff Time for CPO : " << (elapsed_1 - elapsed_2) / bench_iterations << " milliseconds" << endl;
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) CPO3(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        // auto t2 = Clock::now();
-        elapsed_3 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        std::cout << "3rd version CPO Time : " << elapsed_3 / bench_iterations << " msec\n" << endl;
-    }
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        // auto t2 = Clock::now();
-        elapsed_4 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        std::cout << "Ahmed's CPO Time : " << elapsed_4 / bench_iterations << " msec\n" << endl;
-    }
 
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) CSR1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        // auto t2 = Clock::now();
-        elapsed_5 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        std::cout << "1st version CSR Time : " << elapsed_5 / bench_iterations << " msec\n" << endl;
-    }
+            double elapsed_1, elapsed_2, elapsed_3, elapsed_4, elapsed_5, elapsed_6, elapsed_7;
 
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) CSR1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-        // auto t2 = Clock::now();
-        elapsed_6 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        std::cout << "2nd version CSR Time : " << elapsed_6 / bench_iterations << " msec\n" << endl;
-    }
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) CPO1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                elapsed_1 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                // auto t2 = Clock::now();
+                std::cout << "1st version CPO Time : " << elapsed_1 / bench_iterations << " msec\n" << endl;
+            }
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) CPO2(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                elapsed_2 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                // auto t2 = Clock::now();
+                std::cout << "2nd version CPO Time : " << elapsed_2 / bench_iterations << " msec\n" << endl;
+            }
+            // std::cout << "Diff Time for CPO : " << (elapsed_1 - elapsed_2) / bench_iterations << " milliseconds" << endl;
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) CPO3(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // auto t2 = Clock::now();
+                elapsed_3 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                std::cout << "3rd version CPO Time : " << elapsed_3 / bench_iterations << " msec\n" << endl;
+            }
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) _CPO(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // auto t2 = Clock::now();
+                elapsed_4 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                std::cout << "Ahmed's CPO Time : " << elapsed_4 / bench_iterations << " msec\n" << endl;
+            }
 
-    {
-        clock_t t;
-        t = clock();
-        // auto t1 = Clock::now();
-        for (int k = 0; k < bench_iterations; k++) Im2col(d_o1, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, Ic);
-        elapsed_7 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
-        // auto t2 = Clock::now();
-        std::cout << "Im2col Time  : " << elapsed_7 / bench_iterations << " msec\n" << endl;
-        // std::cout << "Im2col t2-t1: "
-           //  << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000
-           //  << " microsec\n" << std::endl;
-    }
-    std::cout << "Diff Time for CPO2 - CSR2 : " << (elapsed_3 - elapsed_6) / bench_iterations << " msec" << endl;
-    std::cout << "Diff Time for CPO2 - Im2col : " << (elapsed_3 - elapsed_7) / bench_iterations << " msec" << endl;
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) CSR1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // auto t2 = Clock::now();
+                elapsed_5 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                std::cout << "1st version CSR Time : " << elapsed_5 / bench_iterations << " msec\n" << endl;
+            }
+
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) CSR1(d_o3, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                // auto t2 = Clock::now();
+                elapsed_6 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                std::cout << "2nd version CSR Time : " << elapsed_6 / bench_iterations << " msec\n" << endl;
+            }
+
+            {
+                clock_t t;
+                t = clock();
+                // auto t1 = Clock::now();
+                for (int k = 0; k < bench_iterations; k++) Im2col(d_o1, filter_vectorized, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, Ic);
+                elapsed_7 = 1000 * ((double)(clock() - t)) / CLOCKS_PER_SEC; // time in milliseconds
+                // auto t2 = Clock::now();
+                std::cout << "Im2col Time  : " << elapsed_7 / bench_iterations << " msec\n" << endl;
+                // std::cout << "Im2col t2-t1: "
+                   //  << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000
+                   //  << " microsec\n" << std::endl;
+            }
+
+
+            // std::cout << "B-" << bench_iterations << "\t" << Kh << "x" << Kw  << " | " <<  Ih << "x" << Iw <<  ") batch\t"<<1
+            // <<"\ttarget_density\t"<<density<<"\tdensity\t"<<density_cal
+            // <<"\tim2col\t"<<t_im2col<<"\tcsr\t" <<t_csr  <<"\tcpoV8\t"<< t_cpoV8
+            // <<"\tpercentCSSC\t" << 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercentV8\t"<< 100.0*(t_im2col-t_cpoV8)/t_im2col << "\t" << s << "\n";
+
+            std::cout << "Diff Time for CPO2 - CSR2 : " << (elapsed_3 - elapsed_6) / bench_iterations << " msec" << endl;
+            std::cout << "Diff Time for CPO2 - Im2col : " << (elapsed_3 - elapsed_7) / bench_iterations << " msec" << endl;
+
+        } // end density loop
+    } // I loop
+} // end Kernel loop
+
+
     return 0;
 }

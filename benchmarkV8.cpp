@@ -1796,8 +1796,7 @@ int main()
   // float density = 0.1;
     
 
-    // for(; density < 1.05; density+=0.05)
-    for(; density < 1.02; density+=0.05)
+    for(; density < 1.05; density+=0.05)
     {
         
         // timer for im2col, csr
