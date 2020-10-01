@@ -1465,16 +1465,17 @@ void CPO_EncodingV7(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vecto
   print2DVector(ptr);
   print2DVector(DA);
 
-  cout << "\nOld 2D Index:" << endl;
-  print2DVector(IN);
+  // cout << "\nOld 2D Index:" << endl;
+  // print2DVector(IN);
+
   int count_d = CPO3(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
 
   cout << "\nNew 1D Ptr:" << endl;
   printVector(ptr_1d);
-  print2DVector(DA);
-
+  
+  // print2DVector(DA);
   cout << "\nNew 2D Index:" << endl;
-  print2DVector(IN);
+  // print2DVector(IN);
   cout << "\nExiting Encoding V7" << endl;
   exit(0);
 
@@ -1517,7 +1518,7 @@ int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
   std::vector<int> x(n, 0);
   std::vector<int> m(n, 0);
 
-  // First part
+    // First part
     for (int j = 0; j < Kw; ++j)
     {
         // ptr[l][m[l]] = x[l];
