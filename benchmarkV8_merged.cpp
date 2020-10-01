@@ -23,6 +23,9 @@ void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, 
 int CPO1(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
          vector<vector<int> > &DA, vector<vector<int> > &ptr);
 
+int CPO2(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
+         vector<vector<int> > &DA, vector<int> &ptr);
+
 // https://scicomp.stackexchange.com/questions/27977/how-can-i-speed-up-this-code-for-sparse-matrix-vector-multiplication
 bool isErrorCSRInd(std::vector<int>& x1, std::vector<int>& x2, std::vector<double>& y1, std::vector<double>& y2)
 {
@@ -1392,24 +1395,29 @@ void CPO_Encoding(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vector<
       n = Kw / Sw;
   }
   
-  vector<vector<int> > IN(n); // n is the rows
-  vector<vector<int> > DA(n); // n is the rows
-  vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
-
-  // Get the total number of non zeros: we can save it while encoding:
-  // CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
-  int count_d = CPO1(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
-
-
   // transform 2d to 1d:
   int count_ptr = n*(1+Ow);
 
+  vector<vector<int> > IN(n); // n is the rows
+  vector<vector<int> > DA(n); // n is the rows
+  
 
-  IN_1d.reserve(count_d);
-  DA_1d.reserve(count_d);
-  ptr_1d.reserve(count_ptr);  
+  // Get the total number of non zeros: we can save it while encoding:
+  // vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
+  // CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+  // int count_d = CPO1(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
 
-  transform2dTo1d(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
+  vector<int> ptr(count_ptr, 0);
+  int count_d = CPO2(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+  cout << "Done" << endl;
+  exit(0);
+
+
+  // IN_1d.reserve(count_d);
+  // DA_1d.reserve(count_d);
+  // ptr_1d.reserve(count_ptr);  
+
+  // transform2dTo1d(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
 }
 
 
@@ -1454,6 +1462,184 @@ void CPO_EncodingV7(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vecto
   // printVector(ptr_1d);
 }
 
+
+int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
+         vector<vector<int> > &DA, vector<int> &ptr)
+{
+
+  int flag = 0;
+  int i = 0;
+  int l = 0;
+  int n = ceil(Kw / Sw);
+
+  int non_zero_count = 0;
+
+  std::vector<int> x(n, 0);
+  std::vector<int> m(n, 0);
+
+    // First piece
+    for (int j = 0; j < Kw; ++j)
+    {
+        if (flag == 0)
+        {
+            // ptr[l][m[l]] = x[l];
+            ptr[l*n +  m[l]] = x[l];
+            flag = 1;
+            m[l]++;
+        } // end if (flag == 0)
+        for (i = 0; i < Ih; ++i)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                IN[l].push_back(j + (i * Kw));
+                DA[l].push_back(org_mat(i, j));
+                x[l]++;
+                non_zero_count++;
+            } // end if  if (org_mat(i, j) != 0)
+        } // end for(i=0; i < Ih; ++i)
+        if ((j + 1) % Sw == 0)
+        {
+            // ptr[l][m[l]] = x[l];
+            ptr[l*n +  m[l]] = x[l];
+            l++;
+            flag = 0;
+        } // end if ( (j+1) % Sw == 0)
+        else if (j == Kw - 1)
+        {
+            // ptr[l][m[l]] = x[l];
+            ptr[l*n +  m[l]] = x[l];
+        } // end if(j == Kw - 1)
+    } // end for (int j = 0; j < Kw; ++j)
+
+    l--;
+
+    for (int p = 0; p < m.size(); ++p)
+    {
+        m[p] = m[p] + 1;
+    }
+    flag = 0;
+
+    // Second piece
+    for (int j = Kw; j < Iw - Kw; ++j)
+    {
+        for (i = 0; i < Ih; ++i)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                int ind_val = j + (i * Kw) - Sw * (m[l] - 1);
+                IN[l].push_back(ind_val);
+                DA[l].push_back(org_mat(i, j));
+                x[l]++;
+                non_zero_count++;
+            } // end if (org_mat(i, j) != 0)
+        }// end for(i = 0; i < Ih; ++i)
+
+        if (flag == 0)
+        {
+            if (Kw % Sw == 0)
+            {
+                if ((j - Kw + 1) % Sw == 0)
+                {
+                    // ptr[l][m[l]] = x[l];
+                    ptr[l*n +  m[l]] = x[l];
+                    m[l]++;
+
+                    if (n > 1)
+                    {
+                        for (int c = 0; c < n - 1; ++c)
+                        {
+                            // ptr[c][m[c]] = x[c];
+                            ptr[c*n +  m[c]] = x[c];
+                            m[c]++;
+                        } // end for(int c = 0; c < n-1; ++c)
+                    } // end if(n > 1)
+                } // end if ((j - Kw + 1) % Sw == 0)
+            } // end if (Kw % Sw == 0)
+            else if ((j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+            {
+                // ptr[l][m[l]] = x[l];
+                ptr[l*n +  m[l]] = x[l];
+                m[l]++;
+                l++;
+                flag = 1;
+            } // end else if ( (j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
+        } // end if(flag == 0)
+        else
+        {
+            if ((j - Kw + 1) % Sw == 0)
+            {
+                // ptr[l][m[l]] = x[l];
+                ptr[l*n +  m[l]] = x[l];
+                m[l]++;
+                l--;
+                flag = 0;
+            } // end if ( (j - Kw + 1) % Sw == 0)
+            if (n > 2)
+            {
+                for (int c = 0; c < n - 2; ++c)
+                {
+                    // ptr[c][m[c]] = x[c];
+                    ptr[c*n + m[c]] = x[c];
+                    m[c]++;
+                } // end for(int c = 0; c < n-2; ++c)
+            } // end if n > 2
+        } // end if flag == 1
+    } // end for(int j = Kw; j < Iw - Kw; ++j)
+
+    // Third piece
+    for (int j = Iw - Kw; j < Iw; ++j)
+    {
+        for (int i = 0; i < Ih; i++)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                int ind_val = j + (i * Kw) - Sw * (m[l] - 1);
+                IN[l].push_back(ind_val);
+                DA[l].push_back(org_mat(i, j));
+                x[l]++;
+                non_zero_count++;
+            }// end if(lowered_mat(i, j) != 0)
+        } // end for(i = 0; i = Ih; ++i)
+        if ((Iw - j - 1) % Sw == 0)
+        {
+            for (int c = 0; c < l + 1; ++c)
+            {
+                // ptr[l][m[l]] = x[l];
+                ptr[l*n +  m[l]] = x[l];
+                m[l]++;
+            } // end for(int c = 0; c < l+1; ++c)
+            if (l > 1)
+            {
+                for (int c = 0; c < l; ++c)
+                {
+                    // ptr[c][m[c]] = x[c];
+                    ptr[c*n + m[c]] = x[c];
+                    m[c]++;
+                } // end for(int c = 0; c < l-1; ++c)
+            }// end if l > 1
+
+            else if (l == 1)
+            {
+                // ptr[0][m[0]] = x[0];
+                ptr[0*n +  m[0]] = x[0];
+                m[0]++;
+            } // end else if(l == 1)
+            l--;
+        } // end if ((Iw - j - 1) % Sw == 0)
+    } // end for (j = Iw - Kw; Iw; ++j)
+
+  std::cout << "\nPtr: ";
+  printVector(ptr);
+  exit(0);
+
+  // std::cout << "\n\nIN: ";
+  // print2DVector(IN);
+
+  // std::cout << "\n\nData:";
+  // print2DVector(DA);
+  // std::cout << "\n" << endl;
+  return non_zero_count;
+}
 
 
 int CPO1(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
@@ -2728,6 +2914,9 @@ int main()
         // // <<"\tpercentCSSC\t"<< 100.0*(t_im2col-t_csr)/t_im2col  <<"\tpercentV5\t"<< 100.0*(t_im2col-t_cpoV5)/t_im2col <<"\tpercentV6\t"<< 100.0*(t_im2col-t_cpoV6)/t_im2col  
         // // <<"\tpercentV7\t"<< 100.0*(t_im2col-t_cpoV7)/t_im2col  <<"\tpercentV8\t"<< 100.0*(t_im2col-t_cpoV8)/t_im2col << "\t" << s << "\n";
 
+
+        cout << "im2col: " << t_im2col_creation << "\tt_cscc: " << t_cscc_creation << "\tt_cpo_creation: " << t_cpo_creation << "\tt_cpo_creationV7: " << t_cpo_creation_V7 << endl;
+        exit(0);
         // // Note: t_cpoV6 is t_cpoV3
         myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
         "\t" << t_im2col << "\t" << t_csr << "\t" << t_cpoV6 << "\t" << t_cpoV8 << 
