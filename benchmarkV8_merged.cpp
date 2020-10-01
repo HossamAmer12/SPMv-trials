@@ -18,13 +18,22 @@ using namespace std;
 using namespace boost::timer;
 
 void printVector(std::vector<int>& x);
+// Org Piece:
 void CPO(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
          vector<vector<int> > &DA, vector<vector<int> > &ptr);
+
+// CPO1 with Ahmad's modifications
 int CPO1(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
          vector<vector<int> > &DA, vector<vector<int> > &ptr);
 
+// CPO2 with 1-D modifications:
 int CPO2(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
          vector<vector<int> > &DA, vector<int> &ptr);
+
+// CPO3 with 1-d modifications and removing repititions:
+int CPO3(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
+         vector<vector<int> > &DA, vector<int> &ptr);
+
 
 // https://scicomp.stackexchange.com/questions/27977/how-can-i-speed-up-this-code-for-sparse-matrix-vector-multiplication
 bool isErrorCSRInd(std::vector<int>& x1, std::vector<int>& x2, std::vector<double>& y1, std::vector<double>& y2)
@@ -1353,6 +1362,16 @@ void reset_Im2col_Encoding(MatrixXf &im2col_mat)
     }
 }
 
+void reset_ptr(std::vector <int> &x)
+{
+     
+  for(int i = 0; i < x.size() ; ++i)
+  {
+    x[i] = 0;
+  }
+}
+
+
 
 
 double generate_org_featureMap(MatrixXf& org_fm, int Ih, int Iw, double density)
@@ -1423,6 +1442,7 @@ void CPO_Encoding(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vector<
   IN_1d.reserve(count_d);
   DA_1d.reserve(count_d);  
   transform2dTo1d(IN, DA, IN_1d, DA_1d);
+
 }
 
 
@@ -1439,33 +1459,175 @@ void CPO_EncodingV7(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vecto
   vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
 
   // Get the total number of non zeros: we can save it while encoding:
-  // CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
-  int count_d = CPO1(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+  CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+
+  cout << "Old 2D Ptr:" << endl;
+  print2DVector(ptr);
+  print2DVector(DA);
+
+  cout << "Old 2D Index:" << endl;
+  print2DVector(IN);
+  int count_d = CPO3(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
+
+  cout << "New 1D Ptr:" << endl;
+  printVector(ptr_1d);
+  print2DVector(DA);
+
+  cout << "New 2D Index:" << endl;
+  print2DVector(IN);
+  cout << "Exiting Encoding V7" << endl;
+  exit(0);
 
        
   // transform 2d to 1d:
-  int count_ptr = n*(1+Ow);
-  if(n != 1)
-  {
-    count_ptr = (n-1)*(1 + Ow) + min(int(ptr[0].size()), 3);
-  }
+  // int count_ptr = n*(1+Ow);
+  // if(n != 1)
+  // {
+  //   count_ptr = (n-1)*(1 + Ow) + min(int(ptr[0].size()), 3);
+  // }
 
-  IN_1d.reserve(count_d);
-  DA_1d.reserve(count_d);
-  ptr_1d.reserve(count_ptr);  
+  // IN_1d.reserve(count_d);
+  // DA_1d.reserve(count_d);
+  // ptr_1d.reserve(count_ptr);  
 
-  if(n != 1)
-  {
-    transform2dTo1dV7(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);  
-  }
-  else
-  {
-    transform2dTo1d_old(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
-  }
+  // if(n != 1)
+  // {
+  //   transform2dTo1dV7(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);  
+  // }
+  // else
+  // {
+  //   transform2dTo1d_old(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
+  // }
 
   // cout << "After: " << endl;
   // printVector(ptr_1d);
 }
+
+
+int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
+         vector<vector<int> > &DA, vector<int> &ptr)
+{
+
+
+  int l = 0;
+  int n = Kw;
+  int non_zero_count = 0;
+
+
+  std::vector<int> x(n, 0);
+  std::vector<int> m(n, 0);
+
+  // First part
+    for (int j = 0; j < Kw; ++j)
+    {
+        // ptr[l][m[l]] = x[l];
+        ptr[l*(1 + Ow) +  m[l]] = x[l];
+        m[l]++;
+        for (int i = 0; i < Ih; ++i)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                int ind_val = j + (i * Kw);
+                IN[l].push_back(ind_val);
+                DA[l].push_back(org_mat(i, j));
+                x[l]++;
+                non_zero_count++
+            } // end if  if (org_mat(i, j) != 0)
+        } // end for(i=0; i < Ih; ++i)       
+        // ptr[l][m[l]] = x[l];
+        ptr[l*(1 + Ow) +  m[l]] = x[l];
+        m[l]++;
+        l++;
+    } // end for (int j = 0; j < Kw; ++j)
+
+    l--;
+
+    // Second piece
+    for (int j = Kw; j < Iw - Kw; ++j)
+    {
+        for (int i = 0; i < Ih; ++i)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                int ind_val = j - (m[l] - 1) + (i * Kw);
+                IN[l].push_back(ind_val);
+                DA[l].push_back(org_mat(i, j));
+                x[l]++;
+                non_zero_count++
+            } // end if (org_mat(i, j) != 0)
+        }// end for(i = 0; i < Ih; ++i)
+        // ptr[l][m[l]] = x[l];
+        ptr[l*(1 + Ow) +  m[l]] = x[l];
+        m[l]++;
+        if (n > 1)
+        {
+            for (int c = 1; c < n - 1; ++c)
+            // for (int c = 1; c < 4; ++c)
+            {
+                // ptr[c][m[c]] = x[c];
+                ptr[c*(1 + Ow) +  m[c]] = x[c];
+                m[c]++;
+                non_zero_count++
+            } // end for(int c = 0; c < n-1; ++c)
+        } // end if(n > 1) 
+    } // end for(int j = Kw; j < Iw - Kw; ++j)
+
+    // Third piece   
+    for (int j = Iw - Kw; j < Iw; ++j)
+    {
+        for (int i = 0; i < Ih; i++)
+        {
+            if (org_mat(i, j) != 0)
+            {
+                if (j != Iw - 1)
+                {
+                    int ind_val = j - (m[l] - 1) + (i * Kw);
+                    IN[l].push_back(ind_val);
+                    DA[l].push_back(org_mat(i, j));
+                    x[l]++;
+                }
+                else {
+                    int ind_val = Kw - 1 + (i * Kw);
+                    IN[l].push_back(ind_val);
+                    DA[l].push_back(org_mat(i, j));
+                    x[l]++;
+                }
+
+                non_zero_count++
+
+            }// end if(org_mat(i, j) != 0)
+        } // end for(i = 0; i = Ih; ++i)
+        for (int c = 0; c < l + 1; ++c)
+        {
+            // ptr[l][m[l]] = x[l];
+            ptr[l*(1 + Ow) +  m[l]] = x[l];
+            m[l]++;
+        } // end for(int c = 0; c < l+1; ++c)
+        if (l > 1)
+        {
+            for (int c = 1; c < l; ++c)
+            {
+                // ptr[c][m[c]] = x[c];
+                ptr[c*(1 + Ow) +  m[c]] = x[c];
+                m[c]++;
+            } // end for(int c = 0; c < l-1; ++c)
+        }// end if l > 1
+        l--;
+    } // end for (j = Iw - Kw; Iw; ++j)
+
+   // std::cout << "\nPtr: ";
+  // print2DVector(ptr);
+
+   // std::cout << "\n\nIN: ";
+  // print2DVector(IN);
+
+   //  std::cout << "\n\nData:";
+    //  print2DVector(DA);
+   // std::cout << "\n" << endl;
+
+  return non_zero_count;
+}
+
 
 
 int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> > &IN,
@@ -2582,6 +2744,7 @@ int main()
         // transform 2d to 1d:
         int count_ptr = n*(1+Ow);
         std::vector<int> ptr_1d(count_ptr, 0);
+
         
         for(int k = 0; k < bench_iterations; ++k)
         {
@@ -2597,10 +2760,12 @@ int main()
           {
             IN_1d.clear();
             DA_1d.clear();
-            ptr_1d.clear();  
+            // ptr_1d.clear();  
+            reset_ptr(ptr_1d);
           }
           
         }
+
 
         // cout << t_cpo_creation << endl;
         // cout << "Ptr: " << endl;
@@ -2662,14 +2827,19 @@ int main()
             
                 // include creation time:
                t_cpoV6 += t_cpo_creation;
-        }              
+        }     
 
-        
         // V7 Code:
         // CPO Encoding V7:
         std::vector<int> IN_1d_v7;
         std::vector<int> DA_1d_v7;
-        std::vector<int> ptr_1d_v7;
+
+        int count_ptr_v8 = n*(1+Ow);
+        if(n != 1)
+        {
+          count_ptr_v8 = (n-1)*(1 + Ow) + min(1 + Ow, 3);
+        }
+        std::vector<int> ptr_1d_v7(count_ptr_v8, 0);
 
         for(int k = 0; k < bench_iterations; ++k)
         {
@@ -2685,7 +2855,8 @@ int main()
           {
             IN_1d_v7.clear();
             DA_1d_v7.clear();
-            ptr_1d_v7.clear();  
+            // ptr_1d_v7.clear(); 
+            reset_ptr(ptr_1d_v7);
           }
           
         }
@@ -2702,6 +2873,7 @@ int main()
         // cout << "New Index: " << endl;
         // printVector(IN_1d_v7);
         // exit(0);
+
            
         // CPO V8:
         {
