@@ -244,7 +244,22 @@ void transform2dTo1dV7(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vec
 }
 
 
-void transform2dTo1d(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<vector<int> >  &ptr, vector<int>  &IN_1d,  vector<int> &DA_1d, vector<int>  &ptr_1d)
+void transform2dTo1d(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<int>  &IN_1d,  vector<int> &DA_1d)
+{ 
+  // Convert the data and indices to 1-D:
+  for(int i = 0; i < DA.size(); ++i)
+  {
+    const vector<int> & v1 = DA[i];
+    DA_1d.insert( DA_1d.end() , v1.begin() , v1.end() );
+
+    const vector<int> & v2 = IN[i];
+    IN_1d.insert( IN_1d.end() , v2.begin() , v2.end() );
+
+  }
+
+}
+
+void transform2dTo1d_old(vector<vector<int> >  &IN,  vector<vector<int> > &DA, vector<vector<int> >  &ptr, vector<int>  &IN_1d,  vector<int> &DA_1d, vector<int>  &ptr_1d)
 { 
 
   // Convert the ptr to 1-D:
@@ -1401,24 +1416,13 @@ void CPO_Encoding(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vector<
   vector<vector<int> > IN(n); // n is the rows
   vector<vector<int> > DA(n); // n is the rows
   
-
-  // Get the total number of non zeros: we can save it while encoding:
-  vector<vector<int> > ptr3( n , vector<int> (Ow + 1, 0)); // n is the rows
-  CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr3);
-  print2DVector(ptr3);
-
   // int count_d = CPO1(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
 
-  vector<int> ptr(count_ptr, 0);
-  int count_d = CPO2(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
-  cout << "Done" << endl;
-  exit(0);
+  int count_d = CPO2(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
 
-  // IN_1d.reserve(count_d);
-  // DA_1d.reserve(count_d);
-  // ptr_1d.reserve(count_ptr);  
-
-  // transform2dTo1d(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
+  IN_1d.reserve(count_d);
+  DA_1d.reserve(count_d);  
+  transform2dTo1d(IN, DA, IN_1d, DA_1d);
 }
 
 
@@ -1456,7 +1460,7 @@ void CPO_EncodingV7(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vecto
   }
   else
   {
-    transform2dTo1d(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
+    transform2dTo1d_old(IN, DA, ptr, IN_1d, DA_1d, ptr_1d);
   }
 
   // cout << "After: " << endl;
@@ -2574,8 +2578,11 @@ int main()
         // CPO Encoding:
         std::vector<int> IN_1d;
         std::vector<int> DA_1d;
-        std::vector<int> ptr_1d;
 
+        // transform 2d to 1d:
+        int count_ptr = n*(1+Ow);
+        std::vector<int> ptr_1d(count_ptr, 0);
+        
         for(int k = 0; k < bench_iterations; ++k)
         {
 
