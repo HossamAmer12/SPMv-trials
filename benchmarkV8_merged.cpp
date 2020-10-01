@@ -1403,15 +1403,16 @@ void CPO_Encoding(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vector<
   
 
   // Get the total number of non zeros: we can save it while encoding:
-  // vector<vector<int> > ptr( n , vector<int> (Ow + 1, 0)); // n is the rows
-  // CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
+  vector<vector<int> > ptr3( n , vector<int> (Ow + 1, 0)); // n is the rows
+  CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr3);
+  print2DVector(ptr3);
+
   // int count_d = CPO1(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
 
   vector<int> ptr(count_ptr, 0);
   int count_d = CPO2(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
   cout << "Done" << endl;
   exit(0);
-
 
   // IN_1d.reserve(count_d);
   // DA_1d.reserve(count_d);
@@ -1483,7 +1484,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
         if (flag == 0)
         {
             // ptr[l][m[l]] = x[l];
-            ptr[l*n +  m[l]] = x[l];
+            ptr[l*(1 + Ow) +  m[l]] = x[l];
             flag = 1;
             m[l]++;
         } // end if (flag == 0)
@@ -1500,14 +1501,14 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
         if ((j + 1) % Sw == 0)
         {
             // ptr[l][m[l]] = x[l];
-            ptr[l*n +  m[l]] = x[l];
+            ptr[l*(Ow + 1) +  m[l]] = x[l];
             l++;
             flag = 0;
         } // end if ( (j+1) % Sw == 0)
         else if (j == Kw - 1)
         {
             // ptr[l][m[l]] = x[l];
-            ptr[l*n +  m[l]] = x[l];
+            ptr[l*(Ow + 1) +  m[l]] = x[l];
         } // end if(j == Kw - 1)
     } // end for (int j = 0; j < Kw; ++j)
 
@@ -1541,7 +1542,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 if ((j - Kw + 1) % Sw == 0)
                 {
                     // ptr[l][m[l]] = x[l];
-                    ptr[l*n +  m[l]] = x[l];
+                    ptr[l*(Ow + 1) +  m[l]] = x[l];
                     m[l]++;
 
                     if (n > 1)
@@ -1549,7 +1550,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                         for (int c = 0; c < n - 1; ++c)
                         {
                             // ptr[c][m[c]] = x[c];
-                            ptr[c*n +  m[c]] = x[c];
+                            ptr[c*(Ow + 1) +  m[c]] = x[c];
                             m[c]++;
                         } // end for(int c = 0; c < n-1; ++c)
                     } // end if(n > 1)
@@ -1558,7 +1559,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
             else if ((j - Kw + 1) % Sw == (Sw - (Kw % Sw)))
             {
                 // ptr[l][m[l]] = x[l];
-                ptr[l*n +  m[l]] = x[l];
+                ptr[l*(Ow + 1) +  m[l]] = x[l];
                 m[l]++;
                 l++;
                 flag = 1;
@@ -1569,7 +1570,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
             if ((j - Kw + 1) % Sw == 0)
             {
                 // ptr[l][m[l]] = x[l];
-                ptr[l*n +  m[l]] = x[l];
+                ptr[l*(Ow + 1) +  m[l]] = x[l];
                 m[l]++;
                 l--;
                 flag = 0;
@@ -1579,7 +1580,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 for (int c = 0; c < n - 2; ++c)
                 {
                     // ptr[c][m[c]] = x[c];
-                    ptr[c*n + m[c]] = x[c];
+                    ptr[c*(Ow + 1) + m[c]] = x[c];
                     m[c]++;
                 } // end for(int c = 0; c < n-2; ++c)
             } // end if n > 2
@@ -1605,7 +1606,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
             for (int c = 0; c < l + 1; ++c)
             {
                 // ptr[l][m[l]] = x[l];
-                ptr[l*n +  m[l]] = x[l];
+                ptr[l*(Ow + 1) +  m[l]] = x[l];
                 m[l]++;
             } // end for(int c = 0; c < l+1; ++c)
             if (l > 1)
@@ -1613,7 +1614,7 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 for (int c = 0; c < l; ++c)
                 {
                     // ptr[c][m[c]] = x[c];
-                    ptr[c*n + m[c]] = x[c];
+                    ptr[c*(Ow + 1) + m[c]] = x[c];
                     m[c]++;
                 } // end for(int c = 0; c < l-1; ++c)
             }// end if l > 1
@@ -1621,16 +1622,16 @@ int CPO2(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
             else if (l == 1)
             {
                 // ptr[0][m[0]] = x[0];
-                ptr[0*n +  m[0]] = x[0];
+                ptr[0*(Ow + 1) +  m[0]] = x[0];
                 m[0]++;
             } // end else if(l == 1)
             l--;
         } // end if ((Iw - j - 1) % Sw == 0)
     } // end for (j = Iw - Kw; Iw; ++j)
 
-  std::cout << "\nPtr: ";
-  printVector(ptr);
-  exit(0);
+  // std::cout << "\nPtr: ";
+  // printVector(ptr);
+  // exit(0);
 
   // std::cout << "\n\nIN: ";
   // print2DVector(IN);
@@ -1716,6 +1717,7 @@ int CPO1(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
             {
                 if ((j - Kw + 1) % Sw == 0)
                 {
+
                     ptr[l][m[l]] = x[l];
                     m[l]++;
 
