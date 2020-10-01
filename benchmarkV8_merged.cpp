@@ -1461,21 +1461,21 @@ void CPO_EncodingV7(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vecto
   // Get the total number of non zeros: we can save it while encoding:
   CPO(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr);
 
-  cout << "Old 2D Ptr:" << endl;
+  cout << "\nOld 2D Ptr:" << endl;
   print2DVector(ptr);
   print2DVector(DA);
 
-  cout << "Old 2D Index:" << endl;
+  cout << "\nOld 2D Index:" << endl;
   print2DVector(IN);
   int count_d = CPO3(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
 
-  cout << "New 1D Ptr:" << endl;
+  cout << "\nNew 1D Ptr:" << endl;
   printVector(ptr_1d);
   print2DVector(DA);
 
-  cout << "New 2D Index:" << endl;
+  cout << "\nNew 2D Index:" << endl;
   print2DVector(IN);
-  cout << "Exiting Encoding V7" << endl;
+  cout << "\nExiting Encoding V7" << endl;
   exit(0);
 
        
@@ -1531,7 +1531,7 @@ int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 IN[l].push_back(ind_val);
                 DA[l].push_back(org_mat(i, j));
                 x[l]++;
-                non_zero_count++
+                non_zero_count++;
             } // end if  if (org_mat(i, j) != 0)
         } // end for(i=0; i < Ih; ++i)       
         // ptr[l][m[l]] = x[l];
@@ -1553,7 +1553,7 @@ int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 IN[l].push_back(ind_val);
                 DA[l].push_back(org_mat(i, j));
                 x[l]++;
-                non_zero_count++
+                non_zero_count++;
             } // end if (org_mat(i, j) != 0)
         }// end for(i = 0; i < Ih; ++i)
         // ptr[l][m[l]] = x[l];
@@ -1567,7 +1567,7 @@ int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                 // ptr[c][m[c]] = x[c];
                 ptr[c*(1 + Ow) +  m[c]] = x[c];
                 m[c]++;
-                non_zero_count++
+                non_zero_count++;
             } // end for(int c = 0; c < n-1; ++c)
         } // end if(n > 1) 
     } // end for(int j = Kw; j < Iw - Kw; ++j)
@@ -1593,7 +1593,7 @@ int CPO3(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
                     x[l]++;
                 }
 
-                non_zero_count++
+                non_zero_count++;
 
             }// end if(org_mat(i, j) != 0)
         } // end for(i = 0; i = Ih; ++i)
