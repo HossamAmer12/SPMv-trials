@@ -2081,7 +2081,6 @@ int main()
         
     
         
-        
         // Conv parameters:
         int padding = 0;
         int stride  = 1;
@@ -2318,37 +2317,6 @@ int main()
 
         
         // V7 Code:
-          // Remove repeats and transofrm 2d to 1d:
-      //   int count_ptr_v7 = 0;
-      //   for(int i = 0 ; i < ptr.size(); ++i)
-      //   {
-
-      //     // if it one ptr, don't do anything
-      //     if(i == 0 && n != 1)
-      //     {
-      //       int f = ptr[i].size();
-      //       count_ptr_v7 += min(f, 3);   
-      //     }
-      //     else
-      //     {
-      //       count_ptr_v7 += ptr[i].size();
-      //     }
-          
-      //   } 
-
-      //   int count_d_v7 = 0;
-      //   for(int i = 0 ; i < DA.size(); ++i)
-      //   {
-
-      //     count_d_v7 += DA[i].size();
-      //   }   
-
-      // std::vector<int> IN_1d_v7(count_d_v7, 0);
-      // std::vector<int> DA_1d_v7(count_d_v7, 0);
-      // std::vector<int> ptr_1d_v7(count_ptr_v7, 0);
-
-      // transform2dTo1dv1(IN, DA, ptr, IN_1d_v7, DA_1d_v7, ptr_1d_v7);
-
         // CPO Encoding V7:
         std::vector<int> IN_1d_v7;
         std::vector<int> DA_1d_v7;
