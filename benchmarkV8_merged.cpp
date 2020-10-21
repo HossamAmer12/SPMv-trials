@@ -41,7 +41,7 @@ int CPO4(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int 
 
 // with 1-d modifications and removing repititions:
 int CPO3_(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> >& IN,
-    vector<vector<int> >& DA, vector<int>& ptr, vector<vector<int> >& ptr2d);
+    vector<vector<int> >& DA, vector<int>& ptr);
 
 int CPO3__(MatrixXf& lowered_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> >& IN,
     vector<vector<int> >& DA, vector<int>& ptr, vector<vector<int> >& ptr2d);
@@ -1493,7 +1493,7 @@ int CPO_Encoding(std::vector<int> &IN_1d, std::vector<int> &DA_1d, std::vector<i
 
 
 int CPO3_(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, vector<vector<int> >& IN,
-    vector<vector<int> >& DA, vector<int>& ptr, vector<vector<int> >& ptr2d)
+    vector<vector<int> >& DA, vector<int>& ptr)
 {
     // cout << "########################### CPO3_ ###########################" << endl;
 
@@ -1509,7 +1509,6 @@ int CPO3_(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int
     // NPO
     {
         int j = 0;
-        ptr2d[l][m[l]] = x[l];
         ptr[l * (1 + Ow) + m[l]] = x[l];
         m[l]++;
         for (int i = 0; i < Ih; ++i)
@@ -1530,7 +1529,6 @@ int CPO3_(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int
     // first piece
     for (int j = 1; j < Kw; ++j)
     {
-        ptr2d[l][m[l]] = x[l];
         ptr[l * (1 + Ow) + m[l] - npo_shift] = x[l];
         m[l]++;
         for (int i = 0; i < Ih; ++i)
@@ -1606,7 +1604,6 @@ int CPO3_(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int
             // as it is repeated for each col in the pointer with the same value in a linear way .. where if 
             // it is removed .. no need to use this stage 
             // thinking about stride of 1 and we have only 3 pointers 
-            ptr2d[l][m[l]] = x[l];
             // cout << j <<" -- 3rd a -- ptr : " << l * (1 + Ow) + m[l] << endl;
             ptr[l * (1 + Ow) + m[l] - npo_shift] = x[l];
             // cout << "ptr index : " << l * (1 + Ow) + m[l] - 3 << endl;
@@ -1619,7 +1616,6 @@ int CPO3_(MatrixXf& org_mat, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int
         {
             for (int c = 1; c < l ; ++c)
             {
-                ptr2d[c][m[c]] = x[c];
                 // cout << j <<" -- 3rd b (l>=1) --  ptr : " << l * (1 + Ow) + m[l] << endl;
                 ptr[c * (1 + Ow) + m[c] - npo_shift] = x[c];
                 m[c]++;
@@ -3120,13 +3116,12 @@ void All_CPO(std::vector<int>& IN_1d, std::vector<int>& DA_1d, std::vector<int>&
         vector<vector<int> > IN(n); // n is the rows
         vector<vector<int> > DA(n); // n is the rows
         vector<vector<int> > ptr(n, vector<int>(Ow + 1, 0)); // n is the rows
-        vector<vector<int> > ptr2d(n, vector<int>(Ow + 1, 0)); // n is the rows
         clock_t t_cpo_creation_c;
         t_cpo_creation_c = clock();
 
         // the only thing done here is using of 1d pointer instead of 2d
         
-        int count_d = CPO3_(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d, ptr2d);
+        int count_d = CPO3_(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
         double elapsed = 1000 * ((double)(clock() - t_cpo_creation_c)) / CLOCKS_PER_SEC; // time in milliseconds
         
         if (k>0)
@@ -4225,7 +4220,7 @@ void CSR(std::vector<int>& DA, std::vector<int>& IN, std::vector<int>& ptr, Matr
             } // end if (i == Ih)
         } // end if (j == m + (Kw - 1))
     } // end for (int j = 0; j < Iw; ++j)
-
+    // cout << "\nCSR Done\n" << endl;
    // std::cout << "\nPtr: ";
    // printVector(ptr);
 
@@ -4453,13 +4448,22 @@ int main()
 
 
   // Big test
-   std::vector<int> I_list = {8,17,50};
-   std::vector<int> Kh_list = {3, 1, 3, 7, 1};
-   std::vector<int> Kw_list = {3, 3, 1, 1, 7};
+   //std::vector<int> I_list = {8,17,50};
+   //std::vector<int> Kh_list = {3, 1, 3, 7, 1};
+   //std::vector<int> Kw_list = {3, 3, 1, 1, 7};
 
-  // std::vector<int> I_list = {17};
-  // std::vector<int> Kh_list = {1};
-  // std::vector<int> Kw_list = {5};
+
+  std::vector<int> I_list = { 8,17,50 };
+  std::vector<int> Kh_list = { 3, 7, 1 };
+  std::vector<int> Kw_list = { 1, 1, 7 };
+
+   //std::vector<int> I_list = { 50 };
+   //std::vector<int> Kh_list = { 1};
+   //std::vector<int> Kw_list = { 3};
+
+   //std::vector<int> I_list = {17};
+   //std::vector<int> Kh_list = {1};
+   //std::vector<int> Kw_list = {5};
 
   // std::vector<int> I_list = {17};
   // std::vector<int> Kh_list = {5};
@@ -4770,55 +4774,55 @@ int main()
 #if 0 //encode_all
         All_CPO(IN_1d_v7, DA_1d_v7, ptr_1d_v7, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
 #endif
-        {
-            int count_ptr_v8 = n*(1+Ow);
-            if(n != 1)
-            {
-              count_ptr_v8 = (n-1)*(1 + Ow) + min(1 + Ow, 3);
-            }
-            t_cpo_creation_V6 = 0   ;
+        // {
+        //     int count_ptr_v8 = n*(1+Ow);
+        //     if(n != 1)
+        //     {
+        //       count_ptr_v8 = (n-1)*(1 + Ow) + min(1 + Ow, 3);
+        //     }
+        //     t_cpo_creation_V6 = 0   ;
             
 
-            vector<vector<int> > IN(n); // n is the rows
-            vector<vector<int> > DA(n); // n is the rows
-            vector<int> ptr_1d(count_ptr_v8,-1); // n is the rows
-            vector<vector<int> > ptr2d(n, vector<int>(Ow + 1, 0)); // n is the rows
+        //     vector<vector<int> > IN(n); // n is the rows
+        //     vector<vector<int> > DA(n); // n is the rows
+        //     vector<int> ptr_1d(count_ptr_v8,-1); // n is the rows
+        //     // vector<vector<int> > ptr2d(n, vector<int>(Ow + 1, 0)); // n is the rows
 
-            for (int k = 0; k < bench_iterations; ++k)
-            // for (int k = 0; k < 1; ++k)
-            {
-                clock_t t_cpo_creation_c;
-                t_cpo_creation_c = clock();
+        //     for (int k = 0; k < bench_iterations; ++k)
+        //     // for (int k = 0; k < 1; ++k)
+        //     {
+        //         clock_t t_cpo_creation_c;
+        //         t_cpo_creation_c = clock();
 
-                // the only thing done here is using of 1d pointer instead of 2d
+        //         // the only thing done here is using of 1d pointer instead of 2d
                 
-                int count_d = CPO3_(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d, ptr2d);
-                double elapsed = 1000 * ((double)(clock() - t_cpo_creation_c)) / CLOCKS_PER_SEC; // time in milliseconds
+        //         int count_d = CPO3_(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, IN, DA, ptr_1d);
+        //         double elapsed = 1000 * ((double)(clock() - t_cpo_creation_c)) / CLOCKS_PER_SEC; // time in milliseconds
                 
-                if (k>0)
-                    t_cpo_creation_V6 +=  elapsed / (Ih * Iw * 1.0); // normalized timing
-                    // t_cpo_creation_V7 +=  elapsed ; // normalized timing
-                if (k<1)
-                {
-                    // cout <<"\n\nNumber of Non-zero elements : " << count_d <<endl;
-                    // cout << "\nNew 1D Ptr:" << endl;
-                    // printVector(ptr_1d);
+        //         if (k>0)
+        //             t_cpo_creation_V6 +=  elapsed / (Ih * Iw * 1.0); // normalized timing
+        //             // t_cpo_creation_V7 +=  elapsed ; // normalized timing
+        //         if (k<1)
+        //         {
+        //             // cout <<"\n\nNumber of Non-zero elements : " << count_d <<endl;
+        //             // cout << "\nNew 1D Ptr:" << endl;
+        //             // printVector(ptr_1d);
 
-                    // cout << "\nNew 2D DA:" << endl;
-                    // print2DVector(DA);
+        //             // cout << "\nNew 2D DA:" << endl;
+        //             // print2DVector(DA);
 
-                    // cout << "\nNew 2D Index:" << endl;
-                    // print2DVector(IN);
-                // cout << "\nExiting Encoding V7" << endl;
-                }
-                if (k != bench_iterations - 1)
-                {
-                    IN.clear();
-                    DA.clear();
-                    reset_ptr(ptr_1d);
-                } // end if
-            }
-        }
+        //             // cout << "\nNew 2D Index:" << endl;
+        //             // print2DVector(IN);
+        //         // cout << "\nExiting Encoding V7" << endl;
+        //         }
+        //         if (k != bench_iterations - 1)
+        //         {
+        //             IN.clear();
+        //             DA.clear();
+        //             reset_ptr(ptr_1d);
+        //         } // end if
+        //     }
+        // }
 
 #if case_1_time
         cout << "\n\t\t\tCPO3_ wo rep" << endl;
