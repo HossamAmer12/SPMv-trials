@@ -3354,7 +3354,7 @@ void All_CPO(std::vector<int>& IN_1d, std::vector<int>& DA_1d, std::vector<int>&
         cout << "\n ####### CSCC #######  " << endl;
         std::vector<int> DA_1d_csr;
         std::vector<int> IN_1d_csr;
-        std::vector<int> ptr_1d_csr;
+        std::vector<int> ptr_1d_csr(Ow+1,0);
         for (int k = 0; k < bench_iterations; ++k)
         {
             // copy data to double
@@ -4437,10 +4437,10 @@ int main()
 //    float density = 0.5;
 
   // bench iterations
-    // int bench_iterations = 100000;
+     int bench_iterations = 100000;
     // int bench_iterations = 10000;
     // int bench_iterations = 1;
-  int bench_iterations = 100000;
+  //int bench_iterations = 1;
 
   // std::vector<int> I_list = {8,17,50};
   // std::vector<int> Kh_list = {3, 7, 1};
@@ -4453,9 +4453,9 @@ int main()
    //std::vector<int> Kw_list = {3, 3, 1, 1, 7};
 
 
-  std::vector<int> I_list = { 8,17,50 };
-  std::vector<int> Kh_list = { 3, 7, 1 };
-  std::vector<int> Kw_list = { 1, 1, 7 };
+  // std::vector<int> I_list = { 8,17,50 };
+  // std::vector<int> Kh_list = { 3, 7, 1 };
+  // std::vector<int> Kw_list = { 1, 1, 7 };
 
    //std::vector<int> I_list = { 50 };
    //std::vector<int> Kh_list = { 1};
@@ -4470,13 +4470,13 @@ int main()
   // std::vector<int> Kw_list = {5};
 
 
-  //std::vector<int> I_list = {8};
-  //std::vector<int> Kh_list = {3};
-  //std::vector<int> Kw_list = {3};
-
-  // std::vector<int> I_list = {8};
+  // std::vector<int> I_list = {50};
   // std::vector<int> Kh_list = {3};
-  // std::vector<int> Kw_list = {1};
+  // std::vector<int> Kw_list = {3};
+
+  std::vector<int> I_list = {8};
+  std::vector<int> Kh_list = {3, 3};
+  std::vector<int> Kw_list = {3, 1};
 
 
   // std::vector<int> I_list = {17};
@@ -4492,7 +4492,7 @@ int main()
         int Iw = I;
 
         // density:e
-     // float density = 0.2;
+     // float density = 0.1;
         float density = 0.05;
     //    float density = 0.3;
   // float density = 0.1;
@@ -4690,6 +4690,14 @@ int main()
           if(k > 0)
             t_cpo_creation += elapsed/(Ih*Iw*1.0); // normalized timing
 
+          if (k<1)
+          {
+            // cout << "CPO ptr : " << endl;
+            // printVector(ptr_1d);
+            // cout << "CPO IN : " << endl;
+            // printVector(IN_1d);
+          }
+
           if(k != bench_iterations-1)
           {
             IN_1d.clear();
@@ -4732,11 +4740,8 @@ int main()
             // Prepare the output for CPO
         vector<vector<float> > O_CPO2( Oh , vector<float> (Ow, 0));
         {
-            
-            for(int k=0;k<bench_iterations;k++){
-                
-
-
+            for(int k=0;k<bench_iterations;k++)
+            {
                 clock_t t4;
                 t4 = clock();
                 // conv_CPO_v4(O_CPO2, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
@@ -4761,7 +4766,6 @@ int main()
                 if(k > 0)
                 t_cpoV6 += elapsed/(Ih*Iw*1.0); // normalized timing
             } // end k lop 
-            
                 // include creation time:
                t_cpoV6 += t_cpo_creation;
         }     
@@ -4906,6 +4910,7 @@ int main()
             
             if(n != 1)
             {
+                cout << " conv_CPO_v8_trim " << endl;
                 
                 // copy data to double
                 std::vector<double> DA_1d_v7_d(DA_1d_v7.size(), 0);
@@ -4939,6 +4944,7 @@ int main()
             } // end if
             else
             {
+                cout << " conv_CPO_v7 " << endl;
 
                 // copy data to double
                 std::vector<double> DA_1d_v7_d(DA_1d.size(), 0);
@@ -4983,15 +4989,9 @@ int main()
             std::vector<int> ptr_1d_v8(count_ptr_v8, -1);
             std::vector<int> IN_1d_v8;
             std::vector<int> DA_1d_v8;
-
+            int m3_pos = Iw - 2 * Kw + 2;
+            std::vector<int> m(n, m3_pos);
             {
-                int m3_pos = Iw - 2 * Kw + 2;
-                t_cpo_creation_V8 = 0   ;
-                std::vector<int> m(n, m3_pos);
-                for (int i = 1 ; i < m.size()-1 ; i++)
-                {
-                    m[i] = Ow - i;
-                }
                 for (int k = 0; k < bench_iterations; ++k)
                 // for (int k = 0; k < 1; ++k)
                 {
@@ -5001,39 +5001,34 @@ int main()
                     // CPO5_OP(org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, ptr_1d_v8, IN_1d_v8, DA_1d_v8, x, m);
                     CPO_EncodingV8(IN_1d_v8, DA_1d_v8, ptr_1d_v8, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, m, n);
                     double elapsed = 1000 * ((double)(clock() - t_cpo_creation_c)) / CLOCKS_PER_SEC; // time in milliseconds
-                    
                     if (k>0)
                         t_cpo_creation_V8 +=  elapsed / (Ih * Iw * 1.0); // normalized timing
                         // t_cpo_creation_V7 +=  elapsed ; // normalized timing
-
-                    if (k == bench_iterations - 1)
-                    {
-                        // cout << "\nNew 1D Ptr:" << endl;
+                    // if (k == bench_iterations - 1)
+                    // {
                         // for (int i = 0 ; i < ptr_1d_v8.size(); i++)
                         // {
                         //     if (ptr_1d_v8[i] < 0) ptr_1d_v8[i] = ptr_1d_v8[i-1];
                         // }
+                        // cout << "\nNew 1D Ptr:" << endl;
                         // printVector(ptr_1d_v8);
+
+                        // cout << "\nNew 1D Index:" << endl;
+                        // printVector(IN_1d_v8);
 
                         // cout << "\nNew 2D DA:" << endl;
                         // // print2DVector(DA);
                         // printVector(DA_1d);
 
-                        // cout << "\nNew 2D Index:" << endl;
-                        // printVector(IN_1d_v8);
                         // printVector(IN_1d);
                     // cout << "\nExiting Encoding V7" << endl;
-                    }
+                    // }
                     if (k != bench_iterations - 1)
                     {
                         IN_1d_v8.clear();
                         DA_1d_v8.clear();
                         reset_ptr(ptr_1d,-1);
                         reset_ptr(m,m3_pos);
-                        for (int i = 1 ; i < m.size()-1 ; i++)
-                        {
-                            m[i] = Ow - i;
-                        }
                     } // end if
 
                 }
@@ -5113,7 +5108,7 @@ int main()
                     clock_t t5;
                     t5 = clock();
                         // conv_CPO_v7(O_v7, Kernel, IN_1d,  DA_1d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-                      conv_CPO_v7(O_v8, Kernel, IN_1d,  DA_1d_v8_d, ptr_1d, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
+                      conv_CPO_v7(O_v8, Kernel, IN_1d_v8, DA_1d_v8_d, ptr_1d_v8, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
 
                       double elapsed  = 1000*((double)(clock()-t5))/CLOCKS_PER_SEC; // time in milliseconds
 
@@ -5139,14 +5134,11 @@ int main()
 
         // // New place for CSR:
         // CSR:
-        {
-            // Prepare the output for CPO
-            vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
-                
-            // copy data to double
           std::vector<int> DA_1d_csr;            
           std::vector<int> IN_1d_csr;
-          std::vector<int> ptr_1d_csr(count_ptr_v8, 0);
+          std::vector<int> ptr_1d_csr(Ow+1, 0);
+        {
+          // copy data to double
 
           // CSR Encoding:
           for(int k = 0; k < bench_iterations; ++k)
@@ -5164,29 +5156,41 @@ int main()
             {
               IN_1d_csr.clear();
               DA_1d_csr.clear();
-              ptr_1d_csr.clear();  
+              reset_ptr(ptr_1d_csr,0);
+              // cout << " CLEAR CSCC !!!" << endl;
+               
             } // end if
 
+            // if (k == bench_iterations - 1)
+            // {
+                // cout << "CSCC" << endl;
+                // cout << "Ptr: " << endl;
+                // printVector(ptr_1d_csr);
+
+                // cout << "Data:  " << endl;
+                // printVector(DA_1d_csr);
+            // }
+
           } // end for
+
 #if case_1_time
         cout << "\t\t\tCSCC Encoding" << endl;
         cout << t_cscc_creation << endl;
 #endif
+        }
           // Space:
-          s_csr = ptr_1d_csr.size() + DA_1d_csr.size() + IN_1d_csr.size();
-         
-        // cout << "Ptr: " << endl;
-        // printVector(ptr_1d_v7);
-
-        // cout << "Data:  " << endl;
-        // printVectorD(DA_1d_v7_d);
+        s_csr = ptr_1d_csr.size() + DA_1d_csr.size() + IN_1d_csr.size();
+        // cout << "ptr : " << ptr_1d_csr.size() << " DA : " << DA_1d_csr.size() << " IN : " << IN_1d_csr.size() << endl;
 
         // cout << "Index: " << endl;
-        // printVector(IN_1d_v7_d);
+        // printVector(IN_1d_csr);
         
         // cout << "\n" << endl;
         // cout << t_cpo_creation << endl;
         // cout << t_cscc_creation << endl;
+                // Prepare the output for CPO
+        vector<vector<float> > O_CSR( Oh , vector<float> (Ow, 0));
+        {
             std::vector<double> DA_1d_csr_d(DA_1d_csr.size(), 0);
 
             for(int h = 0; h < DA_1d_csr.size(); ++h)
@@ -5194,6 +5198,13 @@ int main()
               DA_1d_csr_d[h] = DA_1d_csr[h];
             }
 
+            // std::vector<double> DA_1d_v8_d(DA_1d.size(), 0);
+            // for(int h = 0; h < DA_1d_v8.size(); ++h)
+            // {
+            //   DA_1d_v8_d[h] = DA_1d_v8[h];
+            // }
+        
+        
           for(int k = 0;k<bench_iterations;k++)
           {
 
@@ -5204,7 +5215,7 @@ int main()
           // csrMult_v4(O_CSR, Kernel, Adata, Aindices, Aindptr, Kh, Kw, Oh, Ow);
           // 2
             conv_CPO_v7(O_CSR, Kernel, IN_1d_csr, DA_1d_csr_d, ptr_1d_csr, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
-
+            // conv_CPO_v7(O_CSR, Kernel, IN_1d_v8, DA_1d_v8_d, ptr_1d_v8, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw);
            // if(k == bench_iterations-1)
            // {
            //     cout << "CSR: " << endl;
@@ -5225,9 +5236,9 @@ int main()
     cout << t_csr << endl;
 #endif
           // Clear the vectors:
-          DA_1d_csr_d.clear();
-          ptr_1d_csr.clear();
-          IN_1d_csr.clear();
+          // DA_1d_csr_d.clear();
+          // ptr_1d_csr.clear();
+          // IN_1d_csr.clear();
 
            // Include CPO creation time in this case:
            
@@ -5269,17 +5280,26 @@ int main()
         << "\tt_cpo_creationV7: " << t_cpo_creation_V7 << "\tt_cpo_creationV8: " << t_cpo_creation_V8 << endl;
         // exit(0);
         // // Note: t_cpoV6 is t_cpoV3
-        myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw << 
-        "\t" << t_im2col << "\t" << t_csr << "\t" << t_cpoV6 << "\t" << t_cpoV8 << 
-        "\t"<< 100.0*(t_im2col-t_csr)/t_im2col <<"\t" << 100.0*(t_im2col-t_cpoV6)/t_im2col << "\t" << 100.0*(t_im2col-t_cpoV8)/t_im2col 
+        myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
+        << "\t" << t_im2col 
+        << "\t" << t_csr 
+        // << "\t" << t_cpoV6 
+        << "\t" << t_cpoV8 
+        << "\t" << 100.0*(t_im2col-t_csr)/t_im2col 
+        // << "\t" << 100.0*(t_im2col-t_cpoV6)/t_im2col 
+        << "\t" << 100.0*(t_im2col-t_cpoV8)/t_im2col 
         <<  "\t" << 1.0*s_im2col/s_csr <<"x\t" << 1.0*s_im2col/s_cpo  << "x\n";
 
         myfile_encoding << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
-        << "\t" << t_im2col_creation << "\t" << t_cscc_creation << "\t" << t_cpo_creation << "\t" << t_cpo_creation_V6 
+        << "\t" << t_im2col_creation 
+        << "\t" << t_cscc_creation 
+        << "\t" << t_cpo_creation 
+        // << "\t" << t_cpo_creation_V6 
         // << "\t" << t_cpo_creation_V7 
         << "\t" << t_cpo_creation_V8
-        << "\t" << 100.0*(t_im2col_creation-t_cscc_creation)/t_im2col_creation <<"\t" << 100.0*(t_im2col_creation-t_cpo_creation)/t_im2col_creation 
-        << "\t" << 100.0*(t_im2col_creation-t_cpo_creation_V6)/t_im2col_creation 
+        << "\t" << 100.0*(t_im2col_creation-t_cscc_creation)/t_im2col_creation 
+        <<"\t" << 100.0*(t_im2col_creation-t_cpo_creation)/t_im2col_creation 
+        // << "\t" << 100.0*(t_im2col_creation-t_cpo_creation_V6)/t_im2col_creation 
         // << "\t" << 100.0*(t_im2col_creation-t_cpo_creation_V7)/t_im2col_creation 
         <<"\t"<< 100.0*(t_im2col_creation-t_cpo_creation_V8)/t_im2col_creation  << "\n";
 
