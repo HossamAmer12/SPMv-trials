@@ -1,6 +1,16 @@
 
 #include <boost/math/special_functions/next.hpp>
 #include <boost/random.hpp>
+// #include <cblas.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+   #include <cblas.h>
+#ifdef __cplusplus
+}
+#endif
 
 // https://www.programmersought.com/article/16963235/
 #include <iostream>
@@ -14,28 +24,19 @@ inline bool is_a_ge_zero_and_a_lt_b(int a, int b) {
 	return static_cast<unsigned>(a) < static_cast<unsigned>(b);
 }
  
-/*
 template <typename Dtype>
-void caffe_cpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
+void caffe_cpu_gemm(const CBLAS_TRANSPOSE TransA,
     const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
-    const float alpha, const float* A, const float* B, const float beta,
-    float* C) {
+    const float alpha, const Dtype* A, const Dtype* B, const float beta,
+    Dtype* C) {
   int lda = (TransA == CblasNoTrans) ? K : M; // The size of the first dimention of matrix A; if you are passing a matrix A[m][n], the value should be m.
   int ldb = (TransB == CblasNoTrans) ? N : K; // The size of the first dimention of matrix A; if you are passing a matrix A[m][n], the value should be m.
 
 
   // std::cout << "lda: " << lda << " " << ldb << " " << TransA << " " << TransB << " " << CblasNoTrans << " " << K << " " << M << " " << N << std::endl;
-  // for(int i = 0; i < K; ++i)
-  // {
-  //   for(int j = 0; j < N; ++j)
-  //   {
-  //     std::cout << B[j + i*N] << " ";
-  //   }
-  // }
   cblas_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
 }
-*/
 
 template <typename Dtype>
 void caffe_set(const int N, const Dtype alpha, Dtype* Y) {
@@ -133,7 +134,8 @@ void col2im_cpu(const Dtype* data_col, const int channels,
  
 // If you want to run a 6x6 matrix, please uncomment the comment below and comment out the 5X5 section.
 
-int dataim[] = {
+/*
+float dataim[] = {
 	1,2,3,4,5,6,
 	5,6,7,8,9,10,
 	6,5,4,3,2,1,
@@ -141,10 +143,22 @@ int dataim[] = {
 	4,3,2,1,5,6,
 	3,2,1,6,5,4,
 };
+*/
+
+// data all ones 6x6
+float dataim[] = {
+	1,1,1,1,1,1,
+	1,1,1,1,1,1,
+	1,1,1,1,1,1,
+	1,1,1,1,1,1,
+	1,1,1,1,1,1,
+	1,1,1,1,1,1,
+};
+
 /**/
 
 /*
- int dataim[] = {
+ float dataim[] = {
  	1,2,3,4,5,
  	6,7,8,9,10,
  	5,4,3,2,1,
@@ -153,8 +167,8 @@ int dataim[] = {
  };
 */ 
 
-int datacol[1000];
-int outim[50];
+float datacol[1000];
+float outim[50];
  
 int main()
 {
@@ -199,6 +213,16 @@ int main()
 	// im2col_cpu(dataim, 1, 6, 6, 3, 3, 0, 0, 1, 1, 1, 1, datacol);
 	// col2im_cpu(datacol, 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, outim);
 
+	float* output = new float[output_h*output_w];
+	float* filter = new float[Kh*Kw];
+	
+	// filter setting
+	for(int i = 0; i < Kh*Kw; ++i)
+	{
+	  filter[i] = 1;
+	}	
+	
+	cout << "Original Image: " << endl;
 	for(int i=0; i < Ih; i++)
 	{
 		for(int j=0; j< Iw; j++)
@@ -241,6 +265,37 @@ int main()
 	}
 
 */
+	int conv_out_channels_ = 1;
+	int conv_out_spatial_dim_ = output_h*output_w;
+	int weight_offset_ = Kh*Kw;
+	
+	// caffe: group_ = this->layer_param_.convolution_param().group();	
+	// caffe: weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;
+	// caffe: col_offset_ = kernel_dim_ * conv_out_spatial_dim_;
+	// caffe: output_offset_ = conv_out_channels_ * conv_out_spatial_dim_ / group_;
+	// CHECK_EQ(channels_ % group_, 0);
+       //   CHECK_EQ(num_output_ % group_, 0)
+       // << "Number of output should be multiples of group.";
+  
+	int col_offset_    = im2col_height*im2col_width;
+	int output_offset_ = conv_out_spatial_dim_;
+	
+	for (int g = 0; g < Ic; ++g) {
+   		 caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
+        	Ic, conv_out_spatial_dim_, Kh*Kw,
+        	(float)1., filter + weight_offset_ * g, datacol + col_offset_ * g,
+        	(float)0., output + output_offset_ * g);
+		
+  	}
+	
+	cout << "Conv Output: " << output_h << ", " << output_w << endl;
+	for(int i = 0; i < conv_out_spatial_dim_; ++i)
+	{
+		cout << output[i] << endl;
+	}
+
+	delete [] output;
+	delete [] filter;
 	return 0;
 }
  
