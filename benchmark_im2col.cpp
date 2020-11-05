@@ -41,6 +41,15 @@ using namespace Eigen;
 using namespace std;
 using namespace boost::timer;
 
+
+void print_caffe_out(float* output, int conv_out_spatial_dim_)
+{
+	for(int i = 0; i < conv_out_spatial_dim_; ++i)
+	{
+		cout << output[i] << endl;
+	}
+
+}
  
 double generate_org_featureMap(MatrixXf& org_fm, int Ih, int Iw, double density)
 {
@@ -217,6 +226,61 @@ void im2col_cpu(const Dtype* data_im, const int channels,
 }
  
 
+bool isErrorIm2col(const MatrixXf &im2col_mat, float* datacol, int im2col_height, int im2col_width)
+{
+	int total_size_caffe = im2col_height*im2col_width;
+	int total_size_mine  = im2col_mat.rows()*im2col_mat.cols();
+   	if(total_size_mine != total_size_caffe)
+   	{
+   		cout << "Dims Mismatch " << im2col_mat.rows() << ", " << im2col_mat.cols() << " | " << im2col_height << ", " << im2col_width <<endl;
+   		return true;
+   	}	
+
+ //    std::cout << "\n===My Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
+    
+ //    int count_print = 0;
+ //    for(int i = 0; i < im2col_height ; ++i)
+ //    {
+ //      for(int j = 0; j < im2col_width; ++j)
+ //      {
+ //      	cout << im2col_mat(count_print++, 0) << ", ";
+ //      }
+ //      cout << "\n";
+ //  }
+
+ //    std::cout << "\n===Caffe Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
+	// for(int i = 0; i < im2col_height ; ++i)
+	// {
+	//   for(int j = 0; j < im2col_width; ++j)
+	//   {
+	//   	cout << datacol[i + j*im2col_width] << ", ";
+	//   }
+	//   cout << "\n";
+	// }
+
+ //   cout << "-----\n" << endl;
+ 
+
+   	int count = 0;
+    for(int i = 0; i < im2col_height ; ++i)
+	{
+	  for(int j = 0; j < im2col_width; ++j)
+	  {
+	  	if(datacol[i + j*im2col_width] != im2col_mat(count++, 0))
+	  	{
+	  		cout << "Values Mismatch " << im2col_mat(count-1, 0) << " => " << datacol[i + j*im2col_width] << endl;
+        	// cout << " At my index: " << i << ", " << j << ", 1D: " << j+i*im2col_width << endl;
+        	// cout << "Oh: " << im2col_mat.cols() << " Ow: " << im2col_mat.rows() << " output_h: " << im2col_height << " output_w: " << im2col_width << endl;  
+        	return true;
+	  	}
+	  }
+	}
+
+    return false;
+}
+
+
+
 int main()
 {
 	// // bench iterations
@@ -227,7 +291,7 @@ int main()
    // std::vector<int> Kh_list = {3, 1, 3, 7, 1};
    // std::vector<int> Kw_list = {3, 3, 1, 1, 7};
 
-  std::vector<int> I_list = {8, 50};
+  std::vector<int> I_list = {8};
   std::vector<int> Kh_list = {3};
   std::vector<int> Kw_list = {3};
 
@@ -318,7 +382,7 @@ int main()
 				}
 			}
 
-			// Define the output and filter for caffe
+			// Define the output and filter for caffe [Note: Remember this data should be deleted below - look at code below!!!]
 			float* output = new float[output_h*output_w];
 			float* filter = new float[Kh*Kw];
 
@@ -330,6 +394,7 @@ int main()
 			{
 			  filter[i] = 1;
 			}
+
 
 			// ====================================== Im2Col My Version ========================
 
@@ -389,12 +454,10 @@ int main()
 				  // Reset im2col encoing
 				  if(k != bench_iterations-1)
 				  {
-				    reset_Im2col_Encoding_Caffe(dataim, Ih, Iw);  
+				    reset_Im2col_Encoding_Caffe(datacol, Ih, Iw);  
 				  }
 				} // end for loop
 			} // end scope
-
-
 
 			int conv_out_channels_ = 1;
 			int conv_out_spatial_dim_ = output_h*output_w;
@@ -409,7 +472,6 @@ int main()
 					clock_t t;
 					t = clock();
 
-
 					for (int g = 0; g < Ic; ++g) {
 						caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
 						Ic, conv_out_spatial_dim_, Kh*Kw,
@@ -417,6 +479,10 @@ int main()
 						(float)0., output + output_offset_ * g);
 
 					}
+
+					// print_caffe_out(output, conv_out_spatial_dim_);
+					// print_caffe_out(datacol, im2col_width*im2col_height);
+					// print_caffe_out(dataim, Ih*Iw);
 
 					double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
 					if (k > 0)
@@ -433,6 +499,9 @@ int main()
 
 			ofstream myfile;
 			myfile.open ("csr_log.txt", ios::out | ios::app);
+
+
+			bool is_error = isErrorIm2col(d_o1, output, output_h, output_w);
 
 			ofstream myfile_encoding;
 			myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
@@ -454,8 +523,11 @@ int main()
 			std::cout << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
 			<< "\t" << t_im2col 
 			<< "\t" << t_im2col_caffe 
+			<< "\t"  <<std::boolalpha << !is_error
 			// << "\t" << 100.0*(t_im2col_caffe-t_im2col)/t_im2col 
 			<< "\n";
+
+
 
 			// Delete the data created
 			delete [] dataim;
