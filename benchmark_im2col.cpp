@@ -98,17 +98,35 @@ double generate_org_featureMap(MatrixXf& org_fm, int Ih, int Iw, double density)
 
 }
 
+void print_org_mat(MatrixXf &org_fm)
+{
+	cout << "Org: " << org_fm.rows() << ", " << org_fm.cols() << endl;
+	for(int i = 0; i < org_fm.rows(); ++i)
+	{
+	 for(int j = 0; j < org_fm.cols(); ++j)
+	 {
+	 	cout << org_fm(i, j) << " " ;
+	 }
+		cout << "\n";
+	}
+}
+
 void Im2col_Encoding(MatrixXf &im2col_mat, MatrixXf& org_fm, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, int Ic)
 {
     int start_row_int = 0;
     int start_col_int = 0;
-   
+   	
+   	// print_org_mat(org_fm);
+
     int patch_matrix_index = 0;
     // For each patch:
     for (int patch = 0; patch < Oh * Ow; patch = patch + Sw)
     {
         int im2col_mat_col_index = 0;
 
+        // fankoosh
+        // if(patch_matrix_index <= 1)
+        // 	cout << start_row_int << ", " << start_col_int << endl;
         // Fetch this piece (all rows, all cols in this current submatrix)
         for (int row_int = start_row_int; row_int < start_row_int + Kh; ++row_int)
         {
@@ -119,6 +137,20 @@ void Im2col_Encoding(MatrixXf &im2col_mat, MatrixXf& org_fm, int Kh, int Kw, int
             } // end inner loop
         } // end outer loop
         patch_matrix_index++;
+
+        // for(int p = 0; p < patch_matrix_index; p++)
+        // {
+        // 	for(int k = 0; k < im2col_mat_col_index; k++)
+        // 	{
+        // 		cout << im2col_mat(p, k) << ", ";
+        // 	}
+
+        // 	cout << "\n";
+        // }
+        // cout << "Done " << endl;
+        // if(patch_matrix_index == 20)
+        // 	exit(0);
+
         // increment the start row
         start_row_int = start_row_int + Sw;
 
@@ -226,7 +258,7 @@ void im2col_cpu(const Dtype* data_im, const int channels,
 }
  
 
-bool isErrorIm2col(const MatrixXf &im2col_mat, float* datacol, int im2col_height, int im2col_width)
+bool isErrorIm2col(const MatrixXf &org_fm, const MatrixXf &im2col_mat, float* datacol, int im2col_height, int im2col_width)
 {
 	int total_size_caffe = im2col_height*im2col_width;
 	int total_size_mine  = im2col_mat.rows()*im2col_mat.cols();
@@ -236,45 +268,73 @@ bool isErrorIm2col(const MatrixXf &im2col_mat, float* datacol, int im2col_height
    		return true;
    	}	
 
+   // 	std::cout << "\n==Org Map (" << org_fm.rows() << "x" << org_fm.cols() <<  "):  \n" << std::endl;
+   //  for(int i = 0; i < org_fm.rows() ; ++i)
+   //  {
+   //    for(int j = 0; j < org_fm.cols(); ++j)
+   //    {
+   //    	cout << org_fm(i, j) << ", ";
+   //    }
+   //    cout << "\n";
+   // }
+
  //    std::cout << "\n===My Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
-    
+ //    // Disply the output (my output) Rows is actually cols in the actual output
  //    int count_print = 0;
- //    for(int i = 0; i < im2col_height ; ++i)
+ //    for(int i = 0; i < im2col_width; ++i)
  //    {
- //      for(int j = 0; j < im2col_width; ++j)
+ //      for(int j = 0; j < im2col_height; ++j)
  //      {
  //      	cout << im2col_mat(count_print++, 0) << ", ";
  //      }
  //      cout << "\n";
- //  }
+ //  	}
 
  //    std::cout << "\n===Caffe Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
-	// for(int i = 0; i < im2col_height ; ++i)
-	// {
-	//   for(int j = 0; j < im2col_width; ++j)
-	//   {
-	//   	cout << datacol[i + j*im2col_width] << ", ";
-	//   }
-	//   cout << "\n";
-	// }
+	// // for(int i = 0; i < im2col_height ; ++i)
+	// // {
+	// //   for(int j = 0; j < im2col_width; ++j)
+	// //   {
+	// //   	 cout << datacol[i + j*im2col_width] << ", ";
 
+	// //   }
+	// //   cout << "\n";
+	// // }
+
+ //    for(int i = 0; i < im2col_width; ++i)
+	// {
+	// 	for(int j = 0; j < im2col_height ; ++j)
+	// 	{
+	 	
+	//  	  // 0, 8, 16...etc
+	// 	  // 1, 9, ...etc
+	//  	  int actual_index = j*im2col_width + i;
+	//   	  cout << datacol[actual_index] << ", ";
+	//   	  // cout << actual_index << ", ";
+	//  	}
+
+	//  	cout << "\n";
+	// }
  //   cout << "-----\n" << endl;
+   
  
 
    	int count = 0;
-    for(int i = 0; i < im2col_height ; ++i)
-	{
-	  for(int j = 0; j < im2col_width; ++j)
-	  {
-	  	if(datacol[i + j*im2col_width] != im2col_mat(count++, 0))
-	  	{
-	  		cout << "Values Mismatch " << im2col_mat(count-1, 0) << " => " << datacol[i + j*im2col_width] << endl;
+   	for(int i = 0; i < im2col_width; ++i)
+    {
+      for(int j = 0; j < im2col_height; ++j)
+      {
+
+      	int actual_index = j*im2col_width + i;
+      	if(im2col_mat(count++, 0) != datacol[actual_index])
+      	{
+      		cout << "Values Mismatch " << im2col_mat(count-1, 0) << " => " << datacol[i + j*im2col_width] << endl;
         	// cout << " At my index: " << i << ", " << j << ", 1D: " << j+i*im2col_width << endl;
         	// cout << "Oh: " << im2col_mat.cols() << " Ow: " << im2col_mat.rows() << " output_h: " << im2col_height << " output_w: " << im2col_width << endl;  
         	return true;
-	  	}
-	  }
-	}
+      	}
+      }
+  	}
 
     return false;
 }
@@ -293,7 +353,7 @@ int main()
 
   std::vector<int> I_list = {8};
   std::vector<int> Kh_list = {3};
-  std::vector<int> Kw_list = {3};
+  std::vector<int> Kw_list = {1};
 
    for(int KK = 0; KK < Kh_list.size(); ++KK)
    {
@@ -494,6 +554,40 @@ int main()
 				t_im2col_caffe +=  t_im2col_creation_caffe;
 
 			} // end scope
+			
+		        // sep print 	
+
+			// cout << "Org: " << org_fm.rows() << ", " << org_fm.cols() << endl;
+			// for(int i = 0; i < org_fm.rows(); ++i)
+			// {
+			//  for(int j = 0; j < org_fm.cols(); ++j)
+			//  {
+			//  	cout << org_fm(i, j) << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+
+			// cout << "Caffe Im2col: " << im2col_height << ", " << im2col_width << endl;
+			// for(int i = 0; i < im2col_height; ++i)
+			// {
+			//  for(int j = 0; j < im2col_width; ++j)
+			//  {
+			//  	cout << datacol[j + i*im2col_width] << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+
+			// cout << "Im2col: " << im2col_mat.rows() << ", " << im2col_mat.cols() << endl;
+			// for(int i = 0; i < im2col_mat.rows(); ++i)
+			// {
+			//  for(int j = 0; j < im2col_mat.cols(); ++j)
+			//  {
+			//  	cout << im2col_mat(i, j) << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+			// isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
+			// exit(0);
 
 			//-----
 
@@ -501,7 +595,7 @@ int main()
 			myfile.open ("csr_log.txt", ios::out | ios::app);
 
 
-			bool is_error = isErrorIm2col(d_o1, output, output_h, output_w);
+			bool is_error = isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
 
 			ofstream myfile_encoding;
 			myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
