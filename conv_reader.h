@@ -32,12 +32,6 @@ public:
     // Destructor
     ~conv_reader();
 
-    // The file to be read from, opened by constructor
-    FILE *fp;
-    
-    // the input file name
-    std::string m_feature_map_file_name;
-
 
     // buffer for the feature map
     vector<vector<vector<float>>> m_input_feature_map;
@@ -49,11 +43,11 @@ public:
     vector<float> m_input_feature_map_colMajor;
 
 
+    // Define the input dimensions
     int In;
     int Ih;
     int Iw;
     int Ic;
-
 
 
     // Main loop

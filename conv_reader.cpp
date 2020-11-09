@@ -80,6 +80,8 @@ void conv_reader::readFile(std::string filename)
 
 	// Make sure that you read the same number of elements
 	assert(count == N*H*W*C);
+
+	cout << "Reading of " << count << " elements is done => No Risk No Fun :)" << endl;
 }
 
 int main(int argc, const char * argv[]) 
