@@ -1,7 +1,31 @@
 
+
+
+#include <vector>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <boost/timer/timer.hpp>
+#include <time.h>
+#include <fstream>
+
+
+// https://www.programmersought.com/article/16963235/
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+// Set percision
+#include <iomanip>
+
+
+
 #include <boost/math/special_functions/next.hpp>
 #include <boost/random.hpp>
 // #include <cblas.h>
+
+
 
 #ifdef __cplusplus
 extern "C"
@@ -12,14 +36,164 @@ extern "C"
 }
 #endif
 
-// https://www.programmersought.com/article/16963235/
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
+using namespace Eigen;
 using namespace std;
+using namespace boost::timer;
+
+
+void print_caffe_out(float* output, int conv_out_spatial_dim_)
+{
+	for(int i = 0; i < conv_out_spatial_dim_; ++i)
+	{
+		cout << output[i] << endl;
+	}
+
+}
  
+double generate_org_featureMap(MatrixXf& org_fm, int Ih, int Iw, double density)
+{
+    for (int i = 0; i < ceil(density * Ih * Iw); ++i)
+    {
+        int r = rand() % Ih;
+        int c = rand() % Iw;
+        if (org_fm(r, c) == 0)
+        {
+            org_fm(r, c) = 1;
+        }
+        else
+        {
+            bool found = false;
+            for (int u = 0; u < Ih; ++u)
+            {
+                for (int v = 0; v < Iw; ++v)
+                {
+                    if (org_fm(u, v) == 0)
+                    {
+                        org_fm(u, v) = 1;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                    break;
+            }
+        }
+    }
+
+    // Calculate the actual dennsity
+    double density_cal = 0;
+    for (unsigned i = 0; i < Ih; ++i)
+    {
+        for (unsigned j = 0; j < Iw; ++j)
+        {
+            if (org_fm(i, j) != 0) {
+                density_cal += 1;
+            }
+        }
+    }
+
+    density_cal = density_cal / (Ih * Iw);
+    return density_cal;
+
+}
+
+void print_org_mat(MatrixXf &org_fm)
+{
+	cout << "Org: " << org_fm.rows() << ", " << org_fm.cols() << endl;
+	for(int i = 0; i < org_fm.rows(); ++i)
+	{
+	 for(int j = 0; j < org_fm.cols(); ++j)
+	 {
+	 	cout << org_fm(i, j) << " " ;
+	 }
+		cout << "\n";
+	}
+}
+
+void Im2col_Encoding(MatrixXf &im2col_mat, MatrixXf& org_fm, int Kh, int Kw, int Oh, int Ow, int Sh, int Sw, int Ih, int Iw, int Ic)
+{
+    int start_row_int = 0;
+    int start_col_int = 0;
+   	
+   	// print_org_mat(org_fm);
+
+    int patch_matrix_index = 0;
+    // For each patch:
+    for (int patch = 0; patch < Oh * Ow; patch = patch + Sw)
+    {
+        int im2col_mat_col_index = 0;
+
+        // fankoosh
+        // if(patch_matrix_index <= 1)
+        // 	cout << start_row_int << ", " << start_col_int << endl;
+        // Fetch this piece (all rows, all cols in this current submatrix)
+        for (int row_int = start_row_int; row_int < start_row_int + Kh; ++row_int)
+        {
+            for (int col_int = start_col_int; col_int < start_col_int + Kw; ++col_int)
+            {
+                im2col_mat(patch_matrix_index, im2col_mat_col_index) = org_fm(row_int, col_int);
+                im2col_mat_col_index++;
+            } // end inner loop
+        } // end outer loop
+        patch_matrix_index++;
+
+        // for(int p = 0; p < patch_matrix_index; p++)
+        // {
+        // 	for(int k = 0; k < im2col_mat_col_index; k++)
+        // 	{
+        // 		cout << im2col_mat(p, k) << ", ";
+        // 	}
+
+        // 	cout << "\n";
+        // }
+        // cout << "Done " << endl;
+        // if(patch_matrix_index == 20)
+        // 	exit(0);
+
+        // increment the start row
+        start_row_int = start_row_int + Sw;
+
+        if (start_row_int + Kh > Ih)
+        {
+            start_row_int = 0;
+            start_col_int = start_col_int + Sw;
+        }
+        if (start_col_int + Kw > Iw)
+        {
+            break;
+        }
+    } // end outer outer loop
+}
+
+void reset_Im2col_Encoding(MatrixXf &im2col_mat)
+{
+    int start_row_int = 0;
+    int start_col_int = 0;
+   
+    for(int i = 0; i < im2col_mat.rows() ; ++i)
+    {
+      for(int j = 0; j < im2col_mat.cols(); ++j)
+      {
+        im2col_mat(i, j) = 0;
+      }
+    }
+}
+
+
+void reset_Im2col_Encoding_Caffe(float* dataim, int Ih, int Iw)
+{
+    for(int i = 0; i < Ih*Iw ; ++i)
+    {
+        *(dataim + i) = 0;
+    }
+}
+
+void bench_Dense(const MatrixXf &m, const MatrixXf &in, MatrixXf &o) {
+    o.noalias() = m*in;    
+}
+
+
 inline bool is_a_ge_zero_and_a_lt_b(int a, int b) {
 	return static_cast<unsigned>(a) < static_cast<unsigned>(b);
 }
@@ -38,16 +212,6 @@ void caffe_cpu_gemm(const CBLAS_TRANSPOSE TransA,
       ldb, beta, C, N);
 }
 
-template <typename Dtype>
-void caffe_set(const int N, const Dtype alpha, Dtype* Y) {
-	if (alpha == 0) {
-		memset(Y, 0, sizeof(Dtype) * N);  // NOLINT(caffe/alt_fn)
-		return;
-	}
-	for (int i = 0; i < N; ++i) {
-		Y[i] = alpha;
-	}
-}
  
 template <typename Dtype>
 void im2col_cpu(const Dtype* data_im, const int channels,
@@ -93,226 +257,404 @@ void im2col_cpu(const Dtype* data_im, const int channels,
 
 }
  
+
+bool isErrorIm2col(const MatrixXf &org_fm, const MatrixXf &im2col_mat, float* datacol, int im2col_height, int im2col_width)
+{
+	int total_size_caffe = im2col_height*im2col_width;
+	int total_size_mine  = im2col_mat.rows()*im2col_mat.cols();
+   	if(total_size_mine != total_size_caffe)
+   	{
+   		cout << "Dims Mismatch " << im2col_mat.rows() << ", " << im2col_mat.cols() << " | " << im2col_height << ", " << im2col_width <<endl;
+   		return true;
+   	}	
+
+   // 	std::cout << "\n==Org Map (" << org_fm.rows() << "x" << org_fm.cols() <<  "):  \n" << std::endl;
+   //  for(int i = 0; i < org_fm.rows() ; ++i)
+   //  {
+   //    for(int j = 0; j < org_fm.cols(); ++j)
+   //    {
+   //    	cout << org_fm(i, j) << ", ";
+   //    }
+   //    cout << "\n";
+   // }
+
+ //    std::cout << "\n===My Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
+ //    // Disply the output (my output) Rows is actually cols in the actual output
+ //    int count_print = 0;
+ //    for(int i = 0; i < im2col_width; ++i)
+ //    {
+ //      for(int j = 0; j < im2col_height; ++j)
+ //      {
+ //      	cout << im2col_mat(count_print++, 0) << ", ";
+ //      }
+ //      cout << "\n";
+ //  	}
+
+ //    std::cout << "\n===Caffe Out Map (" << im2col_height << "x" << im2col_width <<  "):  \n" << std::endl;
+	// // for(int i = 0; i < im2col_height ; ++i)
+	// // {
+	// //   for(int j = 0; j < im2col_width; ++j)
+	// //   {
+	// //   	 cout << datacol[i + j*im2col_width] << ", ";
+
+	// //   }
+	// //   cout << "\n";
+	// // }
+
+ //    for(int i = 0; i < im2col_width; ++i)
+	// {
+	// 	for(int j = 0; j < im2col_height ; ++j)
+	// 	{
+	 	
+	//  	  // 0, 8, 16...etc
+	// 	  // 1, 9, ...etc
+	//  	  int actual_index = j*im2col_width + i;
+	//   	  cout << datacol[actual_index] << ", ";
+	//   	  // cout << actual_index << ", ";
+	//  	}
+
+	//  	cout << "\n";
+	// }
+ //   cout << "-----\n" << endl;
+   
  
-template <typename Dtype>
-void col2im_cpu(const Dtype* data_col, const int channels,
-	const int height, const int width, const int kernel_h, const int kernel_w,
-	const int pad_h, const int pad_w,
-	const int stride_h, const int stride_w,
-	const int dilation_h, const int dilation_w,
-	Dtype* data_im) {
-	caffe_set(height * width * channels, Dtype(0), data_im);
-	const int output_h = (height + 2 * pad_h -
-		(dilation_h * (kernel_h - 1) + 1)) / stride_h + 1;
-	const int output_w = (width + 2 * pad_w -
-		(dilation_w * (kernel_w - 1) + 1)) / stride_w + 1;
-	const int channel_size = height * width;
-	for (int channel = channels; channel--; data_im += channel_size) {
-		for (int kernel_row = 0; kernel_row < kernel_h; kernel_row++) {
-			for (int kernel_col = 0; kernel_col < kernel_w; kernel_col++) {
-				int input_row = -pad_h + kernel_row * dilation_h;
-				for (int output_rows = output_h; output_rows; output_rows--) {
-					if (!is_a_ge_zero_and_a_lt_b(input_row, height)) {
-						data_col += output_w;
-					}
-					else {
-						int input_col = -pad_w + kernel_col * dilation_w;
-						for (int output_col = output_w; output_col; output_col--) {
-							if (is_a_ge_zero_and_a_lt_b(input_col, width)) {
-								data_im[input_row * width + input_col] += *data_col;
-							}
-							data_col++;
-							input_col += stride_w;
-						}
-					}
-					input_row += stride_h;
+
+   	int count = 0;
+   	for(int i = 0; i < im2col_width; ++i)
+    {
+      for(int j = 0; j < im2col_height; ++j)
+      {
+
+      	int actual_index = j*im2col_width + i;
+      	if(im2col_mat(count++, 0) != datacol[actual_index])
+      	{
+      		cout << "Values Mismatch " << im2col_mat(count-1, 0) << " => " << datacol[i + j*im2col_width] << endl;
+        	// cout << " At my index: " << i << ", " << j << ", 1D: " << j+i*im2col_width << endl;
+        	// cout << "Oh: " << im2col_mat.cols() << " Ow: " << im2col_mat.rows() << " output_h: " << im2col_height << " output_w: " << im2col_width << endl;  
+        	return true;
+      	}
+      }
+  	}
+
+    return false;
+}
+
+
+
+int main()
+{
+	// // bench iterations
+	int bench_iterations = 100000;
+
+    // Big test
+   //std::vector<int> I_list = {50, 8, 17};
+  // std::vector<int> Kh_list = {3, 1, 3, 7, 1};
+  // std::vector<int> Kw_list = {3, 3, 1, 1, 7};
+
+   std::vector<int> I_list = {8};
+   std::vector<int> Kh_list = {3, 1};
+   std::vector<int> Kw_list = {1, 3};
+
+   for(int KK = 0; KK < Kh_list.size(); ++KK)
+   {
+   	for(int II = 0; II < I_list.size(); ++II)
+   	{
+   		int Ih = I_list[II];
+        int Iw = I_list[II];
+
+        // density:
+        // float density = 0.1;
+        float density = 0.05;
+   //         float density = 0.3;
+   //      float density = 1;
+        for(; density < 1.05; density+=0.05)
+        {
+        	// timer for im2col, csr
+		    float t_im2col = 0;
+		    float t_im2col_caffe    = 0;
+		    
+		    // timer for creations:
+		    float t_im2col_creation = 0;
+		    float t_im2col_creation_caffe = 0;
+
+		    // Conv parameters:
+		    int padding = 0;
+		    int stride  = 1;
+		    int Sh, Sw;
+		    Sh = Sw = stride;
+		    int num_filters = 1; // 6
+
+   		    int dilation_h = 1;
+		    int dilation_w = 1;	
+ 
+
+		    int Kh = Kh_list[KK];
+		    int Kw = Kw_list[KK];
+
+		    // usleess case skip it
+		    if(Ih == 8) if((Kh == 1 && Kw == 7) || Kh == 7) continue;
+
+			int Ic = 1; // put it as articial for now
+			int In = 1;
+
+			int K = 1; // number of filters
+
+			int Oh = (1 + Ih - Kh + 2 * padding)/stride; // removed + 1
+			int Ow = (1 + Iw - Kw + 2 * padding)/stride;
+
+			int pad_h = 0;
+			int pad_w = 0;
+
+			int output_h = (Ih + 2 * pad_h -
+			(dilation_h * (Kh - 1) + 1)) / Sh + 1;
+			int output_w = (Iw + 2 * pad_w -
+			(dilation_w * (Kw - 1) + 1)) / Sw + 1;
+
+			int im2col_height  = Kh*Kw*Ic;
+			int im2col_width =  output_h*output_w;
+
+
+			// Create your original input feature map:
+			MatrixXf org_fm = MatrixXf::Zero(Ih, Iw);
+			double density_cal = generate_org_featureMap(org_fm, Ih, Iw, density);
+
+			// Prepare the output for im2col, sparseMat
+			MatrixXf d_o1 = MatrixXf::Zero(Oh, Ow);
+
+			// Decalare Eigen Vector
+			VectorXf filter_vectorized  = VectorXf::Ones(Kh*Kw);
+
+			// Prepare the output for CPO
+			vector<vector<float> > O( Oh , vector<float> (Ow, 0));
+
+			// Create the Kernel
+			vector<int> Kernel(Kh*Kw, 1);
+
+
+			// Create the float data for im2col
+			float* dataim = new float[Ih*Iw];
+
+			for(int i = 0; i < Ih; ++i)
+			{
+				for(int j = 0; j < Iw; ++j)
+				{
+					dataim[j + i*Iw] = org_fm(i, j);	
 				}
 			}
-		}
-	}
-}
+
+			// Define the output and filter for caffe [Note: Remember this data should be deleted below - look at code below!!!]
+			float* output = new float[output_h*output_w];
+			float* filter = new float[Kh*Kw];
+
+			// Create the data col
+			float* datacol = new float[im2col_height*im2col_width];
+
+			// filter setting
+			for(int i = 0; i < Kh*Kw; ++i)
+			{
+			  filter[i] = 1;
+			}
+
+
+			// ====================================== Im2Col My Version ========================
+
+
+			// Create the intermediate representation for im2col:
+			MatrixXf im2col_mat    = MatrixXf::Zero(Oh*Ow, Kh*Kw*Ic);
+			{
+				for(int k = 0; k < bench_iterations; ++k)
+				{
+
+				  clock_t t_im2col_creation_c;
+				  t_im2col_creation_c = clock();
+				  Im2col_Encoding(im2col_mat, org_fm, Kh, Kw, Oh, Ow, Sh, Sw, Ih, Iw, Ic);
+				  double elapsed  = 1000*((double)(clock()-t_im2col_creation_c))/CLOCKS_PER_SEC; // time in milliseconds
+				  if(k > 0)
+				    t_im2col_creation += elapsed/(Ih*Iw*1.0); // normalized timing
+
+				  // Reset im2col encoing
+				  if(k != bench_iterations-1)
+				  {
+				    reset_Im2col_Encoding(im2col_mat);
+				  }
+				} // end for loop
+			} // end scope
+
+			// Perform 50 times dense matrix dense vector multiplication: d_o1 = d_m * d_b
+			{
+
+				for(int k=0; k<bench_iterations; k++){
+
+				    clock_t t;
+				    t = clock();
+				    bench_Dense(im2col_mat, filter_vectorized, d_o1);
+
+				    double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+
+				     if (k > 0)
+				      t_im2col += elapsed/(Ih*Iw*1.0); // normalized timing
+				} // end for loop
+			} // end scope 
+
+			// include creation time:
+			t_im2col +=  t_im2col_creation;
+
+			// ====================================== Im2Col Caffe Version ========================
+			{
+				for(int k = 0; k < bench_iterations; ++k)
+				{
+
+				  clock_t t_im2col_creation_c;
+				  t_im2col_creation_c = clock();
+				  im2col_cpu(dataim, Ic, Ih, Iw, Kh, Kw, pad_h, pad_w, Sh, Sw, dilation_h, dilation_w, datacol);
+				  double elapsed  = 1000*((double)(clock()-t_im2col_creation_c))/CLOCKS_PER_SEC; // time in milliseconds
+				  if(k > 0)
+				    t_im2col_creation_caffe += elapsed/(Ih*Iw*1.0); // normalized timing
+
+				  // Reset im2col encoing
+				  if(k != bench_iterations-1)
+				  {
+				    reset_Im2col_Encoding_Caffe(datacol, Ih, Iw);  
+				  }
+				} // end for loop
+			} // end scope
+
+			int conv_out_channels_ = 1;
+			int conv_out_spatial_dim_ = output_h*output_w;
+			int weight_offset_ = Kh*Kw;
+
+			int col_offset_    = im2col_height*im2col_width;
+			int output_offset_ = conv_out_spatial_dim_;
+
+			{
+				for(int k = 0; k < bench_iterations; ++k)
+				{
+					clock_t t;
+					t = clock();
+
+					for (int g = 0; g < Ic; ++g) {
+						caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
+						Ic, conv_out_spatial_dim_, Kh*Kw,
+						(float)1., filter + weight_offset_ * g, datacol + col_offset_ * g,
+						(float)0., output + output_offset_ * g);
+
+					}
+
+					// print_caffe_out(output, conv_out_spatial_dim_);
+					// print_caffe_out(datacol, im2col_width*im2col_height);
+					// print_caffe_out(dataim, Ih*Iw);
+
+					double elapsed = 1000*((double)(clock()-t))/CLOCKS_PER_SEC; // time in milliseconds
+					if (k > 0)
+						t_im2col_caffe += elapsed/(Ih*Iw*1.0); // normalized timing
+
+				} // end for loop
+
+				// include creation time:
+				t_im2col_caffe +=  t_im2col_creation_caffe;
+
+			} // end scope
+			
+		        // sep print 	
+
+			// cout << "Org: " << org_fm.rows() << ", " << org_fm.cols() << endl;
+			// for(int i = 0; i < org_fm.rows(); ++i)
+			// {
+			//  for(int j = 0; j < org_fm.cols(); ++j)
+			//  {
+			//  	cout << org_fm(i, j) << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+
+			// cout << "Caffe Im2col: " << im2col_height << ", " << im2col_width << endl;
+			// for(int i = 0; i < im2col_height; ++i)
+			// {
+			//  for(int j = 0; j < im2col_width; ++j)
+			//  {
+			//  	cout << datacol[j + i*im2col_width] << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+
+			// cout << "Im2col: " << im2col_mat.rows() << ", " << im2col_mat.cols() << endl;
+			// for(int i = 0; i < im2col_mat.rows(); ++i)
+			// {
+			//  for(int j = 0; j < im2col_mat.cols(); ++j)
+			//  {
+			//  	cout << im2col_mat(i, j) << " " ;
+			//  }
+			// 	cout << "\n";
+			// }
+			// isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
+			// exit(0);
+
+			//-----
+
+			ofstream myfile;
+			myfile.open ("csr_log.txt", ios::out | ios::app);
+
+
+			bool is_error = isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
+
+			ofstream myfile_encoding;
+			myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
+			myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
+			<< "\t" << t_im2col 
+			<< "\t" << t_im2col_caffe 
+			// << "\t" << 100.0*(t_im2col_caffe-t_im2col)/t_im2col 
+			<< "\n";
+
+			myfile_encoding << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
+			<< "\t" << t_im2col_creation 
+			<< "\t" << t_im2col_creation_caffe
+			// << "\t" << 100.0*(t_im2col_creation_caffe-t_im2col_creation)/t_im2col_creation 
+			<< "\n";
+
+			myfile.close();
+			myfile_encoding.close();
+
+			std::cout << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
+			<< "\t" << t_im2col 
+			<< "\t" << t_im2col_caffe 
+			<< "\t"  <<std::boolalpha << !is_error
+			// << "\t" << 100.0*(t_im2col_caffe-t_im2col)/t_im2col 
+			<< "\n";
+
+
+
+			// Delete the data created
+			delete [] dataim;
+			delete [] output;
+			delete [] filter;
+			delete [] datacol;
+
+		} // end denisty loop
+		} // end I loop
+
+		ofstream myfile;
+	    myfile.open ("csr_log.txt", ios::out | ios::app);
+	    myfile << "\n";
+	    myfile.close();
+
+	    ofstream myfile_encoding;
+	    myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
+	    myfile_encoding << "\n";
+	    myfile_encoding.close();
+	} // end K loop
+
+	ofstream myfile;
+	myfile.open ("csr_log.txt", ios::out | ios::app);
+	myfile << "\n";
+	myfile.close();
+
+	ofstream myfile_encoding;
+	myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
+	myfile_encoding << "\n";
+	myfile_encoding.close();
+   
  
-// If you want to run a 6x6 matrix, please uncomment the comment below and comment out the 5X5 section.
-
-/*
-float dataim[] = {
-	1,2,3,4,5,6,
-	5,6,7,8,9,10,
-	6,5,4,3,2,1,
-	10,9,8,7,6,5,
-	4,3,2,1,5,6,
-	3,2,1,6,5,4,
-};
-*/
-
-// data all ones 6x6
-float dataim[] = {
-	1,1,1,1,1,1,
-	1,1,1,1,1,1,
-	1,1,1,1,1,1,
-	1,1,1,1,1,1,
-	1,1,1,1,1,1,
-	1,1,1,1,1,1,
-};
-
-/**/
-
-/*
- float dataim[] = {
- 	1,2,3,4,5,
- 	6,7,8,9,10,
- 	5,4,3,2,1,
- 	10,9,8,7,6,
- 	4,3,2,1,5,
- };
-*/ 
-
-float datacol[1000];
-float outim[50];
- 
-int main()
-{
-	//im2col_cpu(dataim, 1, 6, 6, 3, 3, 0, 0, 1, 1, 1, 1, datacol);
-	//col2im_cpu(datacol, 1, 6, 6, 3, 3, 0, 0, 1, 1, 1, 1, outim);
-	
-	 // int Ih = 5;
-	 // int Iw = 5;
-
-	int Ic = 1;
-	int Ih = 6;
-	int Iw = 6;
-
-	int Kh = 3;
-	int Kw = 3;
-
-	int Sh = 1;
-	int Sw = 1;
-	int dilation_h = 1;
-	int dilation_w = 1;	
-
-	int pad_h = 0;
-	int pad_w = 0;
-
-	int output_h = (Ih + 2 * pad_h -
-		(dilation_h * (Kh - 1) + 1)) / Sh + 1;
-	int output_w = (Iw + 2 * pad_w -
-		(dilation_w * (Kw - 1) + 1)) / Sw + 1;
-
-//	int output_h = (1 + Ih - Kh + 2 * pad_h)/Sh; // removed + 1
-//        int output_w = (1 + Iw - Kw + 2 * pad_w)/Sw;
-
-
-	// int im2col_height = output_h*output_w;
-	// int im2col_width  = Kh*Kw*Ic;
-	
-	int im2col_height  = Kh*Kw*Ic;
-	int im2col_width =  output_h*output_w;
-
-	im2col_cpu(dataim, 1, Ih, Iw, Kh, Kw, 0, 0, Sh, Sw, dilation_h, dilation_w, datacol);
-
-	// im2col_cpu(dataim, 1, 6, 6, 3, 3, 0, 0, 1, 1, 1, 1, datacol);
-	// col2im_cpu(datacol, 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, outim);
-
-	float* output = new float[output_h*output_w];
-	float* filter = new float[Kh*Kw];
-	
-	// filter setting
-	for(int i = 0; i < Kh*Kw; ++i)
-	{
-	  filter[i] = 1;
-	}	
-	
-	cout << "Original Image: " << endl;
-	for(int i=0; i < Ih; i++)
-	{
-		for(int j=0; j< Iw; j++)
-		{
-			cout << dataim[j + i*Iw] << " " ;
-		}
-
-		cout << "\n";
-	}
-	
-	cout << "1D Data:" << endl;
-	for (int i = 0; i < Ih*Iw; ++i)
-	{
-	 cout << dataim[i] << " " ;
-	}
-	cout << "\n";
-
-	/*
-	for(int i=0; i < Ih*Iw; i++)
-	{
-		
-		cout << outim[i] << " " ;
-		cout << "\n";
-	}
-	*/
-	
-	cout << "Im2col: " << im2col_height << ", " << im2col_width << endl;
-	for(int i = 0; i < im2col_height; ++i)
-	{
-	 for(int j = 0; j < im2col_width; ++j)
-	 {
-	 	cout << datacol[j + i*im2col_width] << " " ;
-	 }
-		cout << "\n";
-	}
-
-/*	for(int i=0; i < im2col_height*im2col_width; ++i)
-	{
-	 cout << datacol[i] << endl;
-	}
-
-*/
-	int conv_out_channels_ = 1;
-	int conv_out_spatial_dim_ = output_h*output_w;
-	int weight_offset_ = Kh*Kw;
-	
-	// caffe: group_ = this->layer_param_.convolution_param().group();	
-	// caffe: weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;
-	// caffe: col_offset_ = kernel_dim_ * conv_out_spatial_dim_;
-	// caffe: output_offset_ = conv_out_channels_ * conv_out_spatial_dim_ / group_;
-	// CHECK_EQ(channels_ % group_, 0);
-       //   CHECK_EQ(num_output_ % group_, 0)
-       // << "Number of output should be multiples of group.";
-  
-	int col_offset_    = im2col_height*im2col_width;
-	int output_offset_ = conv_out_spatial_dim_;
-	
-	for (int g = 0; g < Ic; ++g) {
-   		 caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
-        	Ic, conv_out_spatial_dim_, Kh*Kw,
-        	(float)1., filter + weight_offset_ * g, datacol + col_offset_ * g,
-        	(float)0., output + output_offset_ * g);
-		
-  	}
-	
-	cout << "Conv Output: " << output_h << ", " << output_w << endl;
-	for(int i = 0; i < conv_out_spatial_dim_; ++i)
-	{
-		cout << output[i] << endl;
-	}
-
-	delete [] output;
-	delete [] filter;
+   
 	return 0;
 }
- 
- // If you want to run a 5x5 matrix, please uncomment the comment below and comment out the above paragraph
-/* 
-int dataim[] = {
-	1,2,3,4,5,
-	6,7,8,9,10,
-	5,4,3,2,1,
-	10,9,8,7,6,
-	4,3,2,1,5,
-};
-int datacol[1000];
-int outim[50];
-int main()
-{
-	im2col_cpu(dataim, 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, datacol);
-	col2im_cpu(datacol, 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, outim);
-	return 0;
-*/
+
