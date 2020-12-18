@@ -37,8 +37,6 @@ extern "C"
 #endif
 
 
-#include "conv_reader.cpp"
-
 using namespace Eigen;
 using namespace std;
 using namespace boost::timer;
@@ -561,24 +559,8 @@ int main()
 					t = clock();
 
 					for (int g = 0; g < group_; ++g) 
-					// int g = 0;
 					{
 
-						// caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
-						// Ic, conv_out_spatial_dim_, Kh*Kw,
-						// (float)1., filter + weight_offset_ * g, datacol + col_offset_ * g,
-						// (float)0., output + output_offset_ * g);
-
-						// caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
-						// 1, conv_out_spatial_dim_, Kh*Kw,
-						// (float)1., filter + weight_offset_ * g, datacol + col_offset_ * g,
-						// (float)0., output + output_offset_ * g);
-
-						// Caffe Call:
-						// caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
-				  //       group_, conv_out_spatial_dim_, kernel_dim_,
-				  //       (Dtype)1., weights + weight_offset_ * g, col_buff + col_offset_ * g,
-				  //       (Dtype)0., output + output_offset_ * g);
 
 						caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
 				        group_, conv_out_spatial_dim_, kernel_dim_,
@@ -612,71 +594,6 @@ int main()
 			} // end scope
 			
 		        // sep print 	
-
-			// cout << "Org: " << org_fm.rows() << ", " << org_fm.cols() << endl;
-			// for(int i = 0; i < org_fm.rows(); ++i)
-			// {
-			//  for(int j = 0; j < org_fm.cols(); ++j)
-			//  {
-			//  	cout << org_fm(i, j) << " " ;
-			//  }
-			// 	cout << "\n";
-			// }
-
-			// cout << "Caffe Im2col: " << im2col_height << ", " << im2col_width << endl;
-			// for(int i = 0; i < im2col_height; ++i)
-			// {
-			//  for(int j = 0; j < im2col_width; ++j)
-			//  {
-			//  	cout << datacol[j + i*im2col_width] << " " ;
-			//  }
-			// 	cout << "\n";
-			// }
-
-			// cout << "Im2col: " << im2col_mat.rows() << ", " << im2col_mat.cols() << endl;
-			// for(int i = 0; i < im2col_mat.rows(); ++i)
-			// {
-			//  for(int j = 0; j < im2col_mat.cols(); ++j)
-			//  {
-			//  	cout << im2col_mat(i, j) << " " ;
-			//  }
-			// 	cout << "\n";
-			// }
-			// isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
-			// exit(0);
-
-			//-----
-
-			ofstream myfile;
-			myfile.open ("csr_log.txt", ios::out | ios::app);
-
-
-			bool is_error = isErrorIm2col(org_fm, d_o1, output, output_h, output_w);
-
-			ofstream myfile_encoding;
-			myfile_encoding.open ("encoding_log.txt", ios::out | ios::app);
-			myfile << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
-			<< "\t" << t_im2col 
-			<< "\t" << t_im2col_caffe 
-			// << "\t" << 100.0*(t_im2col_caffe-t_im2col)/t_im2col 
-			<< "\n";
-
-			myfile_encoding << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
-			<< "\t" << t_im2col_creation 
-			<< "\t" << t_im2col_creation_caffe
-			// << "\t" << 100.0*(t_im2col_creation_caffe-t_im2col_creation)/t_im2col_creation 
-			<< "\n";
-
-			myfile.close();
-			myfile_encoding.close();
-
-			std::cout << std::setprecision(3) << density  << "\t" << density_cal << "\t" << Kh << "\t" << Kw << "\t" << Ih << "\t" << Iw 
-			<< "\t" << t_im2col 
-			<< "\t" << t_im2col_caffe 
-			<< "\t"  <<std::boolalpha << !is_error
-			// << "\t" << 100.0*(t_im2col_caffe-t_im2col)/t_im2col 
-			<< "\n";
-
 
 
 			// Delete the data created
